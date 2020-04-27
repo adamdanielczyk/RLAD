@@ -1,5 +1,6 @@
 package com.sample.search
 
+import android.app.ActivityOptions
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -39,9 +40,14 @@ class SearchActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
 
         viewModel.openDetailsScreen
-            .onEach { characterEntity ->
+            .onEach { (characterEntity, imageView) ->
                 val intent = DetailsActivity.createIntent(this, characterEntity.id)
-                startActivity(intent)
+                val options = ActivityOptions.makeSceneTransitionAnimation(
+                    this,
+                    imageView,
+                    resources.getString(R.string.shared_element_name)
+                )
+                startActivity(intent, options.toBundle())
             }
             .launchIn(lifecycleScope)
     }

@@ -17,6 +17,7 @@
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
+            android:transitionName="@string/shared_element_name"
             tools:src="@tools:sample/avatars" />
 
         <TextView

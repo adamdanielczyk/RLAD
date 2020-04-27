@@ -2,6 +2,7 @@ package com.sample.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import com.sample.databinding.SearchListItemBinding
 import com.sample.utils.applyDefaults
 
 class SearchAdapter(
-    private val onItemClicked: (CharacterEntity) -> Unit
+    private val onItemClicked: (CharacterEntity, ImageView) -> Unit
 ) : ListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,7 +30,7 @@ class SearchAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(entity: CharacterEntity) {
-            binding.root.setOnClickListener { onItemClicked(entity) }
+            binding.root.setOnClickListener { onItemClicked(entity, binding.image) }
 
             binding.name.text = entity.name
 
