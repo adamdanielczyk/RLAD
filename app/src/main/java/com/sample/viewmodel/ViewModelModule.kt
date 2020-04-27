@@ -2,6 +2,7 @@ package com.sample.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.sample.details.DetailsViewModel
 import com.sample.search.SearchViewModel
 import dagger.Binds
 import dagger.Module
@@ -16,5 +17,10 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(SearchViewModel::class)
-    abstract fun searchViewModel(searchViewModel: SearchViewModel): ViewModel
+    abstract fun searchViewModel(viewModel: SearchViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailsViewModel::class)
+    abstract fun detailsViewModel(viewModel: DetailsViewModel): ViewModel
 }

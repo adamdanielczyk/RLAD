@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.sample.R
 import com.sample.databinding.SearchActivityBinding
+import com.sample.details.DetailsActivity
 import com.sample.di.Injector
 import com.sample.utils.SpaceItemDecoration
 import com.sample.viewmodel.DaggerViewModelFactory
@@ -27,7 +28,7 @@ class SearchActivity : AppCompatActivity() {
         binding = SearchActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val searchAdapter = SearchAdapter()
+        val searchAdapter = SearchAdapter(viewModel::onItemClicked)
         with(binding.recyclerView) {
             adapter = searchAdapter
             addItemDecoration(SpaceItemDecoration(resources.getDimensionPixelSize(R.dimen.grid_spacing)))
@@ -35,6 +36,13 @@ class SearchActivity : AppCompatActivity() {
 
         viewModel.allCharacters
             .onEach { searchAdapter.submitList(it) }
+            .launchIn(lifecycleScope)
+
+        viewModel.openDetailsScreen
+            .onEach { characterEntity ->
+                val intent = DetailsActivity.createIntent(this, characterEntity.id)
+                startActivity(intent)
+            }
             .launchIn(lifecycleScope)
     }
 }
