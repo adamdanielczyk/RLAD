@@ -1,5 +1,6 @@
 package com.sample.search
 
+import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import com.sample.data.local.CharacterEntity
 import com.sample.data.repository.CharacterRepository
@@ -15,10 +16,10 @@ class SearchViewModel @Inject constructor(repository: CharacterRepository) : Vie
     val allCharacters: Flow<List<CharacterEntity>> = repository.getAllCharacters()
         .flowOn(Dispatchers.IO)
 
-    private val _openDetailsScreen = BroadcastChannel<CharacterEntity>(1)
-    val openDetailsScreen: Flow<CharacterEntity> = _openDetailsScreen.asFlow()
+    private val _openDetailsScreen = BroadcastChannel<Pair<CharacterEntity, ImageView>>(1)
+    val openDetailsScreen: Flow<Pair<CharacterEntity, ImageView>> = _openDetailsScreen.asFlow()
 
-    fun onItemClicked(entity: CharacterEntity) {
-        _openDetailsScreen.offer(entity)
+    fun onItemClicked(entity: CharacterEntity, imageView: ImageView) {
+        _openDetailsScreen.offer(entity to imageView)
     }
 }
