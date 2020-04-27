@@ -1,10 +1,14 @@
 package com.sample.search
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sample.data.local.CharacterEntity
 import com.sample.databinding.SearchListItemBinding
 
@@ -26,6 +30,14 @@ class SearchAdapter : ListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIF
 
         fun bind(entity: CharacterEntity) {
             binding.name.text = entity.name
+
+            Glide.with(binding.root)
+                .load(entity.imageUrl)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .placeholder(ColorDrawable(Color.LTGRAY))
+                .fallback(ColorDrawable(Color.GRAY))
+                .error(ColorDrawable(Color.RED))
+                .into(binding.image)
         }
     }
 
