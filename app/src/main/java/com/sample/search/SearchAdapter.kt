@@ -1,18 +1,18 @@
 package com.sample.search
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sample.data.local.CharacterEntity
 import com.sample.databinding.SearchListItemBinding
+import com.sample.utils.applyDefaults
 
-class SearchAdapter : ListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
+class SearchAdapter(
+    private val onItemClicked: (CharacterEntity) -> Unit
+) : ListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,19 +24,18 @@ class SearchAdapter : ListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIF
         holder.bind(currentList[position])
     }
 
-    class ViewHolder(
+    inner class ViewHolder(
         private val binding: SearchListItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(entity: CharacterEntity) {
+            binding.root.setOnClickListener { onItemClicked(entity) }
+
             binding.name.text = entity.name
 
             Glide.with(binding.root)
                 .load(entity.imageUrl)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .placeholder(ColorDrawable(Color.LTGRAY))
-                .fallback(ColorDrawable(Color.GRAY))
-                .error(ColorDrawable(Color.RED))
+                .applyDefaults()
                 .into(binding.image)
         }
     }

@@ -23,4 +23,8 @@ class CharacterRepository @Inject constructor(
             }
         }
     }
+
+    fun getCharacterById(id: Int): Flow<CharacterEntity> {
+        return localDataSource.getCharacterById(id)
+    }
 }
