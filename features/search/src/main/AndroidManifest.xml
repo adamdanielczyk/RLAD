@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sample.features.details">
+    package="com.sample.features.search">
 
     <application android:theme="@style/AppTheme">
-        <activity android:name=".DetailsActivity">
+        <activity android:name=".SearchActivity">
             <intent-filter>
-                <action android:name="com.sample.features.details.open" />
+                <action android:name="com.sample.features.search.open" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
