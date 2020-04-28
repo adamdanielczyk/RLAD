@@ -1,27 +1,28 @@
-package com.sample.di
+package com.sample.features.search.di
 
 import com.sample.core.data.di.CoreComponent
 import com.sample.core.data.di.FeatureScope
-import com.sample.search.SearchActivity
-import com.sample.viewmodel.ViewModelModule
+import com.sample.features.search.SearchActivity
 import dagger.Component
 
 @Component(
     modules = [
-        ViewModelModule::class
+        SearchModule::class
     ],
     dependencies = [
         CoreComponent::class
     ]
 )
 @FeatureScope
-interface AppComponent {
-    fun inject(activity: SearchActivity)
+interface SearchComponent {
+
+    fun inject(searchActivity: SearchActivity)
 
     @Component.Builder
     interface Builder {
 
+        fun searchModule(searchModule: SearchModule): Builder
         fun coreComponent(component: CoreComponent): Builder
-        fun build(): AppComponent
+        fun build(): SearchComponent
     }
 }

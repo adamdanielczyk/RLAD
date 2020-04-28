@@ -1,4 +1,4 @@
-package com.sample.search
+package com.sample.features.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sample.core.data.local.CharacterEntity
-import com.sample.databinding.SearchListItemBinding
 import com.sample.core.utils.applyDefaults
+import com.sample.features.search.databinding.SearchListItemBinding
 
 class SearchAdapter(
     private val onItemClicked: (CharacterEntity, ImageView) -> Unit
-) : ListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
+) : ListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(
+    DIFF_UTIL
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

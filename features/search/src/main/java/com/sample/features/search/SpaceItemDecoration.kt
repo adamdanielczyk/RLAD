@@ -1,4 +1,4 @@
-package com.sample.utils
+package com.sample.features.search
 
 import android.graphics.Rect
 import android.view.View

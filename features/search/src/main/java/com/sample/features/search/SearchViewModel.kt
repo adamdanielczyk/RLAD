@@ -1,4 +1,4 @@
-package com.sample.search
+package com.sample.features.search
 
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
@@ -9,9 +9,8 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
 
-class SearchViewModel @Inject constructor(repository: CharacterRepository) : ViewModel() {
+class SearchViewModel(repository: CharacterRepository) : ViewModel() {
 
     val allCharacters: Flow<List<CharacterEntity>> = repository.getAllCharacters()
         .flowOn(Dispatchers.IO)
