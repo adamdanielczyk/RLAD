@@ -2,11 +2,11 @@ package com.sample.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.sample.core.data.di.FeatureScope
 import javax.inject.Inject
 import javax.inject.Provider
-import javax.inject.Singleton
 
-@Singleton
+@FeatureScope
 class DaggerViewModelFactory @Inject constructor(
     private val viewModelProviders: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
 ) : ViewModelProvider.Factory {

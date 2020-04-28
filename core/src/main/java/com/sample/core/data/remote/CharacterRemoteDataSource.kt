@@ -1,4 +1,4 @@
-package com.sample.data.remote
+package com.sample.core.data.remote
 
 import javax.inject.Inject
 import javax.inject.Singleton

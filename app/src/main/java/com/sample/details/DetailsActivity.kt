@@ -10,9 +10,9 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.sample.R
-import com.sample.data.local.CharacterEntity
-import com.sample.data.local.CharacterEntity.Gender
-import com.sample.data.local.CharacterEntity.Status
+import com.sample.core.data.local.CharacterEntity
+import com.sample.core.data.local.CharacterEntity.Gender
+import com.sample.core.data.local.CharacterEntity.Status
 import com.sample.databinding.DetailsActivityBinding
 import com.sample.di.Injector
 import com.sample.utils.applyDefaults

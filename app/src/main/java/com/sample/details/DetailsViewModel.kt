@@ -1,8 +1,8 @@
 package com.sample.details
 
 import androidx.lifecycle.ViewModel
-import com.sample.data.local.CharacterEntity
-import com.sample.data.repository.CharacterRepository
+import com.sample.core.data.local.CharacterEntity
+import com.sample.core.data.repository.CharacterRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
