@@ -1,3 +1,4 @@
 rootProject.name='sample'
 include ':app'
 include ':core'
+include ':features:details'

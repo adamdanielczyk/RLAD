@@ -6,8 +6,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.sample.R
+import com.sample.core.actions.Actions
 import com.sample.databinding.SearchActivityBinding
-import com.sample.details.DetailsActivity
 import com.sample.di.Injector
 import com.sample.utils.SpaceItemDecoration
 import com.sample.viewmodel.DaggerViewModelFactory
@@ -41,7 +41,7 @@ class SearchActivity : AppCompatActivity() {
 
         viewModel.openDetailsScreen
             .onEach { (characterEntity, imageView) ->
-                val intent = DetailsActivity.createIntent(this, characterEntity.id)
+                val intent = Actions.openDetailsIntent(this, characterEntity.id)
                 val options = ActivityOptions.makeSceneTransitionAnimation(
                     this,
                     imageView,

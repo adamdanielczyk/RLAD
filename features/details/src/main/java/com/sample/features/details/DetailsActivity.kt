@@ -1,47 +1,50 @@
-package com.sample.details
+package com.sample.features.details
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.sample.R
+import com.sample.core.actions.EXTRA_CHARACTER_ID
+import com.sample.core.data.di.coreComponent
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.local.CharacterEntity.Gender
 import com.sample.core.data.local.CharacterEntity.Status
-import com.sample.databinding.DetailsActivityBinding
-import com.sample.di.Injector
-import com.sample.utils.applyDefaults
-import com.sample.viewmodel.DaggerViewModelFactory
+import com.sample.core.utils.applyDefaults
+import com.sample.features.details.databinding.DetailsActivityBinding
+import com.sample.features.details.di.DaggerDetailsComponent
+import com.sample.features.details.di.DetailsModule
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class DetailsActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory
-
-    private val viewModel by viewModels<DetailsViewModel> { viewModelFactory }
+    @Inject lateinit var viewModel: DetailsViewModel
 
     private lateinit var binding: DetailsActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Injector.get().inject(this)
+        inject()
         super.onCreate(savedInstanceState)
         binding = DetailsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel.init(characterId = intent.extras?.getInt(EXTRA_CHARACTER_ID)!!)
-
         viewModel.character
             .onEach { displayCharacter(it) }
             .launchIn(lifecycleScope)
+    }
+
+    private fun inject() {
+        DaggerDetailsComponent.builder()
+            .characterId(intent.extras?.getInt(EXTRA_CHARACTER_ID)!!)
+            .detailsModule(DetailsModule(this))
+            .coreComponent(application.coreComponent)
+            .build()
+            .inject(this)
     }
 
     private fun displayCharacter(entity: CharacterEntity) = with(entity) {
@@ -86,15 +89,5 @@ class DetailsActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-
-        private const val EXTRA_CHARACTER_ID = "EXTRA_CHARACTER_ID"
-
-        fun createIntent(context: Context, characterId: Int) =
-            Intent(context, DetailsActivity::class.java).apply {
-                putExtra(EXTRA_CHARACTER_ID, characterId)
-            }
     }
 }

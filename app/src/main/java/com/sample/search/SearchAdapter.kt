@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sample.core.data.local.CharacterEntity
 import com.sample.databinding.SearchListItemBinding
-import com.sample.utils.applyDefaults
+import com.sample.core.utils.applyDefaults
 
 class SearchAdapter(
     private val onItemClicked: (CharacterEntity, ImageView) -> Unit

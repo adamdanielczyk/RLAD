@@ -1,11 +1,16 @@
 package com.sample
 
 import android.app.Application
+import com.sample.core.data.di.CoreComponent
+import com.sample.core.data.di.CoreComponentProvider
 import com.sample.core.data.di.DaggerCoreComponent
 import com.sample.di.AppComponent
 import com.sample.di.DaggerAppComponent
 
-class SampleApplication : Application() {
+class SampleApplication : Application(), CoreComponentProvider {
+
+    lateinit var coreComponent: CoreComponent
+        private set
 
     lateinit var component: AppComponent
         private set
@@ -13,12 +18,11 @@ class SampleApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
-
         setupDagger()
     }
 
     private fun setupDagger() {
-        val coreComponent = DaggerCoreComponent.builder()
+        coreComponent = DaggerCoreComponent.builder()
             .appContext(this)
             .build()
 
@@ -27,8 +31,9 @@ class SampleApplication : Application() {
             .build()
     }
 
-    companion object {
+    override fun provideCoreComponent(): CoreComponent = coreComponent
 
+    companion object {
         lateinit var app: SampleApplication
             private set
     }
