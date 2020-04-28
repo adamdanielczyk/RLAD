@@ -2,8 +2,8 @@ package com.sample.search
 
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
-import com.sample.data.local.CharacterEntity
-import com.sample.data.repository.CharacterRepository
+import com.sample.core.data.local.CharacterEntity
+import com.sample.core.data.repository.CharacterRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow

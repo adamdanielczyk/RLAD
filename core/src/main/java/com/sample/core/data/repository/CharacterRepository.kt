@@ -1,8 +1,8 @@
-package com.sample.data.repository
+package com.sample.core.data.repository
 
-import com.sample.data.local.CharacterEntity
-import com.sample.data.local.CharacterLocalDataSource
-import com.sample.data.remote.CharacterRemoteDataSource
+import com.sample.core.data.local.CharacterEntity
+import com.sample.core.data.local.CharacterLocalDataSource
+import com.sample.core.data.remote.CharacterRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
