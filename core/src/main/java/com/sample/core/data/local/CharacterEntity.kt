@@ -1,10 +1,10 @@
-package com.sample.data.local
+package com.sample.core.data.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.sample.data.remote.ServerCharacter
+import com.sample.core.data.remote.ServerCharacter
 
 @Entity(tableName = "character")
 data class CharacterEntity(
@@ -22,10 +22,14 @@ data class CharacterEntity(
     constructor(serverCharacter: ServerCharacter) : this(
         id = serverCharacter.id,
         name = serverCharacter.name,
-        status = Status.fromServerStatus(serverCharacter.status),
+        status = Status.fromServerStatus(
+            serverCharacter.status
+        ),
         species = serverCharacter.species,
         type = serverCharacter.type,
-        gender = Gender.fromServerStatus(serverCharacter.gender),
+        gender = Gender.fromServerStatus(
+            serverCharacter.gender
+        ),
         location = Location(serverCharacter.location),
         imageUrl = serverCharacter.imageUrl,
         created = serverCharacter.created

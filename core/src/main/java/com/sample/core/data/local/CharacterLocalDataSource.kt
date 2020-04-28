@@ -1,4 +1,4 @@
-package com.sample.data.local
+package com.sample.core.data.local
 
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

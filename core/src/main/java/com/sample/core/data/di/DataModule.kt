@@ -1,10 +1,10 @@
-package com.sample.data.di
+package com.sample.core.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.sample.data.local.CharacterDao
-import com.sample.data.local.CharacterDatabase
-import com.sample.data.remote.RickAndMortyApi
+import com.sample.core.data.local.CharacterDao
+import com.sample.core.data.local.CharacterDatabase
+import com.sample.core.data.remote.RickAndMortyApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
