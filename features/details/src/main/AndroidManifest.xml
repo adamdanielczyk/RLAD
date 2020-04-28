@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sample.features.details">
+
+    <application>
+        <activity android:name=".DetailsActivity">
+            <intent-filter>
+                <action android:name="com.sample.features.details.open" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

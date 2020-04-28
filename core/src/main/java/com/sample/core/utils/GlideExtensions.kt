@@ -1,4 +1,4 @@
-package com.sample.utils
+package com.sample.core.utils
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
