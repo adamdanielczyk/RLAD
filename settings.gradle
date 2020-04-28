@@ -1,4 +1,5 @@
-rootProject.name='sample'
+rootProject.name = 'sample'
 include ':app'
 include ':core'
 include ':features:details'
+include ':features:search'

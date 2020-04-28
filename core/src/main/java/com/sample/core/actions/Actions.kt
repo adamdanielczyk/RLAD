@@ -7,6 +7,10 @@ const val EXTRA_CHARACTER_ID = "EXTRA_CHARACTER_ID"
 
 object Actions {
 
+    fun openSearchIntent(context: Context): Intent {
+        return internalIntent(context, "com.sample.features.search.open")
+    }
+
     fun openDetailsIntent(context: Context, characterId: Int): Intent {
         return internalIntent(context, "com.sample.features.details.open")
             .putExtra(EXTRA_CHARACTER_ID, characterId)

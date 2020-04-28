@@ -1,30 +1,26 @@
-package com.sample.search
+package com.sample.features.search
 
 import android.app.ActivityOptions
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.sample.R
 import com.sample.core.actions.Actions
-import com.sample.databinding.SearchActivityBinding
-import com.sample.di.Injector
-import com.sample.utils.SpaceItemDecoration
-import com.sample.viewmodel.DaggerViewModelFactory
+import com.sample.core.data.di.coreComponent
+import com.sample.features.search.databinding.SearchActivityBinding
+import com.sample.features.search.di.DaggerSearchComponent
+import com.sample.features.search.di.SearchModule
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory
-
-    private val viewModel by viewModels<SearchViewModel> { viewModelFactory }
+    @Inject lateinit var viewModel: SearchViewModel
 
     private lateinit var binding: SearchActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Injector.get().inject(this)
+        inject()
         super.onCreate(savedInstanceState)
         binding = SearchActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -50,5 +46,13 @@ class SearchActivity : AppCompatActivity() {
                 startActivity(intent, options.toBundle())
             }
             .launchIn(lifecycleScope)
+    }
+
+    private fun inject() {
+        DaggerSearchComponent.builder()
+            .searchModule(SearchModule(this))
+            .coreComponent(application.coreComponent)
+            .build()
+            .inject(this)
     }
 }
