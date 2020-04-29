@@ -3,8 +3,8 @@ package com.sample.features.search
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sample.core.data.local.CharacterEntity
@@ -13,9 +13,14 @@ import com.sample.features.search.databinding.SearchListItemBinding
 
 class SearchAdapter(
     private val onItemClicked: (CharacterEntity, ImageView) -> Unit
-) : ListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(
-    DIFF_UTIL
-) {
+) : PagedListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long =
+        getItemOrNull(position)?.id?.toLong() ?: super.getItemId(position)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,8 +29,11 @@ class SearchAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        getItemOrNull(position)?.let(holder::bind)
     }
+
+    private fun getItemOrNull(position: Int): CharacterEntity? =
+        if (position in 0 until itemCount) getItem(position) else null
 
     inner class ViewHolder(
         private val binding: SearchListItemBinding

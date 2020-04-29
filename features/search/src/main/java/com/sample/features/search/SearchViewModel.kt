@@ -1,19 +1,22 @@
 package com.sample.features.search
 
 import android.widget.ImageView
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.repository.CharacterRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flowOn
 
 class SearchViewModel(repository: CharacterRepository) : ViewModel() {
 
-    val allCharacters: Flow<List<CharacterEntity>> = repository.getAllCharacters()
-        .flowOn(Dispatchers.IO)
+    private val _allCharacters: LiveData<PagedList<CharacterEntity>> =
+        repository.getAllCharacters(viewModelScope)
+    val allCharacters = _allCharacters.asFlow()
 
     private val _openDetailsScreen = BroadcastChannel<Pair<CharacterEntity, ImageView>>(1)
     val openDetailsScreen: Flow<Pair<CharacterEntity, ImageView>> = _openDetailsScreen.asFlow()

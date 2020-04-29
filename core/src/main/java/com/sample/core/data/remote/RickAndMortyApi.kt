@@ -1,9 +1,10 @@
 package com.sample.core.data.remote
 
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface RickAndMortyApi {
 
     @GET("/api/character/")
-    suspend fun getAllCharacters(): GetAllCharactersResponse
+    suspend fun getAllCharacters(@Query("page") page: Int): GetAllCharactersResponse
 }
