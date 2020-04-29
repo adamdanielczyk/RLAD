@@ -6,5 +6,6 @@ import javax.inject.Singleton
 @Singleton
 class CharacterRemoteDataSource @Inject constructor(private val rickAndMortyApi: RickAndMortyApi) {
 
-    suspend fun getAllCharacters(): GetAllCharactersResponse = rickAndMortyApi.getAllCharacters()
+    suspend fun getAllCharacters(page: Int): GetAllCharactersResponse =
+        rickAndMortyApi.getAllCharacters(page)
 }
