@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 class CharactersBoundaryCallback(
     private val remoteDataSource: CharacterRemoteDataSource,
     private val scope: CoroutineScope,
+    private val name: String? = null,
     private val insertCharacters: suspend (List<ServerCharacter>) -> Unit
 ) : PagedList.BoundaryCallback<CharacterEntity>() {
 
@@ -31,7 +32,10 @@ class CharactersBoundaryCallback(
     private fun fetchAndSave() {
         scope.launch(Dispatchers.IO) {
             try {
-                val response = remoteDataSource.getAllCharacters(page = nextKey)
+                val response = remoteDataSource.getAllCharacters(
+                    page = nextKey,
+                    name = name
+                )
                 insertCharacters(response.results)
                 nextKey++
             } catch (ex: Exception) {
