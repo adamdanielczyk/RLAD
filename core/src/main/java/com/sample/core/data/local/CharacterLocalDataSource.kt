@@ -8,7 +8,8 @@ import javax.inject.Singleton
 @Singleton
 class CharacterLocalDataSource @Inject constructor(private val characterDao: CharacterDao) {
 
-    fun getCharacters(): DataSource.Factory<Int, CharacterEntity> = characterDao.getAll()
+    fun getCharactersByName(name: String): DataSource.Factory<Int, CharacterEntity> =
+        characterDao.getByName(name)
 
     fun getCharacterById(id: Int): Flow<CharacterEntity> = characterDao.getById(id)
 

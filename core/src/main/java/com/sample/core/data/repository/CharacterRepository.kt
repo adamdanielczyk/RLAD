@@ -19,25 +19,25 @@ class CharacterRepository @Inject constructor(
     private val remoteDataSource: CharacterRemoteDataSource
 ) {
 
-    fun getAllCharacters(scope: CoroutineScope): LiveData<PagedList<CharacterEntity>> {
-        return localDataSource.getCharacters().toLiveData(
+    fun getCharacterById(id: Int): Flow<CharacterEntity> = localDataSource.getCharacterById(id)
+
+    fun getCharacters(
+        scope: CoroutineScope,
+        name: String? = null
+    ): LiveData<PagedList<CharacterEntity>> {
+        return localDataSource.getCharactersByName(name.orEmpty()).toLiveData(
             pageSize = 20,
             initialLoadKey = 1,
             boundaryCallback = CharactersBoundaryCallback(
                 remoteDataSource,
-                scope
+                scope,
+                name
             ) { serverCharacters -> insertCharacters(serverCharacters) }
         )
     }
 
     private suspend fun insertCharacters(serverCharacters: List<ServerCharacter>) {
-        val newLocalCharacters = serverCharacters.map { serverCharacter ->
-            CharacterEntity(serverCharacter)
-        }
+        val newLocalCharacters = serverCharacters.map(::CharacterEntity)
         localDataSource.insertCharacters(newLocalCharacters)
-    }
-
-    fun getCharacterById(id: Int): Flow<CharacterEntity> {
-        return localDataSource.getCharacterById(id)
     }
 }
