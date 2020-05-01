@@ -4,13 +4,14 @@ import androidx.paging.PagedList
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.remote.CharacterRemoteDataSource
 import com.sample.core.data.remote.ServerCharacter
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CharactersBoundaryCallback(
     private val remoteDataSource: CharacterRemoteDataSource,
     private val scope: CoroutineScope,
+    private val ioDispatcher: CoroutineDispatcher,
     private val name: String? = null,
     private val insertCharacters: suspend (List<ServerCharacter>) -> Unit
 ) : PagedList.BoundaryCallback<CharacterEntity>() {
@@ -30,7 +31,7 @@ class CharactersBoundaryCallback(
     }
 
     private fun fetchAndSave() {
-        scope.launch(Dispatchers.IO) {
+        scope.launch(ioDispatcher) {
             try {
                 val characters = remoteDataSource.getCharacters(
                     page = nextKey,
