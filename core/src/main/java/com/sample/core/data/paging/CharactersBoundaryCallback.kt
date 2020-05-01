@@ -32,11 +32,11 @@ class CharactersBoundaryCallback(
     private fun fetchAndSave() {
         scope.launch(Dispatchers.IO) {
             try {
-                val response = remoteDataSource.getAllCharacters(
+                val characters = remoteDataSource.getCharacters(
                     page = nextKey,
                     name = name
                 )
-                insertCharacters(response.results)
+                insertCharacters(characters)
                 nextKey++
             } catch (ex: Exception) {
                 // do nothing in case of network error, could be improved

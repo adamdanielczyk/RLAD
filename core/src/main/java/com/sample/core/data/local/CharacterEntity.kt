@@ -72,13 +72,11 @@ data class CharacterEntity(
     }
 
     data class Location(
-        @ColumnInfo(name = "name") val name: String,
-        @ColumnInfo(name = "url") val url: String?
+        @ColumnInfo(name = "name") val name: String
     ) {
 
         constructor(serverLocation: ServerCharacter.Location) : this(
-            name = serverLocation.name,
-            url = serverLocation.url
+            name = serverLocation.name
         )
     }
 }
