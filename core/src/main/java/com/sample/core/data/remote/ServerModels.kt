@@ -2,16 +2,8 @@ package com.sample.core.data.remote
 
 import com.squareup.moshi.Json
 
-data class GetAllCharactersResponse(
-    @Json(name = "info") val info: ServerInfo,
+data class GetCharactersResponse(
     @Json(name = "results") val results: List<ServerCharacter>
-)
-
-data class ServerInfo(
-    @Json(name = "count") val count: Int,
-    @Json(name = "pages") val pages: Int,
-    @Json(name = "next") val next: String,
-    @Json(name = "prev") val prev: String
 )
 
 data class ServerCharacter(
@@ -40,7 +32,6 @@ data class ServerCharacter(
     }
 
     data class Location(
-        val name: String,
-        val url: String?
+        @Json(name = "name") val name: String
     )
 }
