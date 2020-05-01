@@ -14,6 +14,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+
         consumerProguardFiles 'consumer-rules.pro'
 
         javaCompileOptions {
@@ -33,6 +35,10 @@ android {
         }
     }
 
+    sourceSets {
+        androidTest.java.srcDirs += "src/test-common/java"
+        test.java.srcDirs += "src/test-common/java"
+    }
 }
 
 dependencies {
@@ -56,5 +62,16 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:4.11.0"
     implementation "com.google.android.material:material:1.1.0"
 
-    testImplementation "junit:junit:4.12"
+    testImplementation "junit:junit:4.13"
+    testImplementation "io.mockk:mockk:1.10.0"
+    testImplementation "com.google.dagger:dagger:$dagger_version"
+    kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
+
+    androidTestImplementation "androidx.test:runner:1.2.0"
+    androidTestImplementation "junit:junit:4.13"
+    androidTestImplementation "androidx.test:core:1.2.0"
+    implementation "androidx.arch.core:core-runtime:2.1.0"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation "com.google.dagger:dagger:$dagger_version"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
 }
