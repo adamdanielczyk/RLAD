@@ -4,17 +4,30 @@ import android.content.Context
 import androidx.room.Room
 import com.sample.core.data.local.CharacterDao
 import com.sample.core.data.local.CharacterDatabase
+import com.sample.core.data.local.CharacterLocalDataSource
 import com.sample.core.data.remote.RickAndMortyApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 @Module
 class DataModule {
+
+    @Provides
+    @Singleton
+    fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @Singleton
+    fun diskExecutor(): Executor = Executors.newSingleThreadExecutor()
 
     @Provides
     @Singleton
@@ -33,7 +46,7 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun mosh(): Moshi {
+    fun moshi(): Moshi {
         return Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
