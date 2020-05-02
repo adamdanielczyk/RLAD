@@ -6,7 +6,6 @@
     <string name="gender_male">Male</string>
     <string name="gender_genderless">Genderless</string>
     <string name="unknown">Unknown</string>
-    <string name="details_name">Name: %1$s</string>
     <string name="details_status">Status: %1$s</string>
     <string name="details_species">Species: %1$s</string>
     <string name="details_type">Type: %1$s</string>
