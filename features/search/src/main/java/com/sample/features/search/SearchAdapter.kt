@@ -40,9 +40,19 @@ class SearchAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(entity: CharacterEntity) {
+            val context = itemView.context
+
             binding.root.setOnClickListener { onItemClicked(entity, binding.image) }
 
             binding.name.text = entity.name
+            binding.species.text = context.getString(
+                R.string.details_species,
+                entity.species
+            )
+            binding.location.text = context.getString(
+                R.string.details_location,
+                entity.location.name
+            )
 
             Glide.with(binding.root)
                 .load(entity.imageUrl)

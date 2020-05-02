@@ -14,7 +14,7 @@ data class CharacterEntity(
     @ColumnInfo(name = "species") val species: String,
     @ColumnInfo(name = "type") val type: String?,
     @ColumnInfo(name = "gender") val gender: Gender,
-    @Embedded(prefix = "location") val location: Location,
+    @Embedded(prefix = "location_") val location: Location,
     @ColumnInfo(name = "image") val imageUrl: String,
     @ColumnInfo(name = "created") val created: String
 ) {

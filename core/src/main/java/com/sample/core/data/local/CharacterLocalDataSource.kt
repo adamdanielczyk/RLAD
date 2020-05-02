@@ -8,10 +8,10 @@ import javax.inject.Singleton
 @Singleton
 class CharacterLocalDataSource @Inject constructor(private val characterDao: CharacterDao) {
 
-    fun getCharactersByName(name: String): DataSource.Factory<Int, CharacterEntity> =
-        characterDao.getByName(name)
+    fun getCharactersBy(nameOrLocation: String): DataSource.Factory<Int, CharacterEntity> =
+        characterDao.getBy(nameOrLocation)
 
-    fun getCharacterById(id: Int): Flow<CharacterEntity> = characterDao.getById(id)
+    fun getCharacterBy(id: Int): Flow<CharacterEntity> = characterDao.getBy(id)
 
     suspend fun insertCharacters(characters: List<CharacterEntity>) {
         characterDao.insert(characters)
