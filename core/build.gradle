@@ -1,21 +1,14 @@
+import com.sample.buildsrc.Libs
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
+apply from: "$rootProject.projectDir/gradle/shared_feature_module.gradle"
+
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
-
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments clearPackageData: 'true'
-
         consumerProguardFiles 'consumer-rules.pro'
 
         javaCompileOptions {
@@ -28,50 +21,30 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
     sourceSets {
         androidTest.java.srcDirs += "src/test-common/java"
         test.java.srcDirs += "src/test-common/java"
     }
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions.freeCompilerArgs += [
+            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+    ]
+}
+
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation Libs.AndroidX.Arch.coreRuntime
+    implementation Libs.AndroidX.paging
+    implementation Libs.AndroidX.Room.room
+    implementation Libs.AndroidX.Room.runtime
+    kapt Libs.AndroidX.Room.compiler
 
-    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    implementation Libs.Retrofit.retrofit
+    implementation Libs.Retrofit.moshiConverter
+    implementation Libs.moshi
 
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
-    implementation "com.squareup.moshi:moshi-kotlin:1.9.2"
-
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-
-    implementation "com.github.bumptech.glide:glide:4.11.0"
-    implementation "com.google.android.material:material:1.1.0"
-
-    testImplementation "junit:junit:4.13"
-    testImplementation "io.mockk:mockk:1.10.0"
-    testImplementation "com.google.dagger:dagger:$dagger_version"
-    kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
-
-    androidTestImplementation "androidx.test:runner:1.2.0"
-    androidTestImplementation "junit:junit:4.13"
-    androidTestImplementation "androidx.test:core:1.2.0"
-    implementation "androidx.arch.core:core-runtime:2.1.0"
-    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation "com.google.dagger:dagger:$dagger_version"
-    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation Libs.glide
+    implementation Libs.Google.material
 }

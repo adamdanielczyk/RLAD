@@ -1,0 +1,27 @@
+import com.sample.buildsrc.Libs
+
+dependencies {
+    implementation Libs.Kotlin.stdlib
+
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
+
+    implementation Libs.Dagger.dagger
+    kapt Libs.Dagger.compiler
+
+    testImplementation Libs.Coroutines.Test.test
+    testImplementation Libs.Test.junit
+    testImplementation Libs.Test.mockk
+
+    testImplementation Libs.Dagger.dagger
+    kaptTest Libs.Dagger.compiler
+
+    androidTestImplementation Libs.Coroutines.Test.test
+    androidTestImplementation Libs.AndroidX.Test.runner
+    androidTestImplementation Libs.AndroidX.Test.core
+    androidTestImplementation Libs.AndroidX.Arch.Test.coreTesting
+    androidTestImplementation Libs.Test.junit
+
+    androidTestImplementation Libs.Dagger.dagger
+    kaptAndroidTest Libs.Dagger.compiler
+}
