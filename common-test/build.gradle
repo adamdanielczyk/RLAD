@@ -1,0 +1,27 @@
+import com.sample.buildsrc.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
+apply from: "$rootProject.projectDir/gradle/shared_feature_module.gradle"
+
+android {
+    defaultConfig {
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions.freeCompilerArgs += [
+            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+    ]
+}
+
+dependencies {
+    implementation project(":core")
+
+    implementation Libs.AndroidX.Room.room
+    implementation Libs.Coroutines.Test.test}

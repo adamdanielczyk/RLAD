@@ -1,9 +1,9 @@
-package com.sample.core.data.di
+package com.sample.common.test.di
 
+import com.sample.common.test.remote.FakeRickAndMortyApi
 import com.sample.core.data.local.CharacterDatabase
 import com.sample.core.data.local.CharacterLocalDataSource
 import com.sample.core.data.remote.CharacterRemoteDataSource
-import com.sample.core.data.remote.FakeRickAndMortyApi
 import com.sample.core.data.repository.CharacterRepository
 import dagger.BindsInstance
 import dagger.Component
