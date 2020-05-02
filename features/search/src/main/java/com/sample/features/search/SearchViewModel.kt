@@ -8,10 +8,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.repository.CharacterRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.launch
 
 class SearchViewModel(private val repository: CharacterRepository) : ViewModel() {
 
@@ -26,6 +29,8 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
     private val _scrollToTop = BroadcastChannel<Unit>(1)
     val scrollToTop = _scrollToTop.asFlow()
 
+    private var debounceJob: Job? = null
+
     init {
         displayAllCharacters()
     }
@@ -35,7 +40,11 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
     }
 
     fun onQueryTextChange(newText: String?) {
-        performSearch(newText.orEmpty())
+        debounceJob?.cancel()
+        debounceJob = viewModelScope.launch {
+            delay(DEBOUNCE_TIME)
+            performSearch(newText.orEmpty())
+        }
     }
 
     fun onSearchExpanded() {
@@ -69,4 +78,7 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
         _charactersUpdates.offer(_currentCharacters!!.asFlow())
     }
 
+    companion object {
+        const val DEBOUNCE_TIME = 400L
+    }
 }
