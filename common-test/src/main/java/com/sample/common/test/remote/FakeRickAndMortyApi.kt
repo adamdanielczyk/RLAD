@@ -1,5 +1,8 @@
-package com.sample.core.data.remote
+package com.sample.common.test.remote
 
+import com.sample.core.data.remote.GetCharactersResponse
+import com.sample.core.data.remote.RickAndMortyApi
+import com.sample.core.data.remote.ServerCharacter
 import javax.inject.Inject
 import javax.inject.Singleton
 

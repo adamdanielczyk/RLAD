@@ -6,11 +6,11 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.sample.core.data.di.DaggerTestCoreComponent
+import com.sample.common.test.di.DaggerTestCoreComponent
+import com.sample.common.test.remote.FakeRickAndMortyApi
 import com.sample.core.data.local.CharacterDatabase
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.local.CharacterLocalDataSource
-import com.sample.core.data.remote.FakeRickAndMortyApi
 import com.sample.core.data.remote.ServerCharacter
 import com.sample.core.data.remote.ServerCharacter.*
 import kotlinx.coroutines.flow.first
@@ -21,7 +21,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@ExperimentalStdlibApi
 class CharacterRepositoryTest {
 
     @Rule @JvmField val instantTaskExecutorRule = InstantTaskExecutorRule()
