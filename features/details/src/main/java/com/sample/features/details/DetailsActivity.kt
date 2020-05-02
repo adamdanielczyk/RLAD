@@ -55,7 +55,7 @@ class DetailsActivity : AppCompatActivity() {
             .applyDefaults()
             .into(binding.image)
 
-        binding.name.text = getString(R.string.details_name, name)
+        binding.name.text = name
         binding.status.text = getString(
             R.string.details_status,
             when (status) {
