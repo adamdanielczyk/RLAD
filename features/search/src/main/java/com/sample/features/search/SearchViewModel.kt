@@ -39,11 +39,11 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
         _openDetailsScreen.offer(entity to imageView)
     }
 
-    fun onQueryTextChange(newText: String?) {
+    fun onQueryTextChanged(queryText: String?) {
         debounceJob?.cancel()
         debounceJob = viewModelScope.launch {
             delay(DEBOUNCE_TIME)
-            performSearch(newText.orEmpty())
+            performSearch(queryText.orEmpty())
         }
     }
 
@@ -64,8 +64,8 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
         _scrollToTop.offer(Unit)
     }
 
-    private fun performSearch(name: String) {
-        postNewPagedList(repository.getCharacters(viewModelScope, name))
+    private fun performSearch(nameOrLocation: String) {
+        postNewPagedList(repository.getCharacters(viewModelScope, nameOrLocation))
     }
 
     private fun displayAllCharacters() {
