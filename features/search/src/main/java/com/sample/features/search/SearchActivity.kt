@@ -99,7 +99,7 @@ class SearchActivity : AppCompatActivity() {
                 override fun onQueryTextSubmit(query: String?): Boolean = false
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.onQueryTextChange(newText)
+                    viewModel.onQueryTextChanged(newText)
                     return true
                 }
             })
