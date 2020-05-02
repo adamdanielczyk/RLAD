@@ -23,13 +23,13 @@ class CharacterRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ) {
 
-    fun getCharacterById(id: Int): Flow<CharacterEntity> = localDataSource.getCharacterById(id)
+    fun getCharacterBy(id: Int): Flow<CharacterEntity> = localDataSource.getCharacterBy(id)
 
     fun getCharacters(
         scope: CoroutineScope,
-        name: String? = null
+        nameOrLocation: String? = null
     ): LiveData<PagedList<CharacterEntity>> {
-        return localDataSource.getCharactersByName(name.orEmpty()).toLiveData(
+        return localDataSource.getCharactersBy(nameOrLocation.orEmpty()).toLiveData(
             fetchExecutor = diskExecutor,
             pageSize = PAGE_SIZE,
             initialLoadKey = 1,
@@ -37,7 +37,7 @@ class CharacterRepository @Inject constructor(
                 remoteDataSource,
                 scope,
                 ioDispatcher,
-                name
+                nameOrLocation
             ) { serverCharacters -> insertCharacters(serverCharacters) }
         )
     }
