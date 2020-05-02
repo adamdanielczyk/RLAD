@@ -22,31 +22,39 @@
 
         <TextView
             android:id="@+id/name"
-            style="@style/DetailsTextViewStyle" />
+            style="@style/DetailsTextViewStyle"
+            tools:text="@string/details_name" />
 
         <TextView
             android:id="@+id/status"
-            style="@style/DetailsTextViewStyle" />
+            style="@style/DetailsTextViewStyle"
+            tools:text="@string/details_status" />
 
         <TextView
             android:id="@+id/species"
-            style="@style/DetailsTextViewStyle" />
+            style="@style/DetailsTextViewStyle"
+            tools:text="@string/details_species" />
 
         <TextView
             android:id="@+id/type"
-            style="@style/DetailsTextViewStyle" />
+            style="@style/DetailsTextViewStyle"
+            android:visibility="gone"
+            tools:text="@string/details_type" />
 
         <TextView
             android:id="@+id/gender"
-            style="@style/DetailsTextViewStyle" />
+            style="@style/DetailsTextViewStyle"
+            tools:text="@string/details_gender" />
 
         <TextView
             android:id="@+id/location"
-            style="@style/DetailsTextViewStyle" />
+            style="@style/DetailsTextViewStyle"
+            tools:text="@string/details_location" />
 
         <TextView
             android:id="@+id/created"
-            style="@style/DetailsTextViewStyle" />
+            style="@style/DetailsTextViewStyle"
+            tools:text="@string/details_created" />
 
     </LinearLayout>
 
