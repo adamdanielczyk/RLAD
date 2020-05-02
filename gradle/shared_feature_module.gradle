@@ -12,6 +12,7 @@ dependencies {
     implementation Libs.Dagger.dagger
     kapt Libs.Dagger.compiler
 
+    testImplementation Libs.AndroidX.Arch.Test.coreTesting
     testImplementation Libs.Coroutines.Test.test
     testImplementation Libs.Test.junit
     testImplementation Libs.Test.mockk

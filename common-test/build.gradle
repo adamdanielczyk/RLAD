@@ -23,5 +23,8 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 dependencies {
     implementation project(":core")
 
+    implementation Libs.AndroidX.paging
     implementation Libs.AndroidX.Room.room
-    implementation Libs.Coroutines.Test.test}
+    implementation Libs.Coroutines.Test.test
+    implementation Libs.Test.mockk
+}

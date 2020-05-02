@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.sample.core.data.local.CharacterDao
 import com.sample.core.data.local.CharacterDatabase
-import com.sample.core.data.local.CharacterLocalDataSource
 import com.sample.core.data.remote.RickAndMortyApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

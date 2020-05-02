@@ -78,6 +78,6 @@ object Libs {
 
     object Test {
         const val junit = "junit:junit:4.13"
-        const val mockk = "io.mockk:mockk:1.10.0"
+        const val mockk = "io.mockk:mockk:1.9.2"
     }
 }
