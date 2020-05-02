@@ -10,11 +10,18 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CharacterDao {
 
-    @Query("SELECT * FROM character WHERE name LIKE '%' || :name || '%' ORDER BY id")
-    fun getByName(name: String): DataSource.Factory<Int, CharacterEntity>
+    @Query(
+        """
+        SELECT * FROM character 
+        WHERE name LIKE '%' || :nameOrLocation || '%' 
+        OR location_name LIKE '%' || :nameOrLocation || '%' 
+        ORDER BY id
+        """
+    )
+    fun getBy(nameOrLocation: String): DataSource.Factory<Int, CharacterEntity>
 
     @Query("SELECT * FROM character WHERE id = :id")
-    fun getById(id: Int): Flow<CharacterEntity>
+    fun getBy(id: Int): Flow<CharacterEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(characters: List<CharacterEntity>)

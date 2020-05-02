@@ -10,5 +10,5 @@ class DetailsViewModel(
     repository: CharacterRepository
 ) : ViewModel() {
 
-    val character: Flow<CharacterEntity> = repository.getCharacterById(characterId)
+    val character: Flow<CharacterEntity> = repository.getCharacterBy(characterId)
 }
