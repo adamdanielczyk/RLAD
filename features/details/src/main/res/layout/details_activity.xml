@@ -23,7 +23,8 @@
         <TextView
             android:id="@+id/name"
             style="@style/DetailsTextViewStyle"
-            tools:text="@string/details_name" />
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            tools:text="Rick Sanchez" />
 
         <TextView
             android:id="@+id/status"
