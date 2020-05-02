@@ -1,8 +1,8 @@
-package com.sample.core.data.di
+package com.sample.common.test.di
 
+import com.sample.common.test.remote.FakeRickAndMortyApi
 import com.sample.core.data.local.CharacterDao
 import com.sample.core.data.local.CharacterDatabase
-import com.sample.core.data.remote.FakeRickAndMortyApi
 import com.sample.core.data.remote.RickAndMortyApi
 import dagger.Module
 import dagger.Provides

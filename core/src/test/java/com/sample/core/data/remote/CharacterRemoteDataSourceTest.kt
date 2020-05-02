@@ -1,6 +1,6 @@
 package com.sample.core.data.remote
 
-import com.sample.core.data.di.DaggerTestCoreComponent
+import com.sample.common.test.di.DaggerTestCoreComponent
 import com.sample.core.data.remote.ServerCharacter.*
 import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest

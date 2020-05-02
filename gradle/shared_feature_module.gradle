@@ -1,6 +1,9 @@
 import com.sample.buildsrc.Libs
 
 dependencies {
+    testImplementation project(":common-test")
+    androidTestImplementation project(":common-test")
+
     implementation Libs.Kotlin.stdlib
 
     implementation Libs.Coroutines.core
