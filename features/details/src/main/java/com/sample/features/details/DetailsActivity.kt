@@ -31,6 +31,7 @@ class DetailsActivity : AppCompatActivity() {
         binding = DetailsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel.character
@@ -48,14 +49,13 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun displayCharacter(entity: CharacterEntity) = with(entity) {
-        title = name
+        binding.collapsingToolbar.title = name
 
         Glide.with(this@DetailsActivity)
             .load(imageUrl)
             .applyDefaults()
             .into(binding.image)
 
-        binding.name.text = name
         binding.status.text = getString(
             R.string.details_status,
             when (status) {

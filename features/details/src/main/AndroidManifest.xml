@@ -2,7 +2,9 @@
     package="com.sample.features.details">
 
     <application android:theme="@style/AppTheme">
-        <activity android:name=".DetailsActivity">
+        <activity
+            android:name=".DetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="com.sample.features.details.open" />
                 <category android:name="android.intent.category.DEFAULT" />
