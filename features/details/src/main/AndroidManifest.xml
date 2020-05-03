@@ -4,7 +4,7 @@
     <application android:theme="@style/AppTheme">
         <activity
             android:name=".DetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.TransparentStatus">
             <intent-filter>
                 <action android:name="com.sample.features.details.open" />
                 <category android:name="android.intent.category.DEFAULT" />

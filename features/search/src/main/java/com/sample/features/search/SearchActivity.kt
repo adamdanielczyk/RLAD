@@ -34,6 +34,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = SearchActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         savedQueryState = savedInstanceState?.getCharSequence(KEY_SAVED_QUERY_STATE)
 
