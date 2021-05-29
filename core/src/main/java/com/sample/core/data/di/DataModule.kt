@@ -9,24 +9,12 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 @Module
 class DataModule {
-
-    @Provides
-    @Singleton
-    fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @Provides
-    @Singleton
-    fun diskExecutor(): Executor = Executors.newSingleThreadExecutor()
 
     @Provides
     @Singleton

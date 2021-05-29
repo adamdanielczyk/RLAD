@@ -1,14 +1,15 @@
 package com.sample.features.search
 
 import android.widget.ImageView
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.sample.common.test.utils.asPagedList
+import androidx.paging.PagingData
+import com.sample.common.test.utils.collectData
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.repository.CharacterRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -17,12 +18,9 @@ import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class SearchViewModelTest {
-
-    @Rule @JvmField val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val testCoroutineDispatcher = TestCoroutineDispatcher()
     private val testCoroutineScope = TestCoroutineScope()
@@ -62,19 +60,19 @@ class SearchViewModelTest {
         val characterRepository = mockk<CharacterRepository>()
 
         every {
-            characterRepository.getCharacters(scope = any(), nameOrLocation = null)
-        } returns characters.asPagedList(pageSize = CharacterRepository.PAGE_SIZE)
+            characterRepository.getCharacters(nameOrLocation = null)
+        } returns flowOf(PagingData.from(characters))
 
         every {
-            characterRepository.getCharacters(scope = any(), nameOrLocation = "Rick")
-        } returns searchedCharacters.asPagedList(pageSize = CharacterRepository.PAGE_SIZE)
+            characterRepository.getCharacters(nameOrLocation = "Rick")
+        } returns flowOf(PagingData.from(searchedCharacters))
 
         viewModel = SearchViewModel(characterRepository)
     }
 
     @Test
     fun allCharactersDisplayedByDefault() = runBlockingTest {
-        assertEquals(viewModel.getCurrentCharacters(), characters)
+        assertEquals(characters, viewModel.getCurrentCharacters())
     }
 
     @Test
@@ -96,15 +94,15 @@ class SearchViewModelTest {
     fun onQueryTextChanged_emitItemsAfterDebounce() = runBlockingTest {
         viewModel.onQueryTextChanged("Rick")
 
-        assertEquals(viewModel.getCurrentCharacters(), characters)
+        assertEquals(characters, viewModel.getCurrentCharacters())
 
         testCoroutineDispatcher.advanceTimeBy(SearchViewModel.DEBOUNCE_TIME / 2)
 
-        assertEquals(viewModel.getCurrentCharacters(), characters)
+        assertEquals(characters, viewModel.getCurrentCharacters())
 
         testCoroutineDispatcher.advanceTimeBy(SearchViewModel.DEBOUNCE_TIME / 2)
 
-        assertEquals(viewModel.getCurrentCharacters(), searchedCharacters)
+        assertEquals(searchedCharacters, viewModel.getCurrentCharacters())
     }
 
     @Test
@@ -124,7 +122,7 @@ class SearchViewModelTest {
 
         viewModel.onSearchCollapsed()
 
-        assertEquals(viewModel.getCurrentCharacters(), characters)
+        assertEquals(characters, viewModel.getCurrentCharacters())
     }
 
     @Test
@@ -136,5 +134,6 @@ class SearchViewModelTest {
         viewModel.onClearSearchClicked()
     }
 
-    private suspend fun SearchViewModel.getCurrentCharacters() = charactersUpdates.first().first()
+    private suspend fun SearchViewModel.getCurrentCharacters(): List<CharacterEntity> =
+        charactersUpdates.first().first().collectData()
 }
