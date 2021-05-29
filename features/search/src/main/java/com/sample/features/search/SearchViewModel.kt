@@ -7,23 +7,28 @@ import androidx.paging.PagingData
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.repository.CharacterRepository
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val repository: CharacterRepository) : ViewModel() {
 
-    private val _charactersUpdates = ConflatedBroadcastChannel<Flow<PagingData<CharacterEntity>>>()
-    val charactersUpdates = _charactersUpdates.asFlow()
+    private val _charactersUpdates = MutableSharedFlow<Flow<PagingData<CharacterEntity>>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val charactersUpdates = _charactersUpdates.asSharedFlow()
 
-    private val _openDetailsScreen = BroadcastChannel<Pair<CharacterEntity, ImageView>>(1)
-    val openDetailsScreen = _openDetailsScreen.asFlow()
+    private val _openDetailsScreen = MutableSharedFlow<Pair<CharacterEntity, ImageView>>(
+        extraBufferCapacity = 1
+    )
+    val openDetailsScreen = _openDetailsScreen.asSharedFlow()
 
-    private val _scrollToTop = BroadcastChannel<Unit>(1)
-    val scrollToTop = _scrollToTop.asFlow()
+    private val _scrollToTop = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val scrollToTop = _scrollToTop.asSharedFlow()
 
     private var debounceJob: Job? = null
 
@@ -32,7 +37,7 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
     }
 
     fun onItemClicked(entity: CharacterEntity, imageView: ImageView) {
-        _openDetailsScreen.offer(entity to imageView)
+        _openDetailsScreen.tryEmit(entity to imageView)
     }
 
     fun onQueryTextChanged(queryText: String?) {
@@ -57,7 +62,7 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
     }
 
     private fun scrollToTop() {
-        _scrollToTop.offer(Unit)
+        _scrollToTop.tryEmit(Unit)
     }
 
     private fun performSearch(nameOrLocation: String) {
@@ -69,7 +74,7 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
     }
 
     private fun postNewPagingData(newCharacters: Flow<PagingData<CharacterEntity>>) {
-        _charactersUpdates.offer(newCharacters)
+        _charactersUpdates.tryEmit(newCharacters)
     }
 
     companion object {
