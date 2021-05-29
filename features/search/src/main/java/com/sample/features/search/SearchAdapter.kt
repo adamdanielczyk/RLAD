@@ -3,7 +3,7 @@ package com.sample.features.search
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -13,14 +13,7 @@ import com.sample.features.search.databinding.SearchListItemBinding
 
 class SearchAdapter(
     private val onItemClicked: (CharacterEntity, ImageView) -> Unit
-) : PagedListAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
-
-    init {
-        setHasStableIds(true)
-    }
-
-    override fun getItemId(position: Int): Long =
-        getItemOrNull(position)?.id?.toLong() ?: super.getItemId(position)
+) : PagingDataAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

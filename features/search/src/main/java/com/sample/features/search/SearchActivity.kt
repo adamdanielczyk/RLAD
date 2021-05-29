@@ -14,8 +14,10 @@ import com.sample.features.search.databinding.SearchActivityBinding
 import com.sample.features.search.di.DaggerSearchComponent
 import com.sample.features.search.di.SearchModule
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity() {
@@ -60,9 +62,11 @@ class SearchActivity : AppCompatActivity() {
         charactersUpdates
             .onEach { characters ->
                 charactersJob?.cancel()
-                charactersJob = characters.onEach {
-                    searchAdapter.submitList(it)
-                }.launchIn(lifecycleScope)
+                charactersJob = lifecycleScope.launch {
+                    characters.collectLatest {
+                        searchAdapter.submitData(it)
+                    }
+                }
             }.launchIn(lifecycleScope)
 
         openDetailsScreen
