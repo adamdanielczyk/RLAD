@@ -53,7 +53,6 @@ object Libs {
             private const val version = "2.3.1"
             const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
-            const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
         }
 
         object Room {

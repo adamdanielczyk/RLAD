@@ -1,6 +1,6 @@
 package com.sample.core.data.local
 
-import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -18,7 +18,7 @@ interface CharacterDao {
         ORDER BY id
         """
     )
-    fun getBy(nameOrLocation: String): DataSource.Factory<Int, CharacterEntity>
+    fun getBy(nameOrLocation: String): PagingSource<Int, CharacterEntity>
 
     @Query("SELECT * FROM character WHERE id = :id")
     fun getBy(id: Int): Flow<CharacterEntity>

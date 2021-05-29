@@ -1,50 +1,39 @@
 package com.sample.core.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
-import androidx.paging.toLiveData
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.local.CharacterLocalDataSource
-import com.sample.core.data.paging.CharactersBoundaryCallback
+import com.sample.core.data.paging.CharacterRemoteMediator
 import com.sample.core.data.remote.CharacterRemoteDataSource
-import com.sample.core.data.remote.ServerCharacter
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import java.util.concurrent.Executor
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CharacterRepository @Inject constructor(
     private val localDataSource: CharacterLocalDataSource,
-    private val remoteDataSource: CharacterRemoteDataSource,
-    private val diskExecutor: Executor,
-    private val ioDispatcher: CoroutineDispatcher
+    private val remoteDataSource: CharacterRemoteDataSource
 ) {
 
     fun getCharacterBy(id: Int): Flow<CharacterEntity> = localDataSource.getCharacterBy(id)
 
-    fun getCharacters(
-        scope: CoroutineScope,
-        nameOrLocation: String? = null
-    ): LiveData<PagedList<CharacterEntity>> {
-        return localDataSource.getCharactersBy(nameOrLocation.orEmpty()).toLiveData(
-            fetchExecutor = diskExecutor,
-            pageSize = PAGE_SIZE,
-            initialLoadKey = 1,
-            boundaryCallback = CharactersBoundaryCallback(
-                remoteDataSource,
-                scope,
-                ioDispatcher,
-                nameOrLocation
-            ) { serverCharacters -> insertCharacters(serverCharacters) }
-        )
-    }
-
-    private suspend fun insertCharacters(serverCharacters: List<ServerCharacter>) {
-        val newLocalCharacters = serverCharacters.map(::CharacterEntity)
-        localDataSource.insertCharacters(newLocalCharacters)
+    fun getCharacters(nameOrLocation: String? = null): Flow<PagingData<CharacterEntity>> {
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            remoteMediator = CharacterRemoteMediator(
+              localDataSource = localDataSource,
+              remoteDataSource = remoteDataSource,
+              name = nameOrLocation
+            ),
+            pagingSourceFactory = { localDataSource.getCharactersBy(nameOrLocation.orEmpty()) }
+        ).flow
     }
 
     companion object {
