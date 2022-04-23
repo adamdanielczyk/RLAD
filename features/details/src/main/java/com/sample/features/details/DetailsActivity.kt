@@ -2,31 +2,37 @@ package com.sample.features.details
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.sample.core.actions.EXTRA_CHARACTER_ID
-import com.sample.core.data.di.coreComponent
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.local.CharacterEntity.Gender
 import com.sample.core.data.local.CharacterEntity.Status
 import com.sample.core.utils.applyDefaults
 import com.sample.features.details.databinding.DetailsActivityBinding
-import com.sample.features.details.di.DaggerDetailsComponent
-import com.sample.features.details.di.DetailsModule
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailsActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModel: DetailsViewModel
+    @Inject lateinit var viewModelFactory: DetailsViewModel.Factory
+
+    private val viewModel: DetailsViewModel by viewModels {
+        DetailsViewModel.provideFactory(
+            factory = viewModelFactory,
+            characterId = intent.extras?.getInt(EXTRA_CHARACTER_ID)!!
+        )
+    }
 
     private lateinit var binding: DetailsActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
         super.onCreate(savedInstanceState)
         binding = DetailsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -37,15 +43,6 @@ class DetailsActivity : AppCompatActivity() {
         viewModel.character
             .onEach { displayCharacter(it) }
             .launchIn(lifecycleScope)
-    }
-
-    private fun inject() {
-        DaggerDetailsComponent.builder()
-            .characterId(intent.extras?.getInt(EXTRA_CHARACTER_ID)!!)
-            .detailsModule(DetailsModule(this))
-            .coreComponent(application.coreComponent)
-            .build()
-            .inject(this)
     }
 
     private fun displayCharacter(entity: CharacterEntity) = with(entity) {
