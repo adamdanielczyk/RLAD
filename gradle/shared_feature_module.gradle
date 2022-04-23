@@ -16,7 +16,6 @@ dependencies {
     implementation Libs.AndroidX.constraintlayout
     implementation Libs.AndroidX.activity
     implementation Libs.AndroidX.core
-    implementation Libs.AndroidX.paging
 
     implementation Libs.AndroidX.Lifecycle.ViewModel.viewmodel
     implementation Libs.AndroidX.Lifecycle.ViewModel.compose
@@ -27,9 +26,9 @@ dependencies {
     implementation Libs.AndroidX.Compose.tooling
     implementation Libs.AndroidX.Compose.foundation
     implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.materialIcons
     implementation Libs.AndroidX.Compose.themeAdapter
 
-    implementation Libs.glide
     implementation Libs.coil
     implementation Libs.Google.material
 }
