@@ -142,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
                 Image(
                     painter = rememberImagePainter(character.imageUrl),
                     contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .height(150.dp)
                         .fillMaxWidth(),

@@ -138,7 +138,7 @@ class DetailsActivity : AppCompatActivity() {
             Image(
                 painter = rememberImagePainter(imageUrl),
                 contentDescription = null,
-                contentScale = ContentScale.FillWidth,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .height(250.dp)
                     .fillMaxWidth()
