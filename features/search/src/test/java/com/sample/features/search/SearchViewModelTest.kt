@@ -117,22 +117,22 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun onSearchCollapsed_displayAllCharactersAndScrollToTop() = runTest {
+    fun onSearchCollapsed_scrollToTop() = runTest {
         viewModel.onSearchCollapsed()
+
+        assertEquals(Unit, viewModel.scrollToTop.first())
+    }
+
+    @Test
+    fun onClearSearchClicked_onSearchCollapsed_displayAllCharactersAndScrollToTop() = runTest {
+        viewModel.onClearSearchClicked()
 
         assertEquals(Unit, viewModel.scrollToTop.first())
         assertEquals(characters, viewModel.getCurrentCharacters())
     }
 
-    @Test
-    fun onClearSearchClicked_scrollToTop() = runTest {
-        viewModel.onClearSearchClicked()
-
-        assertEquals(Unit, viewModel.scrollToTop.first())
-    }
-
     private suspend fun SearchViewModel.getCurrentCharacters(): List<CharacterEntity> =
-        charactersUpdates.first().first().collectData()
+        charactersPagingData.first().first().collectData()
 }
 
 private val differCallback = object : DifferCallback {
