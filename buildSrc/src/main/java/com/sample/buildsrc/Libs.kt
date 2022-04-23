@@ -75,13 +75,17 @@ object Libs {
             val foundation = "androidx.compose.foundation:foundation:$version"
             val material = "androidx.compose.material:material:$version"
             val materialIcons = "androidx.compose.material:material-icons-extended:$version"
-            val themeAdapter = "com.google.android.material:compose-theme-adapter:1.1.7"
         }
 
         object Paging {
             val paging = "androidx.paging:paging-runtime-ktx:3.1.1"
             val compose = "androidx.paging:paging-compose:1.0.0-alpha14"
         }
+    }
+
+    object Accompanist {
+        private val version = "0.24.7-alpha"
+        val systemuicontroller = "com.google.accompanist:accompanist-systemuicontroller:$version"
     }
 
     object Hilt {

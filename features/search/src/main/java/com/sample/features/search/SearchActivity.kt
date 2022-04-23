@@ -22,6 +22,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,9 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
-import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sample.core.actions.Actions
 import com.sample.core.data.local.CharacterEntity
+import com.sample.core.ui.SampleTheme
 import com.sample.features.details.SearchBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -48,7 +50,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MdcTheme {
+            SampleTheme() {
                 SearchScreen()
             }
         }
@@ -62,6 +64,15 @@ class SearchActivity : AppCompatActivity() {
 
     @Composable
     private fun SearchScreen() {
+        val systemUiController = rememberSystemUiController()
+
+        val surfaceColor = MaterialTheme.colors.surface
+        SideEffect {
+            systemUiController.setSystemBarsColor(
+                color = surfaceColor,
+            )
+        }
+
         Scaffold {
             Column {
                 SearchBar()
