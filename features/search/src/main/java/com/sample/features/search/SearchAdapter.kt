@@ -2,7 +2,6 @@ package com.sample.features.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +11,7 @@ import com.sample.core.utils.applyDefaults
 import com.sample.features.search.databinding.SearchListItemBinding
 
 class SearchAdapter(
-    private val onItemClicked: (CharacterEntity, ImageView) -> Unit,
+    private val onItemClicked: (CharacterEntity) -> Unit,
 ) : PagingDataAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,7 +34,7 @@ class SearchAdapter(
         fun bind(entity: CharacterEntity) {
             val context = itemView.context
 
-            binding.root.setOnClickListener { onItemClicked(entity, binding.image) }
+            binding.root.setOnClickListener { onItemClicked(entity) }
 
             binding.name.text = entity.name
             binding.species.text = context.getString(
