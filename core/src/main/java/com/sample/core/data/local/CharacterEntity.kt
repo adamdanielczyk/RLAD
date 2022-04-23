@@ -16,7 +16,7 @@ data class CharacterEntity(
     @ColumnInfo(name = "gender") val gender: Gender,
     @Embedded(prefix = "location_") val location: Location,
     @ColumnInfo(name = "image") val imageUrl: String,
-    @ColumnInfo(name = "created") val created: String
+    @ColumnInfo(name = "created") val created: String,
 ) {
 
     constructor(serverCharacter: ServerCharacter) : this(
@@ -72,7 +72,7 @@ data class CharacterEntity(
     }
 
     data class Location(
-        @ColumnInfo(name = "name") val name: String
+        @ColumnInfo(name = "name") val name: String,
     ) {
 
         constructor(serverLocation: ServerCharacter.Location) : this(

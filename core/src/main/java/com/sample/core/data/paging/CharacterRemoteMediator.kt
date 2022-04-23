@@ -15,7 +15,7 @@ import java.io.IOException
 class CharacterRemoteMediator(
     private val localDataSource: CharacterLocalDataSource,
     private val remoteDataSource: CharacterRemoteDataSource,
-    private val name: String? = null
+    private val name: String? = null,
 ) : RemoteMediator<Int, CharacterEntity>() {
 
     /**
@@ -30,7 +30,7 @@ class CharacterRemoteMediator(
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, CharacterEntity>
+        state: PagingState<Int, CharacterEntity>,
     ): MediatorResult {
         if (loadType == LoadType.PREPEND) {
             // Paging is not supported in two directions currently, return early in case of prepend load type

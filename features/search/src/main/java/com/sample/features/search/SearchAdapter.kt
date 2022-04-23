@@ -12,7 +12,7 @@ import com.sample.core.utils.applyDefaults
 import com.sample.features.search.databinding.SearchListItemBinding
 
 class SearchAdapter(
-    private val onItemClicked: (CharacterEntity, ImageView) -> Unit
+    private val onItemClicked: (CharacterEntity, ImageView) -> Unit,
 ) : PagingDataAdapter<CharacterEntity, SearchAdapter.ViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,7 +29,7 @@ class SearchAdapter(
         if (position in 0 until itemCount) getItem(position) else null
 
     inner class ViewHolder(
-        private val binding: SearchListItemBinding
+        private val binding: SearchListItemBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(entity: CharacterEntity) {
@@ -59,12 +59,12 @@ class SearchAdapter(
         private val DIFF_UTIL = object : DiffUtil.ItemCallback<CharacterEntity>() {
             override fun areItemsTheSame(
                 oldItem: CharacterEntity,
-                newItem: CharacterEntity
+                newItem: CharacterEntity,
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: CharacterEntity,
-                newItem: CharacterEntity
+                newItem: CharacterEntity,
             ): Boolean = oldItem == newItem
         }
     }

@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 class CharacterRepository @Inject constructor(
     private val localDataSource: CharacterLocalDataSource,
-    private val remoteDataSource: CharacterRemoteDataSource
+    private val remoteDataSource: CharacterRemoteDataSource,
 ) {
 
     fun getCharacterBy(id: Int): Flow<CharacterEntity> = localDataSource.getCharacterBy(id)
@@ -28,9 +28,9 @@ class CharacterRepository @Inject constructor(
                 enablePlaceholders = false
             ),
             remoteMediator = CharacterRemoteMediator(
-              localDataSource = localDataSource,
-              remoteDataSource = remoteDataSource,
-              name = nameOrLocation
+                localDataSource = localDataSource,
+                remoteDataSource = remoteDataSource,
+                name = nameOrLocation
             ),
             pagingSourceFactory = { localDataSource.getCharactersBy(nameOrLocation.orEmpty()) }
         ).flow
