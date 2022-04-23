@@ -44,6 +44,22 @@ android {
 }
 
 dependencies {
+    implementation Libs.Kotlin.stdlib
+
     implementation Libs.Hilt.hilt
     kapt Libs.Hilt.compiler
+
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
+
+    testImplementation Libs.AndroidX.Arch.Test.coreTesting
+    testImplementation Libs.Coroutines.Test.test
+    testImplementation Libs.Test.junit
+    testImplementation Libs.Test.mockk
+
+    androidTestImplementation Libs.Coroutines.Test.test
+    androidTestImplementation Libs.AndroidX.Test.runner
+    androidTestImplementation Libs.AndroidX.Test.core
+    androidTestImplementation Libs.AndroidX.Arch.Test.coreTesting
+    androidTestImplementation Libs.Test.junit
 }

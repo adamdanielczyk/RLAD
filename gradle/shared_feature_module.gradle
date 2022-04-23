@@ -1,19 +1,35 @@
 import com.sample.buildsrc.Libs
 
+android {
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = Libs.AndroidX.Compose.version
+    }
+}
+
 dependencies {
-    implementation Libs.Kotlin.stdlib
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.recyclerview
+    implementation Libs.AndroidX.constraintlayout
+    implementation Libs.AndroidX.activity
+    implementation Libs.AndroidX.core
+    implementation Libs.AndroidX.paging
 
-    implementation Libs.Coroutines.core
-    implementation Libs.Coroutines.android
+    implementation Libs.AndroidX.Lifecycle.ViewModel.viewmodel
+    implementation Libs.AndroidX.Lifecycle.ViewModel.compose
+    implementation Libs.AndroidX.Lifecycle.runtime
 
-    testImplementation Libs.AndroidX.Arch.Test.coreTesting
-    testImplementation Libs.Coroutines.Test.test
-    testImplementation Libs.Test.junit
-    testImplementation Libs.Test.mockk
+    implementation Libs.AndroidX.Compose.ui
+    implementation Libs.AndroidX.Compose.activity
+    implementation Libs.AndroidX.Compose.tooling
+    implementation Libs.AndroidX.Compose.foundation
+    implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.themeAdapter
 
-    androidTestImplementation Libs.Coroutines.Test.test
-    androidTestImplementation Libs.AndroidX.Test.runner
-    androidTestImplementation Libs.AndroidX.Test.core
-    androidTestImplementation Libs.AndroidX.Arch.Test.coreTesting
-    androidTestImplementation Libs.Test.junit
+    implementation Libs.glide
+    implementation Libs.coil
+    implementation Libs.Google.material
 }
