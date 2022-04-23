@@ -3,7 +3,7 @@ package com.sample
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import dagger.hilt.android.HiltAndroidApp
-import java.util.*
+import java.util.Random
 
 @HiltAndroidApp
 class SampleApplication : Application() {
