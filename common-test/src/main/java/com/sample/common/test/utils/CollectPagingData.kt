@@ -1,7 +1,9 @@
 package com.sample.common.test.utils
 
-import androidx.paging.*
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import androidx.paging.DifferCallback
+import androidx.paging.NullPaddedList
+import androidx.paging.PagingData
+import androidx.paging.PagingDataDiffer
 
 private val differCallback = object : DifferCallback {
     override fun onChanged(position: Int, count: Int) {}
@@ -11,11 +13,10 @@ private val differCallback = object : DifferCallback {
 
 suspend fun <T : Any> PagingData<T>.collectData(): List<T> {
     val items = mutableListOf<T>()
-    val differ = object : PagingDataDiffer<T>(differCallback, TestCoroutineDispatcher()) {
+    val differ = object : PagingDataDiffer<T>(differCallback) {
         override suspend fun presentNewList(
             previousList: NullPaddedList<T>,
             newList: NullPaddedList<T>,
-            newCombinedLoadStates: CombinedLoadStates,
             lastAccessedIndex: Int,
             onListPresentable: () -> Unit
         ): Int? {

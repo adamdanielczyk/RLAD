@@ -10,20 +10,13 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.*
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class SearchViewModelTest {
-
-    private val testCoroutineDispatcher = TestCoroutineDispatcher()
-    private val testCoroutineScope = TestCoroutineScope()
 
     private val characters = listOf(
         CharacterEntity(
@@ -56,7 +49,7 @@ class SearchViewModelTest {
 
     @Before
     fun setup() {
-        Dispatchers.setMain(testCoroutineDispatcher)
+        Dispatchers.setMain(StandardTestDispatcher())
         val characterRepository = mockk<CharacterRepository>()
 
         every {
@@ -70,68 +63,65 @@ class SearchViewModelTest {
         viewModel = SearchViewModel(characterRepository)
     }
 
+    @After
+    fun teardown() {
+        Dispatchers.resetMain()
+    }
+
     @Test
-    fun allCharactersDisplayedByDefault() = runBlockingTest {
+    fun allCharactersDisplayedByDefault() = runTest {
         assertEquals(characters, viewModel.getCurrentCharacters())
     }
 
     @Test
-    fun onItemClicked_sendOpenDetailsEvent() = runBlockingTest {
+    fun onItemClicked_sendOpenDetailsEvent() = runTest {
         val imageView = mockk<ImageView>()
         val character = characters.first()
 
-        viewModel.openDetailsScreen
-            .onEach { (clickedCharacter, clickedImageView) ->
-                assertEquals(character, clickedCharacter)
-                assertEquals(imageView, clickedImageView)
-            }
-            .launchIn(testCoroutineScope)
-
         viewModel.onItemClicked(character, imageView)
+
+        val (clickedCharacter, clickedImageView) = viewModel.openDetailsScreen.first()
+        assertEquals(character, clickedCharacter)
+        assertEquals(imageView, clickedImageView)
     }
 
     @Test
-    fun onQueryTextChanged_emitItemsAfterDebounce() = runBlockingTest {
+    fun onQueryTextChanged_emitItemsAfterDebounce() = runTest {
         viewModel.onQueryTextChanged("Rick")
 
         assertEquals(characters, viewModel.getCurrentCharacters())
 
-        testCoroutineDispatcher.advanceTimeBy(SearchViewModel.DEBOUNCE_TIME / 2)
+        advanceTimeBy(SearchViewModel.DEBOUNCE_TIME / 2)
+        runCurrent()
 
         assertEquals(characters, viewModel.getCurrentCharacters())
 
-        testCoroutineDispatcher.advanceTimeBy(SearchViewModel.DEBOUNCE_TIME / 2)
+        advanceTimeBy(SearchViewModel.DEBOUNCE_TIME / 2)
+        runCurrent()
 
         assertEquals(searchedCharacters, viewModel.getCurrentCharacters())
     }
 
     @Test
-    fun onSearchExpanded_scrollToTop() {
-        viewModel.scrollToTop
-            .onEach { event -> assertEquals(Unit, event) }
-            .launchIn(testCoroutineScope)
-
+    fun onSearchExpanded_scrollToTop() = runTest {
         viewModel.onSearchExpanded()
+
+        assertEquals(Unit, viewModel.scrollToTop.first())
     }
 
     @Test
-    fun onSearchCollapsed_displayAllCharactersAndScrollToTop() = runBlockingTest {
-        viewModel.scrollToTop
-            .onEach { event -> assertEquals(Unit, event) }
-            .launchIn(testCoroutineScope)
-
+    fun onSearchCollapsed_displayAllCharactersAndScrollToTop() = runTest {
         viewModel.onSearchCollapsed()
 
+        assertEquals(Unit, viewModel.scrollToTop.first())
         assertEquals(characters, viewModel.getCurrentCharacters())
     }
 
     @Test
-    fun onClearSearchClicked_scrollToTop() {
-        viewModel.scrollToTop
-            .onEach { event -> assertEquals(Unit, event) }
-            .launchIn(testCoroutineScope)
-
+    fun onClearSearchClicked_scrollToTop() = runTest {
         viewModel.onClearSearchClicked()
+
+        assertEquals(Unit, viewModel.scrollToTop.first())
     }
 
     private suspend fun SearchViewModel.getCurrentCharacters(): List<CharacterEntity> =

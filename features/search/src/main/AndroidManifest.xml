@@ -2,7 +2,9 @@
     package="com.sample.features.search">
 
     <application android:theme="@style/AppTheme">
-        <activity android:name=".SearchActivity">
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.sample.features.search.open" />
                 <category android:name="android.intent.category.DEFAULT" />
