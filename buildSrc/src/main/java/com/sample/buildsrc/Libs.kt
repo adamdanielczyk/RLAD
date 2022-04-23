@@ -6,13 +6,14 @@ object Libs {
 
     val moshi = "com.squareup.moshi:moshi-kotlin:1.13.0"
     val glide = "com.github.bumptech.glide:glide:4.13.1"
+    val coil = "io.coil-kt:coil-compose:1.4.0"
 
     object Google {
         val material = "com.google.android.material:material:1.5.0"
     }
 
     object Kotlin {
-        private val version = "1.6.21"
+        private val version = "1.6.10"
         val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
@@ -52,8 +53,12 @@ object Libs {
 
         object Lifecycle {
             private val version = "2.4.1"
-            val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
             val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
+
+            object ViewModel {
+                val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
+                val compose = "androidx.lifecycle:lifecycle-viewmodel-compose:$version"
+            }
         }
 
         object Room {
@@ -62,6 +67,16 @@ object Libs {
             val compiler = "androidx.room:room-compiler:$version"
             val room = "androidx.room:room-ktx:$version"
             val paging = "androidx.room:room-paging:$version"
+        }
+
+        object Compose {
+            val version = "1.1.1"
+            val ui = "androidx.compose.ui:ui:$version"
+            val activity = "androidx.activity:activity-compose:$version"
+            val tooling = "androidx.compose.ui:ui-tooling:$version"
+            val foundation = "androidx.compose.foundation:foundation:$version"
+            val material = "androidx.compose.material:material:$version"
+            val themeAdapter = "com.google.android.material:compose-theme-adapter:1.1.7"
         }
     }
 
