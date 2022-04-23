@@ -37,7 +37,9 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
     }
 
     fun onItemClicked(entity: CharacterEntity, imageView: ImageView) {
-        _openDetailsScreen.tryEmit(entity to imageView)
+        viewModelScope.launch {
+            _openDetailsScreen.emit(entity to imageView)
+        }
     }
 
     fun onQueryTextChanged(queryText: String?) {
@@ -62,7 +64,9 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
     }
 
     private fun scrollToTop() {
-        _scrollToTop.tryEmit(Unit)
+        viewModelScope.launch {
+            _scrollToTop.emit(Unit)
+        }
     }
 
     private fun performSearch(nameOrLocation: String) {
@@ -74,7 +78,9 @@ class SearchViewModel(private val repository: CharacterRepository) : ViewModel()
     }
 
     private fun postNewPagingData(newCharacters: Flow<PagingData<CharacterEntity>>) {
-        _charactersUpdates.tryEmit(newCharacters)
+        viewModelScope.launch {
+            _charactersUpdates.emit(newCharacters)
+        }
     }
 
     companion object {

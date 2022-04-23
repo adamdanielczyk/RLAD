@@ -10,7 +10,7 @@ class SearchViewModelFactory @Inject constructor(
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass != SearchViewModel::class.java) {
             error("Unknown ViewModel class: $modelClass")
         }

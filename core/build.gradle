@@ -24,14 +24,15 @@ android {
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions.freeCompilerArgs += [
-            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=kotlinx.coroutines.FlowPreview"
     ]
 }
 
 dependencies {
     implementation Libs.AndroidX.Arch.coreRuntime
     implementation Libs.AndroidX.paging
+    implementation Libs.AndroidX.Room.paging
     implementation Libs.AndroidX.Room.room
     implementation Libs.AndroidX.Room.runtime
     kapt Libs.AndroidX.Room.compiler
