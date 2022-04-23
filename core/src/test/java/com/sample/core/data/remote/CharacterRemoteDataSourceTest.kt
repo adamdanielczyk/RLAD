@@ -1,11 +1,8 @@
 package com.sample.core.data.remote
 
-import com.sample.common.test.di.DaggerTestCoreComponent
 import com.sample.core.data.remote.ServerCharacter.*
-import io.mockk.mockk
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 
 class CharacterRemoteDataSourceTest {
@@ -35,19 +32,11 @@ class CharacterRemoteDataSourceTest {
         )
     )
 
-    private lateinit var characterRemoteDataSource: CharacterRemoteDataSource
-
-    @Before
-    fun setup() {
-        val component = DaggerTestCoreComponent.builder()
-            .database(mockk())
-            .build()
-        characterRemoteDataSource = component.characterRemoteDataSource()
-        component.fakeRickAndMortyApi().addCharacters(characters)
-    }
+    private val fakeRickAndMortyApi = FakeRickAndMortyApi(characters)
+    private val characterRemoteDataSource = CharacterRemoteDataSource(fakeRickAndMortyApi)
 
     @Test
-    fun getCharacters_allApiItemsAreReturned() = runBlockingTest {
+    fun getCharacters_allApiItemsAreReturned() = runTest {
         assertEquals(
             characters,
             characterRemoteDataSource.getCharacters(page = 0, name = null)
@@ -55,10 +44,24 @@ class CharacterRemoteDataSourceTest {
     }
 
     @Test
-    fun getCharacters_apiItemsAreFilteredByName() = runBlockingTest {
+    fun getCharacters_apiItemsAreFilteredByName() = runTest {
         assertEquals(
             listOf(characters[1]),
             characterRemoteDataSource.getCharacters(page = 0, name = "Morty")
         )
+    }
+
+    private class FakeRickAndMortyApi(
+        private val characters: List<ServerCharacter>,
+    ) : RickAndMortyApi {
+
+        override suspend fun getCharacters(page: Int, name: String?): GetCharactersResponse {
+            val characters = if (name != null) {
+                characters.filter { it.name.contains(name) }
+            } else {
+                characters
+            }
+            return GetCharactersResponse(characters)
+        }
     }
 }

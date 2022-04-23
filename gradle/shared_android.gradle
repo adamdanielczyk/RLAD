@@ -1,3 +1,5 @@
+import com.sample.buildsrc.Libs
+
 android {
     compileSdkVersion 31
     buildToolsVersion "32.0.0"
@@ -39,4 +41,9 @@ android {
         exclude "META-INF/LGPL2.1"
         exclude "META-INF/licenses/**"
     }
+}
+
+dependencies {
+    implementation Libs.Hilt.hilt
+    kapt Libs.Hilt.compiler
 }
