@@ -2,6 +2,8 @@ import com.sample.buildsrc.Libs
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
 

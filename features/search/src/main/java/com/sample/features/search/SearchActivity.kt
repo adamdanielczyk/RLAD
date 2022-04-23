@@ -5,24 +5,23 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import com.sample.core.actions.Actions
-import com.sample.core.data.di.coreComponent
 import com.sample.features.search.databinding.SearchActivityBinding
-import com.sample.features.search.di.DaggerSearchComponent
-import com.sample.features.search.di.SearchModule
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModels()
 
     private lateinit var binding: SearchActivityBinding
     private lateinit var searchView: SearchView
@@ -32,7 +31,6 @@ class SearchActivity : AppCompatActivity() {
     private var savedQueryState: CharSequence? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
         super.onCreate(savedInstanceState)
         binding = SearchActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -43,14 +41,6 @@ class SearchActivity : AppCompatActivity() {
         val searchAdapter = SearchAdapter(viewModel::onItemClicked)
         setupRecyclerView(searchAdapter)
         setupViewModelEvents(searchAdapter)
-    }
-
-    private fun inject() {
-        DaggerSearchComponent.builder()
-            .searchModule(SearchModule(this))
-            .coreComponent(application.coreComponent)
-            .build()
-            .inject(this)
     }
 
     private fun setupRecyclerView(searchAdapter: SearchAdapter) = with(binding.recyclerView) {
