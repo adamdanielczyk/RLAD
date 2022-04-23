@@ -1,6 +1,8 @@
 package com.sample.core.data.remote
 
-import com.sample.core.data.remote.ServerCharacter.*
+import com.sample.core.data.remote.ServerCharacter.Gender
+import com.sample.core.data.remote.ServerCharacter.Location
+import com.sample.core.data.remote.ServerCharacter.Status
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
