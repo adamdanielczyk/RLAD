@@ -1,6 +1,5 @@
 package com.sample.features.search
 
-import android.widget.ImageView
 import androidx.paging.DifferCallback
 import androidx.paging.NullPaddedList
 import androidx.paging.PagingData
@@ -85,14 +84,12 @@ class SearchViewModelTest {
 
     @Test
     fun onItemClicked_sendOpenDetailsEvent() = runTest {
-        val imageView = mockk<ImageView>()
         val character = characters.first()
 
-        viewModel.onItemClicked(character, imageView)
+        viewModel.onItemClicked(character)
 
-        val (clickedCharacter, clickedImageView) = viewModel.openDetailsScreen.first()
+        val clickedCharacter = viewModel.openDetailsScreen.first()
         assertEquals(character, clickedCharacter)
-        assertEquals(imageView, clickedImageView)
     }
 
     @Test

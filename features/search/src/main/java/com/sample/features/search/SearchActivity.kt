@@ -1,6 +1,5 @@
 package com.sample.features.search
 
-import android.app.ActivityOptions
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -60,15 +59,9 @@ class SearchActivity : AppCompatActivity() {
             }.launchIn(lifecycleScope)
 
         openDetailsScreen
-            .onEach { (characterEntity, imageView) ->
+            .onEach { characterEntity ->
                 val activity = this@SearchActivity
-                val intent = Actions.openDetailsIntent(activity, characterEntity.id)
-                val options = ActivityOptions.makeSceneTransitionAnimation(
-                    activity,
-                    imageView,
-                    resources.getString(R.string.shared_element_name)
-                )
-                startActivity(intent, options.toBundle())
+                startActivity(Actions.openDetailsIntent(activity, characterEntity.id))
             }.launchIn(lifecycleScope)
 
         scrollToTop

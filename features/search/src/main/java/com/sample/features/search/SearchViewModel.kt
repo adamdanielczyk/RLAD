@@ -25,7 +25,7 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
     )
     val charactersUpdates = _charactersUpdates.asSharedFlow()
 
-    private val _openDetailsScreen = MutableSharedFlow<Pair<CharacterEntity, ImageView>>(
+    private val _openDetailsScreen = MutableSharedFlow<CharacterEntity>(
         extraBufferCapacity = 1
     )
     val openDetailsScreen = _openDetailsScreen.asSharedFlow()
@@ -39,9 +39,9 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
         displayAllCharacters()
     }
 
-    fun onItemClicked(entity: CharacterEntity, imageView: ImageView) {
+    fun onItemClicked(entity: CharacterEntity) {
         viewModelScope.launch {
-            _openDetailsScreen.emit(entity to imageView)
+            _openDetailsScreen.emit(entity)
         }
     }
 

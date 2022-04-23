@@ -18,6 +18,5 @@ dependencies {
     implementation project(":features:search")
     implementation project(":features:details")
 
-    implementation Libs.Kotlin.stdlib
     implementation Libs.AndroidX.appcompat
 }
