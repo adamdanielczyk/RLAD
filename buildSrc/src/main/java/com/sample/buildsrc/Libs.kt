@@ -5,7 +5,6 @@ object Libs {
     val androidGradlePlugin = "com.android.tools.build:gradle:7.1.3"
 
     val moshi = "com.squareup.moshi:moshi-kotlin:1.13.0"
-    val glide = "com.github.bumptech.glide:glide:4.13.1"
     val coil = "io.coil-kt:coil-compose:1.4.0"
 
     object Google {
@@ -32,7 +31,6 @@ object Libs {
         val appcompat = "androidx.appcompat:appcompat:1.4.1"
         val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
         val activity = "androidx.activity:activity-ktx:1.4.0"
-        val paging = "androidx.paging:paging-runtime-ktx:3.1.1"
         val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
         val core = "androidx.core:core-ktx:1.7.0"
 
@@ -76,7 +74,13 @@ object Libs {
             val tooling = "androidx.compose.ui:ui-tooling:$version"
             val foundation = "androidx.compose.foundation:foundation:$version"
             val material = "androidx.compose.material:material:$version"
+            val materialIcons = "androidx.compose.material:material-icons-extended:$version"
             val themeAdapter = "com.google.android.material:compose-theme-adapter:1.1.7"
+        }
+
+        object Paging {
+            val paging = "androidx.paging:paging-runtime-ktx:3.1.1"
+            val compose = "androidx.paging:paging-compose:1.0.0-alpha14"
         }
     }
 

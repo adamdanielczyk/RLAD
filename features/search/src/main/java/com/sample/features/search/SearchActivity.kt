@@ -1,129 +1,159 @@
 package com.sample.features.search
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.compose.collectAsLazyPagingItems
+import coil.compose.rememberImagePainter
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.sample.core.actions.Actions
-import com.sample.features.search.databinding.SearchActivityBinding
+import com.sample.core.data.local.CharacterEntity
+import com.sample.features.details.SearchBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
 
     private val viewModel: SearchViewModel by viewModels()
 
-    private lateinit var binding: SearchActivityBinding
-    private lateinit var searchView: SearchView
-    private lateinit var searchMenuItem: MenuItem
-
-    private var charactersJob: Job? = null
-    private var savedQueryState: CharSequence? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = SearchActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
 
-        savedQueryState = savedInstanceState?.getCharSequence(KEY_SAVED_QUERY_STATE)
+        setContent {
+            MdcTheme {
+                SearchScreen()
+            }
+        }
 
-        val searchAdapter = SearchAdapter(viewModel::onItemClicked)
-        setupRecyclerView(searchAdapter)
-        setupViewModelEvents(searchAdapter)
-    }
-
-    private fun setupRecyclerView(searchAdapter: SearchAdapter) = with(binding.recyclerView) {
-        adapter = searchAdapter
-        addItemDecoration(SpaceItemDecoration(resources.getDimensionPixelSize(R.dimen.grid_spacing)))
-    }
-
-    private fun setupViewModelEvents(searchAdapter: SearchAdapter) = with(viewModel) {
-        charactersUpdates
-            .onEach { characters ->
-                charactersJob?.cancel()
-                charactersJob = lifecycleScope.launch {
-                    characters.collectLatest {
-                        searchAdapter.submitData(it)
-                    }
-                }
-            }.launchIn(lifecycleScope)
-
-        openDetailsScreen
+        viewModel.openDetailsScreen
             .onEach { characterEntity ->
                 val activity = this@SearchActivity
                 startActivity(Actions.openDetailsIntent(activity, characterEntity.id))
             }.launchIn(lifecycleScope)
-
-        scrollToTop
-            .onEach { binding.recyclerView.smoothScrollToPosition(0) }
-            .launchIn(lifecycleScope)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.search_menu, menu)
-
-        searchMenuItem = menu.findItem(R.id.action_search)
-        searchView = searchMenuItem.actionView as SearchView
-
-        setupSearchView(searchMenuItem)
-
-        return super.onCreateOptionsMenu(menu)
+    @Composable
+    private fun SearchScreen() {
+        Scaffold {
+            Column {
+                SearchBar()
+                CharactersList()
+            }
+        }
     }
 
-    private fun setupSearchView(searchMenuItem: MenuItem) {
-        with(searchView) {
-            queryHint = getString(R.string.search_hint)
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean = false
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.onQueryTextChanged(newText)
-                    return true
+    @OptIn(ExperimentalAnimationApi::class)
+    @Composable
+    private fun SearchBar() {
+        SearchBar(
+            onQueryChanged = { newQuery ->
+                viewModel.onQueryTextChanged(newQuery)
+            },
+            onSearchFocusChanged = { focused ->
+                if (focused) {
+                    viewModel.onSearchExpanded()
+                } else {
+                    viewModel.onSearchCollapsed()
                 }
-            })
+            },
+            onClearQueryClicked = {
+                viewModel.onClearSearchClicked()
+            },
+            onBack = {
+                viewModel.onClearSearchClicked()
+            },
+        )
+    }
+
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable
+    private fun CharactersList() {
+        val characters = viewModel.charactersPagingData.collectAsState(initial = null).value ?: return
+        val lazyPagingCharacters = characters.collectAsLazyPagingItems()
+
+        val listState = rememberLazyListState()
+
+        LaunchedEffect(Unit) {
+            viewModel.scrollToTop.collectLatest {
+                listState.animateScrollToItem(index = 0)
+            }
         }
 
-        val hasSavedQueryState = !savedQueryState.isNullOrEmpty()
-        if (hasSavedQueryState) {
-            searchMenuItem.expandActionView()
-            searchView.setQuery(savedQueryState, true)
-            searchView.clearFocus()
-        }
-
-        searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                viewModel.onSearchExpanded()
-                return true
+        LazyVerticalGrid(
+            cells = GridCells.Adaptive(minSize = 150.dp),
+            contentPadding = PaddingValues(8.dp),
+            state = listState,
+        ) {
+            items(lazyPagingCharacters.itemCount) { index ->
+                val character = lazyPagingCharacters[index] ?: return@items
+                CharacterCard(character)
             }
-
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                viewModel.onSearchCollapsed()
-                return true
-            }
-        })
-
-        searchView.findViewById<View>(R.id.search_close_btn).setOnClickListener {
-            searchView.setQuery("", false)
-            viewModel.onClearSearchClicked()
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putCharSequence(KEY_SAVED_QUERY_STATE, searchView.query)
-    }
+    @OptIn(ExperimentalMaterialApi::class)
+    @Composable
+    private fun CharacterCard(character: CharacterEntity) {
+        Card(
+            onClick = { viewModel.onItemClicked(character) },
+            elevation = 3.dp,
+            modifier = Modifier.padding(8.dp),
+        ) {
+            Column {
+                Image(
+                    painter = rememberImagePainter(character.imageUrl),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .height(150.dp)
+                        .fillMaxWidth(),
+                )
 
-    companion object {
-        private const val KEY_SAVED_QUERY_STATE = "KEY_SAVED_QUERY_STATE"
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = character.name,
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
+                    Text(
+                        text = stringResource(R.string.details_species, character.species),
+                        style = MaterialTheme.typography.caption,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
+                    Text(
+                        text = stringResource(R.string.details_location, character.location.name),
+                        style = MaterialTheme.typography.caption,
+                    )
+                }
+            }
+        }
     }
 }

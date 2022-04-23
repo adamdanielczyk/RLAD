@@ -66,7 +66,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun DetailScreen() {
+    private fun DetailScreen() {
         val character = viewModel.character.collectAsState(initial = null).value ?: return
 
         Scaffold(
@@ -79,8 +79,8 @@ class DetailsActivity : AppCompatActivity() {
                     navigationIcon = {
                         IconButton(onClick = { onBackPressedDispatcher?.onBackPressed() }) {
                             Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = ""
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null,
                             )
                         }
                     },
@@ -125,7 +125,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun ImageWithGradient(imageUrl: String) {
+    private fun ImageWithGradient(imageUrl: String) {
         var sizeImage by remember { mutableStateOf(IntSize.Zero) }
 
         val gradient = Brush.verticalGradient(
@@ -137,7 +137,7 @@ class DetailsActivity : AppCompatActivity() {
         Box {
             Image(
                 painter = rememberImagePainter(imageUrl),
-                contentDescription = "",
+                contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .height(250.dp)
@@ -153,7 +153,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun DetailsText(text: String) {
+    private fun DetailsText(text: String) {
         Text(
             text = text,
             modifier = Modifier.padding(bottom = 8.dp),

@@ -1,6 +1,5 @@
 package com.sample.features.search
 
-import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -23,7 +22,7 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    val charactersUpdates = _charactersUpdates.asSharedFlow()
+    val charactersPagingData = _charactersUpdates.asSharedFlow()
 
     private val _openDetailsScreen = MutableSharedFlow<CharacterEntity>(
         extraBufferCapacity = 1
@@ -58,11 +57,11 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
     }
 
     fun onSearchCollapsed() {
-        displayAllCharacters()
         scrollToTop()
     }
 
     fun onClearSearchClicked() {
+        displayAllCharacters()
         scrollToTop()
     }
 

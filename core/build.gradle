@@ -31,7 +31,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 
 dependencies {
     implementation Libs.AndroidX.Arch.coreRuntime
-    implementation Libs.AndroidX.paging
+    implementation Libs.AndroidX.Paging.paging
     implementation Libs.AndroidX.Room.paging
     implementation Libs.AndroidX.Room.room
     implementation Libs.AndroidX.Room.runtime
@@ -41,6 +41,5 @@ dependencies {
     implementation Libs.Retrofit.moshiConverter
     implementation Libs.moshi
 
-    implementation Libs.glide
     implementation Libs.Google.material
 }
