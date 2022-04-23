@@ -19,16 +19,28 @@ data class ServerCharacter(
 ) {
 
     enum class Status {
-        @Json(name = "Alive") ALIVE,
-        @Json(name = "Dead") DEAD,
-        @Json(name = "unknown") UNKNOWN
+        @Json(name = "Alive")
+        ALIVE,
+
+        @Json(name = "Dead")
+        DEAD,
+
+        @Json(name = "unknown")
+        UNKNOWN
     }
 
     enum class Gender {
-        @Json(name = "Female") FEMALE,
-        @Json(name = "Male") MALE,
-        @Json(name = "Genderless") GENDERLESS,
-        @Json(name = "unknown") UNKNOWN
+        @Json(name = "Female")
+        FEMALE,
+
+        @Json(name = "Male")
+        MALE,
+
+        @Json(name = "Genderless")
+        GENDERLESS,
+
+        @Json(name = "unknown")
+        UNKNOWN
     }
 
     data class Location(
