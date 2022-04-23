@@ -9,7 +9,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -18,7 +18,7 @@ class DetailsViewModelTest {
     private val characterRepository = mockk<CharacterRepository>()
 
     @Test
-    fun getCharacter_returnMatchingRepositoryCharacter() = runBlockingTest {
+    fun getCharacter_returnMatchingRepositoryCharacter() = runTest {
         val character = CharacterEntity(
             id = 1,
             name = "Morty Smith",
