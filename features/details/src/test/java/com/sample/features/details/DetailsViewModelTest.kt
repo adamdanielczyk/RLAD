@@ -1,7 +1,9 @@
 package com.sample.features.details
 
 import com.sample.core.data.local.CharacterEntity
-import com.sample.core.data.local.CharacterEntity.*
+import com.sample.core.data.local.CharacterEntity.Gender
+import com.sample.core.data.local.CharacterEntity.Location
+import com.sample.core.data.local.CharacterEntity.Status
 import com.sample.core.data.repository.CharacterRepository
 import io.mockk.every
 import io.mockk.mockk

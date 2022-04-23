@@ -6,13 +6,21 @@ import androidx.paging.NullPaddedList
 import androidx.paging.PagingData
 import androidx.paging.PagingDataDiffer
 import com.sample.core.data.local.CharacterEntity
+import com.sample.core.data.local.CharacterEntity.Gender
+import com.sample.core.data.local.CharacterEntity.Location
+import com.sample.core.data.local.CharacterEntity.Status
 import com.sample.core.data.repository.CharacterRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -24,22 +32,22 @@ class SearchViewModelTest {
         CharacterEntity(
             id = 1,
             name = "Rick Sanchez",
-            status = CharacterEntity.Status.ALIVE,
+            status = Status.ALIVE,
             species = "species 1",
             type = "type 1",
-            gender = CharacterEntity.Gender.MALE,
-            location = CharacterEntity.Location("location 1"),
+            gender = Gender.MALE,
+            location = Location("location 1"),
             imageUrl = "url 1",
             created = "created 1"
         ),
         CharacterEntity(
             id = 2,
             name = "Morty Smith",
-            status = CharacterEntity.Status.ALIVE,
+            status = Status.ALIVE,
             species = "species 2",
             type = "type 2",
-            gender = CharacterEntity.Gender.MALE,
-            location = CharacterEntity.Location("location 2"),
+            gender = Gender.MALE,
+            location = Location("location 2"),
             imageUrl = "url 2",
             created = "created 2"
         )
