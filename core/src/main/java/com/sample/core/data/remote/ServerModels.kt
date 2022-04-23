@@ -3,7 +3,7 @@ package com.sample.core.data.remote
 import com.squareup.moshi.Json
 
 data class GetCharactersResponse(
-    @Json(name = "results") val results: List<ServerCharacter>
+    @Json(name = "results") val results: List<ServerCharacter>,
 )
 
 data class ServerCharacter(
@@ -15,7 +15,7 @@ data class ServerCharacter(
     @Json(name = "gender") val gender: Gender,
     @Json(name = "location") val location: Location,
     @Json(name = "image") val imageUrl: String,
-    @Json(name = "created") val created: String
+    @Json(name = "created") val created: String,
 ) {
 
     enum class Status {
@@ -32,6 +32,6 @@ data class ServerCharacter(
     }
 
     data class Location(
-        @Json(name = "name") val name: String
+        @Json(name = "name") val name: String,
     )
 }
