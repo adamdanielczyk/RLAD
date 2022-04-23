@@ -37,10 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.sample.core.actions.EXTRA_CHARACTER_ID
 import com.sample.core.data.local.CharacterEntity.Gender
 import com.sample.core.data.local.CharacterEntity.Status
+import com.sample.core.ui.SampleTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -59,7 +59,7 @@ class DetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MdcTheme {
+            SampleTheme {
                 DetailScreen()
             }
         }

@@ -27,7 +27,8 @@ dependencies {
     implementation Libs.AndroidX.Compose.foundation
     implementation Libs.AndroidX.Compose.material
     implementation Libs.AndroidX.Compose.materialIcons
-    implementation Libs.AndroidX.Compose.themeAdapter
+
+    implementation Libs.Accompanist.systemuicontroller
 
     implementation Libs.coil
     implementation Libs.Google.material
