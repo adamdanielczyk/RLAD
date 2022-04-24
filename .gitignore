@@ -161,6 +161,7 @@ obj/
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 .idea/jarRepositories.xml
+.idea/deploymentTargetDropDown.xml
 
 # OS-specific files
 .DS_Store
