@@ -19,7 +19,6 @@ import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Cancel
@@ -154,8 +153,8 @@ private fun SearchTextField(
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Search
                         ),
-                        textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-                        cursorBrush = SolidColor(TextFieldDefaults.textFieldColors().cursorColor(isError = false).value),
+                        textStyle = TextStyle(MaterialTheme.colors.onSurface),
+                        cursorBrush = SolidColor(MaterialTheme.colors.onSurface),
                     )
 
                     if (!isQueryEmpty) {
