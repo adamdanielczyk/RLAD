@@ -35,7 +35,6 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sample.core.actions.Actions
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.ui.SampleTheme
-import com.sample.features.details.SearchBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -50,7 +49,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            SampleTheme() {
+            SampleTheme {
                 SearchScreen()
             }
         }
