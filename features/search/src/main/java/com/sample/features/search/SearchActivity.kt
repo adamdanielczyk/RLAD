@@ -34,6 +34,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sample.core.actions.Actions
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.ui.SampleTheme
+import com.sample.core.ui.defaultImageRequestBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -138,7 +139,7 @@ class SearchActivity : AppCompatActivity() {
         ) {
             Column {
                 Image(
-                    painter = rememberImagePainter(character.imageUrl),
+                    painter = rememberImagePainter(data = character.imageUrl, builder = defaultImageRequestBuilder()),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
