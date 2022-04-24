@@ -75,7 +75,8 @@ fun SearchBar(
                     keyboardController?.hide()
                     query = ""
                     onBack()
-                }) {
+                }
+            ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
         }
@@ -125,15 +126,15 @@ private fun SearchTextField(
                     )
             ),
         shape = CircleShape,
-        elevation = 1.dp,
+        elevation = 3.dp,
     ) {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = modifier
             ) {
-
-                if (query.isEmpty()) {
+                val isQueryEmpty = query.isEmpty()
+                if (isQueryEmpty) {
                     SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
                 }
 
@@ -157,7 +158,7 @@ private fun SearchTextField(
                         cursorBrush = SolidColor(TextFieldDefaults.textFieldColors().cursorColor(isError = false).value),
                     )
 
-                    if (query.isNotEmpty()) {
+                    if (!isQueryEmpty) {
                         IconButton(onClick = onClearQueryClicked) {
                             Icon(imageVector = Icons.Default.Cancel, contentDescription = null)
                         }
