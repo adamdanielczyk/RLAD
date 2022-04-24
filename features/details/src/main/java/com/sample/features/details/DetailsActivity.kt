@@ -41,6 +41,7 @@ import com.sample.core.actions.EXTRA_CHARACTER_ID
 import com.sample.core.data.local.CharacterEntity.Gender
 import com.sample.core.data.local.CharacterEntity.Status
 import com.sample.core.ui.SampleTheme
+import com.sample.core.ui.defaultImageRequestBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -148,7 +149,7 @@ class DetailsActivity : AppCompatActivity() {
 
         Box {
             Image(
-                painter = rememberImagePainter(imageUrl),
+                painter = rememberImagePainter(data = imageUrl, builder = defaultImageRequestBuilder()),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
