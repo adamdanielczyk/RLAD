@@ -6,10 +6,10 @@
     <string name="gender_male">Male</string>
     <string name="gender_genderless">Genderless</string>
     <string name="unknown">Unknown</string>
-    <string name="details_status">Status: %1$s</string>
-    <string name="details_species">Species: %1$s</string>
-    <string name="details_type">Type: %1$s</string>
-    <string name="details_gender">Gender: %1$s</string>
-    <string name="details_location">Location: %1$s</string>
-    <string name="details_created">Created: %1$s</string>
+    <string name="details_status">Status</string>
+    <string name="details_species">Species</string>
+    <string name="details_type">Type</string>
+    <string name="details_gender">Gender</string>
+    <string name="details_location">Location</string>
+    <string name="details_created">Created</string>
 </resources>
