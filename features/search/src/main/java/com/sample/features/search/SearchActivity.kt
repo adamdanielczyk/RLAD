@@ -26,7 +26,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -154,12 +153,12 @@ class SearchActivity : AppCompatActivity() {
                         modifier = Modifier.padding(bottom = 8.dp),
                     )
                     Text(
-                        text = stringResource(R.string.details_species, character.species),
+                        text = character.species,
                         style = MaterialTheme.typography.caption,
                         modifier = Modifier.padding(bottom = 8.dp),
                     )
                     Text(
-                        text = stringResource(R.string.details_location, character.location.name),
+                        text = character.location.name,
                         style = MaterialTheme.typography.caption,
                     )
                 }
