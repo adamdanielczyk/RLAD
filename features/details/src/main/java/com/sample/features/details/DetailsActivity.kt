@@ -91,33 +91,45 @@ class DetailsActivity : AppCompatActivity() {
                 ImageWithGradient(character.imageUrl)
 
                 Column(modifier = Modifier.padding(16.dp)) {
-                    DetailsText(stringResource(
-                        R.string.details_status,
-                        when (character.status) {
+                    DetailsText(
+                        title = stringResource(R.string.details_status),
+                        text = when (character.status) {
                             Status.ALIVE -> getString(R.string.status_alive)
                             Status.DEAD -> getString(R.string.status_dead)
                             Status.UNKNOWN -> getString(R.string.unknown)
-                        })
+                        }
                     )
 
-                    DetailsText(stringResource(R.string.details_species, character.species))
+                    DetailsText(
+                        title = stringResource(R.string.details_species),
+                        text = character.species
+                    )
 
-                    DetailsText(stringResource(
-                        R.string.details_gender,
-                        when (character.gender) {
+                    DetailsText(
+                        title = stringResource(R.string.details_gender),
+                        text = when (character.gender) {
                             Gender.FEMALE -> getString(R.string.gender_female)
                             Gender.MALE -> getString(R.string.gender_male)
                             Gender.GENDERLESS -> getString(R.string.gender_genderless)
                             Gender.UNKNOWN -> getString(R.string.unknown)
-                        })
+                        }
                     )
 
-                    DetailsText(stringResource(R.string.details_location, character.location.name))
-                    DetailsText(stringResource(R.string.details_created, character.created))
+                    DetailsText(
+                        title = stringResource(R.string.details_location),
+                        text = character.location.name
+                    )
+                    DetailsText(
+                        title = stringResource(R.string.details_created),
+                        text = character.created
+                    )
 
                     val type = character.type
                     if (!type.isNullOrBlank()) {
-                        DetailsText(stringResource(R.string.details_type, type))
+                        DetailsText(
+                            title = stringResource(R.string.details_type),
+                            text = type
+                        )
                     }
                 }
             }
@@ -153,11 +165,16 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun DetailsText(text: String) {
+    private fun DetailsText(title: String, text: String) {
+        Text(
+            text = title,
+            modifier = Modifier.padding(bottom = 4.dp),
+            style = MaterialTheme.typography.h6,
+        )
         Text(
             text = text,
             modifier = Modifier.padding(bottom = 8.dp),
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.body2,
         )
     }
 }
