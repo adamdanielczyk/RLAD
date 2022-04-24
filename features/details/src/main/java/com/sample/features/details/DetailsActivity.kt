@@ -141,7 +141,7 @@ class DetailsActivity : AppCompatActivity() {
         var sizeImage by remember { mutableStateOf(IntSize.Zero) }
 
         val gradient = Brush.verticalGradient(
-            colors = listOf(Color.Transparent, Color(0x80000000)),
+            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.5f)),
             startY = sizeImage.height.toFloat() / 3,
             endY = sizeImage.height.toFloat()
         )
