@@ -32,11 +32,8 @@ class DetailsViewModelTest {
         )
         every { characterRepository.getCharacterBy(id = 1) } returns flowOf(character)
 
-        val viewModel = DetailsViewModel(
-            characterId = 1,
-            repository = characterRepository
-        )
+        val viewModel = DetailsViewModel(characterRepository)
 
-        assertEquals(character, viewModel.character.first())
+        assertEquals(character, viewModel.getCharacter(characterId = 1).first())
     }
 }
