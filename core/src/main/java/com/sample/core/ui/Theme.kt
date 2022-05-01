@@ -10,13 +10,13 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Random
 
-private val DarkColorPalette = darkColors(
+private val DarkThemeColors = darkColors(
     primary = Color.Black,
     primaryVariant = Blue700,
     secondary = Blue200,
 )
 
-private val LightColorPalette = lightColors(
+private val LightThemeColors = lightColors(
     primary = Blue400,
     primaryVariant = Blue700,
     secondary = Blue200,
@@ -25,9 +25,9 @@ private val LightColorPalette = lightColors(
 @Composable
 fun SampleTheme(content: @Composable () -> Unit) {
     val colors = if (Random().nextBoolean()) {
-        DarkColorPalette
+        DarkThemeColors
     } else {
-        LightColorPalette
+        LightThemeColors
     }
 
     val systemUiController = rememberSystemUiController()
