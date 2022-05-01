@@ -6,7 +6,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
 apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
-apply from: "$rootProject.projectDir/gradle/shared_feature_module.gradle"
 
 android {
     defaultConfig {
