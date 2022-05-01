@@ -1,35 +1,14 @@
 package com.sample.features.details
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.repository.CharacterRepository
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class DetailsViewModel @AssistedInject constructor(
-    repository: CharacterRepository,
-    @Assisted characterId: Int,
-) : ViewModel() {
+@HiltViewModel
+class DetailsViewModel @Inject constructor(private val repository: CharacterRepository) : ViewModel() {
 
-    @AssistedFactory
-    interface Factory {
-        fun create(characterId: Int): DetailsViewModel
-    }
-
-    val character: Flow<CharacterEntity> = repository.getCharacterBy(characterId)
-
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        fun provideFactory(
-            factory: Factory,
-            characterId: Int,
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return factory.create(characterId) as T
-            }
-        }
-    }
+    fun getCharacter(characterId: Int): Flow<CharacterEntity> = repository.getCharacterBy(characterId)
 }

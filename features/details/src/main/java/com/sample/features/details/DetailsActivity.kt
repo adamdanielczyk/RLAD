@@ -43,19 +43,14 @@ import com.sample.core.data.local.CharacterEntity.Status
 import com.sample.core.ui.SampleTheme
 import com.sample.core.ui.defaultImageRequestBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailsActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModelFactory: DetailsViewModel.Factory
+    private val viewModel: DetailsViewModel by viewModels()
 
-    private val viewModel: DetailsViewModel by viewModels {
-        DetailsViewModel.provideFactory(
-            factory = viewModelFactory,
-            characterId = intent.extras?.getInt(EXTRA_CHARACTER_ID)!!
-        )
-    }
+    private val characterId: Int
+        get() = intent.extras?.getInt(EXTRA_CHARACTER_ID)!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +63,7 @@ class DetailsActivity : AppCompatActivity() {
 
     @Composable
     private fun DetailScreen() {
-        val character = viewModel.character.collectAsState(initial = null).value ?: return
+        val character = viewModel.getCharacter(characterId).collectAsState(initial = null).value ?: return
 
         Scaffold(
             topBar = {
