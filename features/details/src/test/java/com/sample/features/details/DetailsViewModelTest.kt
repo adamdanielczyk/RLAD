@@ -1,10 +1,12 @@
 package com.sample.features.details
 
+import androidx.lifecycle.SavedStateHandle
 import com.sample.core.data.local.CharacterEntity
 import com.sample.core.data.local.CharacterEntity.Gender
 import com.sample.core.data.local.CharacterEntity.Location
 import com.sample.core.data.local.CharacterEntity.Status
 import com.sample.core.data.repository.CharacterRepository
+import com.sample.features.details.ui.DetailsViewModel
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
@@ -16,6 +18,7 @@ import org.junit.Test
 class DetailsViewModelTest {
 
     private val characterRepository = mockk<CharacterRepository>()
+    private val savedStateHandle = mockk<SavedStateHandle>()
 
     @Test
     fun getCharacter_returnMatchingRepositoryCharacter() = runTest {
@@ -31,9 +34,10 @@ class DetailsViewModelTest {
             created = "created 1"
         )
         every { characterRepository.getCharacterBy(id = 1) } returns flowOf(character)
+        every { savedStateHandle.get<String>("id") } returns "1"
 
-        val viewModel = DetailsViewModel(characterRepository)
+        val viewModel = DetailsViewModel(characterRepository, savedStateHandle)
 
-        assertEquals(character, viewModel.getCharacter(characterId = 1).first())
+        assertEquals(character, viewModel.getCharacter().first())
     }
 }

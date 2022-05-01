@@ -1,15 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sample.features.search">
-
-    <application android:theme="@style/Theme.Sample">
-        <activity
-            android:name=".SearchActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.sample.features.search.open" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-    </application>
-
-</manifest>
+<manifest package="com.sample.features.search" />

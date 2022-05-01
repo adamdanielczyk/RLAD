@@ -9,6 +9,7 @@ import com.sample.core.data.local.CharacterEntity.Gender
 import com.sample.core.data.local.CharacterEntity.Location
 import com.sample.core.data.local.CharacterEntity.Status
 import com.sample.core.data.repository.CharacterRepository
+import com.sample.features.search.ui.SearchViewModel
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -80,16 +81,6 @@ class SearchViewModelTest {
     @Test
     fun allCharactersDisplayedByDefault() = runTest {
         assertEquals(characters, viewModel.getCurrentCharacters())
-    }
-
-    @Test
-    fun onItemClicked_sendOpenDetailsEvent() = runTest {
-        val character = characters.first()
-
-        viewModel.onItemClicked(character)
-
-        val clickedCharacter = viewModel.openDetailsScreen.first()
-        assertEquals(character, clickedCharacter)
     }
 
     @Test
