@@ -1,4 +1,4 @@
-package com.sample.features.search
+package com.sample.features.search.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,11 +24,6 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
     )
     val charactersPagingData = _charactersUpdates.asSharedFlow()
 
-    private val _openDetailsScreen = MutableSharedFlow<CharacterEntity>(
-        extraBufferCapacity = 1
-    )
-    val openDetailsScreen = _openDetailsScreen.asSharedFlow()
-
     private val _scrollToTop = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val scrollToTop = _scrollToTop.asSharedFlow()
 
@@ -36,12 +31,6 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
 
     init {
         displayAllCharacters()
-    }
-
-    fun onItemClicked(entity: CharacterEntity) {
-        viewModelScope.launch {
-            _openDetailsScreen.emit(entity)
-        }
     }
 
     fun onQueryTextChanged(queryText: String?) {

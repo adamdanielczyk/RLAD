@@ -28,11 +28,13 @@ object Libs {
     }
 
     object AndroidX {
-        val appcompat = "androidx.appcompat:appcompat:1.4.1"
-        val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
-        val activity = "androidx.activity:activity-ktx:1.4.0"
-        val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
-        val core = "androidx.core:core-ktx:1.7.0"
+        val navigation = "androidx.navigation:navigation-compose:2.4.2"
+
+        object Activity {
+            private val version = "1.4.0"
+            val activity = "androidx.activity:activity-ktx:$version"
+            val compose = "androidx.activity:activity-compose:$version"
+        }
 
         object Test {
             private val version = "1.4.0"
@@ -70,7 +72,6 @@ object Libs {
         object Compose {
             val version = "1.1.1"
             val ui = "androidx.compose.ui:ui:$version"
-            val activity = "androidx.activity:activity-compose:$version"
             val tooling = "androidx.compose.ui:ui-tooling:$version"
             val foundation = "androidx.compose.foundation:foundation:$version"
             val material = "androidx.compose.material:material:$version"
@@ -93,6 +94,7 @@ object Libs {
         val hilt = "com.google.dagger:hilt-android:$version"
         val compiler = "com.google.dagger:hilt-compiler:$version"
         val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
+        val navigation = "androidx.hilt:hilt-navigation-compose:1.0.0"
     }
 
     object Retrofit {
