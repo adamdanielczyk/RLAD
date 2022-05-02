@@ -32,7 +32,7 @@ import com.sample.ui.defaultImageRequestBuilder
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun SearchScreen(openDetails: (Int) -> Unit) {
+internal fun SearchScreen(openDetails: (Int) -> Unit) {
     val viewModel = hiltViewModel<SearchViewModel>()
     val systemUiController = rememberSystemUiController()
 
