@@ -2,7 +2,7 @@ package com.sample.features.details.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.sample.core.navigation.DetailsNavigator
+import com.sample.domain.navigation.DetailsNavigator
 import com.sample.features.details.ui.DetailScreen
 import javax.inject.Inject
 
