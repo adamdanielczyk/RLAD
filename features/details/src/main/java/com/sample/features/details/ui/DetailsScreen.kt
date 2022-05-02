@@ -29,26 +29,23 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
-import com.sample.core.data.local.CharacterEntity
-import com.sample.core.ui.defaultImageRequestBuilder
-import com.sample.features.details.R
+import com.sample.ui.defaultImageRequestBuilder
 
 @Composable
 fun DetailScreen() {
     val viewModel = hiltViewModel<DetailsViewModel>()
-    val character = viewModel.getCharacter().collectAsState(initial = null).value ?: return
+    val item = viewModel.getItem().collectAsState(initial = null).value ?: return
 
     Scaffold(
         topBar = {
             val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
             TopAppBar(
                 title = {
-                    Text(character.name)
+                    Text(item.name)
                 },
                 navigationIcon = {
                     IconButton(onClick = { onBackPressedDispatcher?.onBackPressed() }) {
@@ -62,48 +59,11 @@ fun DetailScreen() {
         },
     ) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            ImageWithGradient(character.imageUrl)
+            ImageWithGradient(item.imageUrl)
 
             Column(modifier = Modifier.padding(16.dp)) {
-                DetailsText(
-                    title = stringResource(R.string.details_status),
-                    text = when (character.status) {
-                        CharacterEntity.Status.ALIVE -> stringResource(R.string.status_alive)
-                        CharacterEntity.Status.DEAD -> stringResource(R.string.status_dead)
-                        CharacterEntity.Status.UNKNOWN -> stringResource(R.string.unknown)
-                    }
-                )
-
-                DetailsText(
-                    title = stringResource(R.string.details_species),
-                    text = character.species
-                )
-
-                DetailsText(
-                    title = stringResource(R.string.details_gender),
-                    text = when (character.gender) {
-                        CharacterEntity.Gender.FEMALE -> stringResource(R.string.gender_female)
-                        CharacterEntity.Gender.MALE -> stringResource(R.string.gender_male)
-                        CharacterEntity.Gender.GENDERLESS -> stringResource(R.string.gender_genderless)
-                        CharacterEntity.Gender.UNKNOWN -> stringResource(R.string.unknown)
-                    }
-                )
-
-                DetailsText(
-                    title = stringResource(R.string.details_location),
-                    text = character.location.name
-                )
-                DetailsText(
-                    title = stringResource(R.string.details_created),
-                    text = character.created
-                )
-
-                val type = character.type
-                if (!type.isNullOrBlank()) {
-                    DetailsText(
-                        title = stringResource(R.string.details_type),
-                        text = type
-                    )
+                item.detailsKeyValues.forEach { (title, text) ->
+                    DetailsText(title = title(), text = text())
                 }
             }
         }

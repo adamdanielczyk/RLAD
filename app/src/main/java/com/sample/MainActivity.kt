@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sample.core.navigation.DetailsNavigator
-import com.sample.core.navigation.SearchNavigator
-import com.sample.core.ui.SampleTheme
+import com.sample.domain.navigation.DetailsNavigator
+import com.sample.domain.navigation.SearchNavigator
+import com.sample.ui.SampleTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
