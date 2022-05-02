@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val repository: ItemsRepository) : ViewModel() {
+internal class SearchViewModel @Inject constructor(private val repository: ItemsRepository) : ViewModel() {
 
     private val _itemsUpdates = MutableSharedFlow<Flow<PagingData<ItemUiModel>>>(
         replay = 1,

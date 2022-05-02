@@ -36,7 +36,7 @@ import coil.compose.rememberImagePainter
 import com.sample.ui.defaultImageRequestBuilder
 
 @Composable
-fun DetailScreen() {
+internal fun DetailScreen() {
     val viewModel = hiltViewModel<DetailsViewModel>()
     val item = viewModel.getItem().collectAsState(initial = null).value ?: return
 
