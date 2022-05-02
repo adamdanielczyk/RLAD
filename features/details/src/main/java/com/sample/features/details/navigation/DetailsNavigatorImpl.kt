@@ -16,7 +16,7 @@ class DetailsNavigatorImpl @Inject constructor() : DetailsNavigator {
     }
 
     @Composable
-    override fun Content() {
+    override fun Content(navController: NavHostController) {
         DetailScreen()
     }
 }
