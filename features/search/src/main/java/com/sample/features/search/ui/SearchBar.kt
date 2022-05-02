@@ -50,7 +50,7 @@ import com.sample.features.search.R
 @ExperimentalAnimationApi
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBar(
+internal fun SearchBar(
     onQueryChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit,
     onClearQueryClicked: () -> Unit,

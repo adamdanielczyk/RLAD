@@ -7,7 +7,7 @@ import com.sample.domain.navigation.Navigator
 import com.sample.features.search.ui.SearchScreen
 import javax.inject.Inject
 
-class SearchNavigatorImpl @Inject constructor(
+internal class SearchNavigatorImpl @Inject constructor(
     private val detailsNavigator: DetailsNavigator,
 ) : Navigator {
 

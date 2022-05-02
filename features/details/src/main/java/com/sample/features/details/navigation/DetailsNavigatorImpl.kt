@@ -6,7 +6,7 @@ import com.sample.domain.navigation.DetailsNavigator
 import com.sample.features.details.ui.DetailScreen
 import javax.inject.Inject
 
-class DetailsNavigatorImpl @Inject constructor() : DetailsNavigator {
+internal class DetailsNavigatorImpl @Inject constructor() : DetailsNavigator {
 
     override val route: String
         get() = "details/{id}"

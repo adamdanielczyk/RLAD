@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(
+internal class DetailsViewModel @Inject constructor(
     private val repository: ItemsRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

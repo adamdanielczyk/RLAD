@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+internal class MainActivity : ComponentActivity() {
 
     @Inject lateinit var navigators: Set<@JvmSuppressWildcards Navigator>
 
