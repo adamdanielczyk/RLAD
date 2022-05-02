@@ -14,5 +14,5 @@ internal interface SearchModule {
 
     @Binds
     @IntoSet
-    fun provide(impl: SearchNavigatorImpl): Navigator
+    fun bindNavigator(impl: SearchNavigatorImpl): Navigator
 }
