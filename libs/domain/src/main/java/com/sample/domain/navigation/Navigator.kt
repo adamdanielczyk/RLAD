@@ -5,16 +5,13 @@ import androidx.navigation.NavHostController
 
 interface Navigator {
     val route: String
-}
+    val isStartDestination: Boolean
+        get() = false
 
-interface SearchNavigator : Navigator {
     @Composable
-    fun Content(openDetails: (Int) -> Unit)
+    fun Content(navController: NavHostController)
 }
 
 interface DetailsNavigator : Navigator {
     fun navigate(navController: NavHostController, id: Int)
-
-    @Composable
-    fun Content()
 }
