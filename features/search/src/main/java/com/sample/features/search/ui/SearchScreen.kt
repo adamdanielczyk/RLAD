@@ -27,8 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.sample.core.data.local.CharacterEntity
-import com.sample.core.ui.defaultImageRequestBuilder
+import com.sample.domain.model.ItemUiModel
+import com.sample.ui.defaultImageRequestBuilder
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -46,7 +46,7 @@ fun SearchScreen(openDetails: (Int) -> Unit) {
     Scaffold {
         Column {
             SearchBar(viewModel)
-            CharactersList(viewModel, openDetails)
+            ItemsList(viewModel, openDetails)
         }
     }
 }
@@ -76,9 +76,9 @@ private fun SearchBar(viewModel: SearchViewModel) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun CharactersList(viewModel: SearchViewModel, openDetails: (Int) -> Unit) {
-    val characters = viewModel.charactersPagingData.collectAsState(initial = null).value ?: return
-    val lazyPagingCharacters = characters.collectAsLazyPagingItems()
+private fun ItemsList(viewModel: SearchViewModel, openDetails: (Int) -> Unit) {
+    val items = viewModel.itemsPagingData.collectAsState(initial = null).value ?: return
+    val lazyPagingItems = items.collectAsLazyPagingItems()
 
     val listState = rememberLazyListState()
 
@@ -93,24 +93,24 @@ private fun CharactersList(viewModel: SearchViewModel, openDetails: (Int) -> Uni
         contentPadding = PaddingValues(8.dp),
         state = listState,
     ) {
-        items(lazyPagingCharacters.itemCount) { index ->
-            val character = lazyPagingCharacters[index] ?: return@items
-            CharacterCard(character, openDetails)
+        items(lazyPagingItems.itemCount) { index ->
+            val item = lazyPagingItems[index] ?: return@items
+            ItemCard(item, openDetails)
         }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun CharacterCard(character: CharacterEntity, openDetails: (Int) -> Unit) {
+private fun ItemCard(item: ItemUiModel, openDetails: (Int) -> Unit) {
     Card(
-        onClick = { openDetails(character.id) },
+        onClick = { openDetails(item.id) },
         elevation = 3.dp,
         modifier = Modifier.padding(8.dp),
     ) {
         Column {
             Image(
-                painter = rememberImagePainter(data = character.imageUrl, builder = defaultImageRequestBuilder()),
+                painter = rememberImagePainter(data = item.imageUrl, builder = defaultImageRequestBuilder()),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -120,19 +120,18 @@ private fun CharacterCard(character: CharacterEntity, openDetails: (Int) -> Unit
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = character.name,
+                    text = item.name,
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
-                Text(
-                    text = character.species,
-                    style = MaterialTheme.typography.caption,
-                    modifier = Modifier.padding(bottom = 8.dp),
-                )
-                Text(
-                    text = character.location.name,
-                    style = MaterialTheme.typography.caption,
-                )
+
+                item.cardCaptions.forEach { caption ->
+                    Text(
+                        text = caption,
+                        style = MaterialTheme.typography.caption,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
+                }
             }
         }
     }

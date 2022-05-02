@@ -5,12 +5,6 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
 
-android {
-    defaultConfig {
-        consumerProguardFiles 'consumer-rules.pro'
-    }
-}
-
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions.freeCompilerArgs += [
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
@@ -19,5 +13,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 dependencies {
-    implementation project(":core")
+    implementation project(":libs:domain")
+    implementation project(":libs:ui")
 }

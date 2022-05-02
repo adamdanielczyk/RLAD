@@ -3,8 +3,8 @@ package com.sample.features.search.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.sample.core.data.local.CharacterEntity
-import com.sample.core.data.repository.CharacterRepository
+import com.sample.domain.model.ItemUiModel
+import com.sample.domain.repository.ItemsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
@@ -16,13 +16,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val repository: CharacterRepository) : ViewModel() {
+class SearchViewModel @Inject constructor(private val repository: ItemsRepository) : ViewModel() {
 
-    private val _charactersUpdates = MutableSharedFlow<Flow<PagingData<CharacterEntity>>>(
+    private val _itemsUpdates = MutableSharedFlow<Flow<PagingData<ItemUiModel>>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    val charactersPagingData = _charactersUpdates.asSharedFlow()
+    val itemsPagingData = _itemsUpdates.asSharedFlow()
 
     private val _scrollToTop = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val scrollToTop = _scrollToTop.asSharedFlow()
@@ -30,7 +30,7 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
     private var debounceJob: Job? = null
 
     init {
-        displayAllCharacters()
+        displayAllItems()
     }
 
     fun onQueryTextChanged(queryText: String?) {
@@ -50,7 +50,7 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
     }
 
     fun onClearSearchClicked() {
-        displayAllCharacters()
+        displayAllItems()
         scrollToTop()
     }
 
@@ -60,17 +60,17 @@ class SearchViewModel @Inject constructor(private val repository: CharacterRepos
         }
     }
 
-    private fun performSearch(nameOrLocation: String) {
-        postNewPagingData(repository.getCharacters(nameOrLocation))
+    private fun performSearch(name: String) {
+        postNewPagingData(repository.getItems(name))
     }
 
-    private fun displayAllCharacters() {
-        postNewPagingData(repository.getCharacters())
+    private fun displayAllItems() {
+        postNewPagingData(repository.getItems())
     }
 
-    private fun postNewPagingData(newCharacters: Flow<PagingData<CharacterEntity>>) {
+    private fun postNewPagingData(newItems: Flow<PagingData<ItemUiModel>>) {
         viewModelScope.launch {
-            _charactersUpdates.emit(newCharacters)
+            _itemsUpdates.emit(newItems)
         }
     }
 
