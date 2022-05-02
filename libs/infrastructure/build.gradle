@@ -1,0 +1,42 @@
+import com.sample.buildsrc.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
+
+android {
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation": "$projectDir/schemas".toString(),
+                        "room.incremental"   : "true"
+                ]
+            }
+        }
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions.freeCompilerArgs += [
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=kotlinx.coroutines.FlowPreview"
+    ]
+}
+
+dependencies {
+    implementation project(":libs:domain")
+
+    implementation Libs.AndroidX.Arch.coreRuntime
+    implementation Libs.AndroidX.Room.paging
+    implementation Libs.AndroidX.Room.room
+    implementation Libs.AndroidX.Room.runtime
+    kapt Libs.AndroidX.Room.compiler
+
+    implementation Libs.Retrofit.retrofit
+    implementation Libs.Retrofit.moshiConverter
+    implementation Libs.moshi
+}

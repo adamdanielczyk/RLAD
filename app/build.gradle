@@ -12,7 +12,9 @@ android {
 }
 
 dependencies {
-    implementation project(":core")
+    implementation project(":libs:domain")
+    implementation project(":libs:infrastructure")
+    implementation project(":libs:ui")
     implementation project(":features:search")
     implementation project(":features:details")
 }

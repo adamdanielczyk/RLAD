@@ -1,17 +1,9 @@
-import com.sample.buildsrc.Libs
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
 apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
-
-android {
-    defaultConfig {
-        consumerProguardFiles 'consumer-rules.pro'
-    }
-}
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions.freeCompilerArgs += [
@@ -21,8 +13,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 dependencies {
-    implementation project(":core")
-
-    implementation Libs.AndroidX.Paging.paging
-    implementation Libs.AndroidX.Paging.compose
+    implementation project(":libs:domain")
+    implementation project(":libs:ui")
 }
