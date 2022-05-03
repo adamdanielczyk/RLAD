@@ -13,6 +13,7 @@ android {
 
 dependencies {
     implementation project(":libs:domain")
+    implementation project(':libs:infrastructure:common')
     implementation project(':libs:infrastructure:rickandmorty')
     implementation project(':libs:infrastructure:giphy')
     implementation project(":libs:ui")

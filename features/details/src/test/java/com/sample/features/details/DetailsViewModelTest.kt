@@ -4,18 +4,36 @@ import androidx.lifecycle.SavedStateHandle
 import com.sample.domain.model.ItemUiModel
 import com.sample.domain.usecase.ResolveItemsRepositoryUseCase
 import com.sample.features.details.ui.DetailsViewModel
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class DetailsViewModelTest {
 
     private val resolveItemsRepositoryUseCase = mockk<ResolveItemsRepositoryUseCase>()
     private val savedStateHandle = mockk<SavedStateHandle>()
+
+    @Before
+    fun setup() {
+        Dispatchers.setMain(StandardTestDispatcher())
+    }
+
+    @After
+    fun teardown() {
+        Dispatchers.resetMain()
+    }
 
     @Test
     fun getItem_returnMatchingRepositoryItem() = runTest {
@@ -28,11 +46,13 @@ class DetailsViewModelTest {
                 { "test2" } to { "test3" }
             ),
         )
-        every { resolveItemsRepositoryUseCase().getItemBy(id = "1") } returns flowOf(item)
+        coEvery { resolveItemsRepositoryUseCase().getItemBy(id = "1") } returns flowOf(item)
         every { savedStateHandle.get<String>("id") } returns "1"
 
         val viewModel = DetailsViewModel(resolveItemsRepositoryUseCase, savedStateHandle)
 
-        assertEquals(item, viewModel.getItem().first())
+        advanceUntilIdle()
+
+        assertEquals(item, viewModel.item.first())
     }
 }

@@ -3,7 +3,9 @@ package com.sample.features.search.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.sample.domain.model.DataSource
 import com.sample.domain.model.ItemUiModel
+import com.sample.domain.repository.AppSettingsRepository
 import com.sample.domain.usecase.ResolveItemsRepositoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -18,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class SearchViewModel @Inject constructor(
     private val resolveItemsRepositoryUseCase: ResolveItemsRepositoryUseCase,
+    private val appSettingsRepository: AppSettingsRepository,
 ) : ViewModel() {
 
     private val _itemsUpdates = MutableSharedFlow<Flow<PagingData<ItemUiModel>>>(
@@ -32,7 +35,9 @@ internal class SearchViewModel @Inject constructor(
     private var debounceJob: Job? = null
 
     init {
-        displayAllItems()
+        viewModelScope.launch {
+            displayAllItems()
+        }
     }
 
     fun onQueryTextChanged(queryText: String?) {
@@ -44,35 +49,52 @@ internal class SearchViewModel @Inject constructor(
     }
 
     fun onSearchExpanded() {
-        scrollToTop()
-    }
-
-    fun onSearchCollapsed() {
-        scrollToTop()
-    }
-
-    fun onClearSearchClicked() {
-        displayAllItems()
-        scrollToTop()
-    }
-
-    private fun scrollToTop() {
         viewModelScope.launch {
-            _scrollToTop.emit(Unit)
+            scrollToTop()
         }
     }
 
-    private fun performSearch(name: String) {
+    fun onSearchCollapsed() {
+        viewModelScope.launch {
+            scrollToTop()
+        }
+    }
+
+    fun onClearSearchClicked() {
+        viewModelScope.launch {
+            displayAllItems()
+            scrollToTop()
+        }
+    }
+
+    private suspend fun scrollToTop() {
+        _scrollToTop.emit(Unit)
+    }
+
+    private suspend fun performSearch(name: String) {
         postNewPagingData(resolveItemsRepositoryUseCase().getItems(name))
     }
 
-    private fun displayAllItems() {
+    private suspend fun displayAllItems() {
         postNewPagingData(resolveItemsRepositoryUseCase().getItems())
     }
 
-    private fun postNewPagingData(newItems: Flow<PagingData<ItemUiModel>>) {
+    private suspend fun postNewPagingData(newItems: Flow<PagingData<ItemUiModel>>) {
+        _itemsUpdates.emit(newItems)
+    }
+
+    fun onGiphyDataSourceClicked() {
+        changeToDataSource(DataSource.GIPHY)
+    }
+
+    fun onRickAndMortyDataSourceClicked() {
+        changeToDataSource(DataSource.RICK_AND_MORTY)
+    }
+
+    private fun changeToDataSource(dataSource: DataSource) {
         viewModelScope.launch {
-            _itemsUpdates.emit(newItems)
+            appSettingsRepository.saveSelectedDataSource(dataSource)
+            displayAllItems()
         }
     }
 

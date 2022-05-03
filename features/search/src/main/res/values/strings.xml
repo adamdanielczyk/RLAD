@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_hint">Search</string>
+    <string name="data_source_picker_title">Pick data source</string>
+    <string name="data_source_picker_giphy">Giphy</string>
+    <string name="data_source_picker_rickandmorty">Rick and Morty</string>
 </resources>

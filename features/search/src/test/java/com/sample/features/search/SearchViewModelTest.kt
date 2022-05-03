@@ -7,7 +7,7 @@ import androidx.paging.PagingDataDiffer
 import com.sample.domain.model.ItemUiModel
 import com.sample.domain.usecase.ResolveItemsRepositoryUseCase
 import com.sample.features.search.ui.SearchViewModel
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -55,15 +55,18 @@ class SearchViewModelTest {
         Dispatchers.setMain(StandardTestDispatcher())
         val resolveItemsRepositoryUseCase = mockk<ResolveItemsRepositoryUseCase>()
 
-        every {
+        coEvery {
             resolveItemsRepositoryUseCase().getItems(name = null)
         } returns flowOf(PagingData.from(items))
 
-        every {
+        coEvery {
             resolveItemsRepositoryUseCase().getItems(name = "name1")
         } returns flowOf(PagingData.from(searchedItem))
 
-        viewModel = SearchViewModel(resolveItemsRepositoryUseCase)
+        viewModel = SearchViewModel(
+            resolveItemsRepositoryUseCase = resolveItemsRepositoryUseCase,
+            appSettingsRepository = mockk(),
+        )
     }
 
     @After
