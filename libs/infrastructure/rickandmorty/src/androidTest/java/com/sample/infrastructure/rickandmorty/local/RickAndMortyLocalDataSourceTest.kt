@@ -4,28 +4,28 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.sample.infrastructure.rickandmorty.remote.ServerCharacter
-import com.sample.infrastructure.rickandmorty.repository.CharacterRepository
+import com.sample.infrastructure.rickandmorty.repository.RickAndMortyRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
-class CharacterLocalDataSourceTest {
+class RickAndMortyLocalDataSourceTest {
 
     @Rule @JvmField val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val characterDatabase = Room.inMemoryDatabaseBuilder(
+    private val rickAndMortyDatabase = Room.inMemoryDatabaseBuilder(
         ApplicationProvider.getApplicationContext(),
-        CharacterDatabase::class.java
+        RickAndMortyDatabase::class.java
     ).build()
 
-    private val characterDao = characterDatabase.characterDao()
+    private val characterDao = rickAndMortyDatabase.characterDao()
 
-    private val characterLocalDataSource = CharacterLocalDataSource(characterDao)
+    private val localDataSource = RickAndMortyLocalDataSource(characterDao)
 
     private val databaseCharacters: List<CharacterEntity> =
-        (0 until CharacterRepository.PAGE_SIZE)
+        (0 until RickAndMortyRepository.PAGE_SIZE)
             .map { createFakeCharacter(id = it, source = "database") }
             .map(::CharacterEntity)
 
@@ -34,13 +34,13 @@ class CharacterLocalDataSourceTest {
         addDatabaseCharacters(databaseCharacters)
 
         val expectedCharacter = databaseCharacters.first()
-        val characterFlow = characterLocalDataSource.getCharacterBy(expectedCharacter.id)
+        val characterFlow = localDataSource.getCharacterBy(expectedCharacter.id)
 
         assertEquals(expectedCharacter, characterFlow.first())
     }
 
     private suspend fun addDatabaseCharacters(characters: List<CharacterEntity>) {
-        characterLocalDataSource.insertCharacters(characters)
+        localDataSource.insertCharacters(characters)
     }
 
     private fun createFakeCharacter(id: Int, source: String): ServerCharacter {

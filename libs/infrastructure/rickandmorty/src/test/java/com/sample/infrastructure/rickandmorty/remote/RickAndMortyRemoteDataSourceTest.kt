@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class CharacterRemoteDataSourceTest {
+class RickAndMortyRemoteDataSourceTest {
 
     private val characters = listOf(
         ServerCharacter(
@@ -35,13 +35,13 @@ class CharacterRemoteDataSourceTest {
     )
 
     private val fakeRickAndMortyApi = FakeRickAndMortyApi(characters)
-    private val characterRemoteDataSource = CharacterRemoteDataSource(fakeRickAndMortyApi)
+    private val remoteDataSource = RickAndMortyRemoteDataSource(fakeRickAndMortyApi)
 
     @Test
     fun getCharacters_allApiItemsAreReturned() = runTest {
         assertEquals(
             characters,
-            characterRemoteDataSource.getCharacters(page = 0, name = null)
+            remoteDataSource.getCharacters(page = 0, name = null)
         )
     }
 
@@ -49,7 +49,7 @@ class CharacterRemoteDataSourceTest {
     fun getCharacters_apiItemsAreFilteredByName() = runTest {
         assertEquals(
             listOf(characters[1]),
-            characterRemoteDataSource.getCharacters(page = 0, name = "Morty")
+            remoteDataSource.getCharacters(page = 0, name = "Morty")
         )
     }
 

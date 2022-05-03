@@ -23,5 +23,5 @@ internal object RickAndMortyEntryPointModule {
     @Provides
     @IntoMap
     @DataSourceKey(DataSource.RICK_AND_MORTY)
-    fun bindItemsRepository(entryPoint: RickAndMortyEntryPoint): ItemsRepository = entryPoint.provideCharacterRepository()
+    fun provideItemsRepository(entryPoint: RickAndMortyEntryPoint): ItemsRepository = entryPoint.provideRickAndMortyRepository()
 }

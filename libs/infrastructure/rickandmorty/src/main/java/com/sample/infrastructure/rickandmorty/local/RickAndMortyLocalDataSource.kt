@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-internal class CharacterLocalDataSource @Inject constructor(private val characterDao: CharacterDao) {
+internal class RickAndMortyLocalDataSource @Inject constructor(private val characterDao: CharacterDao) {
 
     fun getCharactersBy(nameOrLocation: String): PagingSource<Int, CharacterEntity> =
         characterDao.getBy(nameOrLocation)
