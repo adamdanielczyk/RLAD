@@ -2,6 +2,8 @@ package com.sample.features.search.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -48,13 +50,14 @@ import com.sample.features.search.R
  * Simplified version of SearchBar implemented in https://github.com/SmartToolFactory/Jetpack-Compose-Tutorials
  */
 @ExperimentalAnimationApi
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchBar(
     onQueryChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit,
     onClearQueryClicked: () -> Unit,
     onBack: () -> Unit,
+    onDoubleClick: () -> Unit,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     var focused by rememberSaveable { mutableStateOf(false) }
@@ -63,7 +66,12 @@ internal fun SearchBar(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .combinedClickable(
+                onDoubleClick = onDoubleClick,
+                onClick = {},
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
 

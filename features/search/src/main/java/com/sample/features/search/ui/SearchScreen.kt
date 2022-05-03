@@ -1,7 +1,10 @@
 package com.sample.features.search.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,70 +16,174 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sample.domain.model.ItemUiModel
+import com.sample.features.search.R
 import com.sample.ui.defaultImageModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun SearchScreen(openDetails: (String) -> Unit) {
     val viewModel = hiltViewModel<SearchViewModel>()
-    val systemUiController = rememberSystemUiController()
 
+    val systemUiController = rememberSystemUiController()
     val surfaceColor = MaterialTheme.colors.surface
+
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = surfaceColor,
         )
     }
 
-    Scaffold {
-        Column {
-            SearchBar(viewModel)
-            ItemsList(viewModel, openDetails)
+    SearchScreenContent(viewModel, openDetails)
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun SearchScreenContent(
+    viewModel: SearchViewModel,
+    openDetails: (String) -> Unit,
+) {
+    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+
+    fun showBottomSheet() {
+        coroutineScope.launch {
+            bottomSheetState.show()
         }
+    }
+
+    fun hideBottomSheet() {
+        coroutineScope.launch {
+            bottomSheetState.hide()
+        }
+    }
+
+    ModalBottomSheetLayout(
+        sheetState = bottomSheetState,
+        sheetContent = {
+            SheetContent(
+                onGiphyDataSourceClicked = {
+                    viewModel.onGiphyDataSourceClicked()
+                    hideBottomSheet()
+                },
+                onRickAndMortyDataSourceClicked = {
+                    viewModel.onRickAndMortyDataSourceClicked()
+                    hideBottomSheet()
+                },
+            )
+        }
+    ) {
+        Scaffold {
+            Column {
+                SearchBar(
+                    onQueryTextChanged = viewModel::onQueryTextChanged,
+                    onSearchExpanded = viewModel::onSearchExpanded,
+                    onSearchCollapsed = viewModel::onSearchCollapsed,
+                    onClearSearchClicked = viewModel::onClearSearchClicked,
+                    onDoubleClick = ::showBottomSheet,
+                )
+                ItemsList(viewModel, openDetails)
+            }
+        }
+    }
+}
+
+@Composable
+private fun SheetContent(
+    onGiphyDataSourceClicked: () -> Unit,
+    onRickAndMortyDataSourceClicked: () -> Unit,
+) {
+    Column(modifier = Modifier.padding(vertical = 24.dp)) {
+        Text(
+            text = stringResource(R.string.data_source_picker_title),
+            modifier = Modifier.padding(
+                start = 24.dp,
+                end = 24.dp,
+                bottom = 16.dp,
+            ),
+            style = MaterialTheme.typography.h6,
+        )
+
+        SheetItem(
+            textResId = R.string.data_source_picker_giphy,
+            onClicked = onGiphyDataSourceClicked,
+        )
+
+        SheetItem(
+            textResId = R.string.data_source_picker_rickandmorty,
+            onClicked = onRickAndMortyDataSourceClicked,
+        )
+    }
+}
+
+@Composable
+private fun SheetItem(
+    @StringRes textResId: Int,
+    onClicked: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .clickable(onClick = onClicked)
+            .padding(horizontal = 24.dp, vertical = 16.dp)
+            .fillMaxWidth(),
+    ) {
+        Text(
+            text = stringResource(textResId),
+            style = MaterialTheme.typography.body1,
+        )
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun SearchBar(viewModel: SearchViewModel) {
+private fun SearchBar(
+    onQueryTextChanged: (String) -> Unit,
+    onSearchExpanded: () -> Unit,
+    onSearchCollapsed: () -> Unit,
+    onClearSearchClicked: () -> Unit,
+    onDoubleClick: () -> Unit,
+) {
     SearchBar(
-        onQueryChanged = { newQuery ->
-            viewModel.onQueryTextChanged(newQuery)
-        },
+        onQueryChanged = { newQuery -> onQueryTextChanged(newQuery) },
         onSearchFocusChanged = { focused ->
             if (focused) {
-                viewModel.onSearchExpanded()
+                onSearchExpanded()
             } else {
-                viewModel.onSearchCollapsed()
+                onSearchCollapsed()
             }
         },
-        onClearQueryClicked = {
-            viewModel.onClearSearchClicked()
-        },
-        onBack = {
-            viewModel.onClearSearchClicked()
-        },
+        onClearQueryClicked = { onClearSearchClicked() },
+        onBack = { onClearSearchClicked() },
+        onDoubleClick = onDoubleClick,
     )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ItemsList(viewModel: SearchViewModel, openDetails: (String) -> Unit) {
+private fun ItemsList(
+    viewModel: SearchViewModel,
+    openDetails: (String) -> Unit,
+) {
     val items = viewModel.itemsPagingData.collectAsState(initial = null).value ?: return
     val lazyPagingItems = items.collectAsLazyPagingItems()
 

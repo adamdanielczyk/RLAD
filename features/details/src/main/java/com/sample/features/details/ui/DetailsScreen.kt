@@ -38,7 +38,7 @@ import com.sample.ui.defaultImageModel
 @Composable
 internal fun DetailScreen() {
     val viewModel = hiltViewModel<DetailsViewModel>()
-    val item = viewModel.getItem().collectAsState(initial = null).value ?: return
+    val item = viewModel.item.collectAsState().value ?: return
 
     Scaffold(
         topBar = {
