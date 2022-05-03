@@ -13,5 +13,5 @@ interface Navigator {
 }
 
 interface DetailsNavigator : Navigator {
-    fun navigate(navController: NavHostController, id: Int)
+    fun navigate(navController: NavHostController, id: String)
 }

@@ -23,7 +23,7 @@ internal class CharacterRepository @Inject constructor(
     private val remoteDataSource: CharacterRemoteDataSource,
 ) : ItemsRepository {
 
-    override fun getItemBy(id: Int): Flow<ItemUiModel> = localDataSource.getCharacterBy(id).map { characterEntity -> characterEntity.toItemEntity() }
+    override fun getItemBy(id: String): Flow<ItemUiModel> = localDataSource.getCharacterBy(id.toInt()).map { characterEntity -> characterEntity.toItemEntity() }
 
     override fun getItems(name: String?): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)
@@ -47,7 +47,7 @@ internal class CharacterRepository @Inject constructor(
             value: @Composable () -> String,
         ): Pair<@Composable () -> String, @Composable () -> String> = key to value
         return ItemUiModel(
-            id = id,
+            id = id.toString(),
             imageUrl = imageUrl,
             name = name,
             cardCaptions = listOf(
