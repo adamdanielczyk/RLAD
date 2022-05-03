@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.sample.domain.model.ItemUiModel
-import com.sample.domain.repository.ItemsRepository
+import com.sample.domain.usecase.ResolveItemsRepositoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
@@ -16,7 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class SearchViewModel @Inject constructor(private val repository: ItemsRepository) : ViewModel() {
+internal class SearchViewModel @Inject constructor(
+    private val resolveItemsRepositoryUseCase: ResolveItemsRepositoryUseCase,
+) : ViewModel() {
 
     private val _itemsUpdates = MutableSharedFlow<Flow<PagingData<ItemUiModel>>>(
         replay = 1,
@@ -61,11 +63,11 @@ internal class SearchViewModel @Inject constructor(private val repository: Items
     }
 
     private fun performSearch(name: String) {
-        postNewPagingData(repository.getItems(name))
+        postNewPagingData(resolveItemsRepositoryUseCase().getItems(name))
     }
 
     private fun displayAllItems() {
-        postNewPagingData(repository.getItems())
+        postNewPagingData(resolveItemsRepositoryUseCase().getItems())
     }
 
     private fun postNewPagingData(newItems: Flow<PagingData<ItemUiModel>>) {
