@@ -11,16 +11,16 @@ import com.sample.domain.model.ItemUiModel
 import com.sample.domain.repository.ItemsRepository
 import com.sample.infrastructure.rickandmorty.R
 import com.sample.infrastructure.rickandmorty.local.CharacterEntity
-import com.sample.infrastructure.rickandmorty.local.CharacterLocalDataSource
+import com.sample.infrastructure.rickandmorty.local.RickAndMortyLocalDataSource
 import com.sample.infrastructure.rickandmorty.paging.CharacterRemoteMediator
-import com.sample.infrastructure.rickandmorty.remote.CharacterRemoteDataSource
+import com.sample.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class CharacterRepository @Inject constructor(
-    private val localDataSource: CharacterLocalDataSource,
-    private val remoteDataSource: CharacterRemoteDataSource,
+internal class RickAndMortyRepository @Inject constructor(
+    private val localDataSource: RickAndMortyLocalDataSource,
+    private val remoteDataSource: RickAndMortyRemoteDataSource,
 ) : ItemsRepository {
 
     override fun getItemBy(id: String): Flow<ItemUiModel> = localDataSource.getCharacterBy(id.toInt()).map { characterEntity -> characterEntity.toItemEntity() }

@@ -5,16 +5,16 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.sample.infrastructure.rickandmorty.local.CharacterEntity
-import com.sample.infrastructure.rickandmorty.local.CharacterLocalDataSource
-import com.sample.infrastructure.rickandmorty.remote.CharacterRemoteDataSource
+import com.sample.infrastructure.rickandmorty.local.RickAndMortyLocalDataSource
+import com.sample.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
 import com.sample.infrastructure.rickandmorty.remote.ServerCharacter
 import retrofit2.HttpException
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
 internal class CharacterRemoteMediator(
-    private val localDataSource: CharacterLocalDataSource,
-    private val remoteDataSource: CharacterRemoteDataSource,
+    private val localDataSource: RickAndMortyLocalDataSource,
+    private val remoteDataSource: RickAndMortyRemoteDataSource,
     private val name: String? = null,
 ) : RemoteMediator<Int, CharacterEntity>() {
 

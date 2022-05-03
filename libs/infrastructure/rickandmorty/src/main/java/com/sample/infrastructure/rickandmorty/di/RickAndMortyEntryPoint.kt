@@ -1,6 +1,6 @@
 package com.sample.infrastructure.rickandmorty.di
 
-import com.sample.infrastructure.rickandmorty.repository.CharacterRepository
+import com.sample.infrastructure.rickandmorty.repository.RickAndMortyRepository
 import dagger.hilt.DefineComponent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -24,5 +24,5 @@ internal interface RickAndMortyComponent {
 @InstallIn(RickAndMortyComponent::class)
 @EntryPoint
 internal interface RickAndMortyEntryPoint {
-    fun provideCharacterRepository(): CharacterRepository
+    fun provideRickAndMortyRepository(): RickAndMortyRepository
 }

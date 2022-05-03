@@ -23,5 +23,5 @@ internal object GiphyEntryPointModule {
     @Provides
     @IntoMap
     @DataSourceKey(DataSource.GIPHY)
-    fun bindItemsRepository(entryPoint: GiphyEntryPoint): ItemsRepository = entryPoint.provideGiphyRepository()
+    fun provideItemsRepository(entryPoint: GiphyEntryPoint): ItemsRepository = entryPoint.provideGiphyRepository()
 }
