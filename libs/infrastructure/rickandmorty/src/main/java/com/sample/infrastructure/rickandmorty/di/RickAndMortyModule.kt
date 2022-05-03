@@ -3,7 +3,7 @@ package com.sample.infrastructure.rickandmorty.di
 import android.content.Context
 import androidx.room.Room
 import com.sample.infrastructure.rickandmorty.local.CharacterDao
-import com.sample.infrastructure.rickandmorty.local.CharacterDatabase
+import com.sample.infrastructure.rickandmorty.local.RickAndMortyDatabase
 import com.sample.infrastructure.rickandmorty.remote.RickAndMortyApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -20,18 +20,18 @@ internal object RickAndMortyModule {
 
     @Provides
     @RickAndMortyScope
-    fun characterDatabase(@ApplicationContext context: Context): CharacterDatabase {
+    fun rickAndMortyDatabase(@ApplicationContext context: Context): RickAndMortyDatabase {
         return Room.databaseBuilder(
             context,
-            CharacterDatabase::class.java,
-            "character_database"
+            RickAndMortyDatabase::class.java,
+            "rickandmorty_database"
         ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
     @RickAndMortyScope
-    fun characterDao(characterDatabase: CharacterDatabase): CharacterDao =
-        characterDatabase.characterDao()
+    fun characterDao(rickAndMortyDatabase: RickAndMortyDatabase): CharacterDao =
+        rickAndMortyDatabase.characterDao()
 
     @Provides
     @RickAndMortyScope
