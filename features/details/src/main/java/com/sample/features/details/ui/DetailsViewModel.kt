@@ -15,7 +15,7 @@ internal class DetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun getItem(): Flow<ItemUiModel> {
-        val id = savedStateHandle.get<String>("id")!!.toInt()
+        val id = savedStateHandle.get<String>("id")!!
         return repository.getItemBy(id)
     }
 }

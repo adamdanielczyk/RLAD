@@ -11,7 +11,7 @@ internal class DetailsNavigatorImpl @Inject constructor() : DetailsNavigator {
     override val route: String
         get() = "details/{id}"
 
-    override fun navigate(navController: NavHostController, id: Int) {
+    override fun navigate(navController: NavHostController, id: String) {
         navController.navigate("details/$id")
     }
 

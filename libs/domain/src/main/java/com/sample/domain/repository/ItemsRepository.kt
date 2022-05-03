@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ItemsRepository {
 
-    fun getItemBy(id: Int): Flow<ItemUiModel>
+    fun getItemBy(id: String): Flow<ItemUiModel>
 
     fun getItems(name: String? = null): Flow<PagingData<ItemUiModel>>
 }

@@ -2,7 +2,6 @@ package com.sample.features.search.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,17 +21,18 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sample.domain.model.ItemUiModel
-import com.sample.ui.defaultImageRequestBuilder
+import com.sample.ui.defaultImageModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-internal fun SearchScreen(openDetails: (Int) -> Unit) {
+internal fun SearchScreen(openDetails: (String) -> Unit) {
     val viewModel = hiltViewModel<SearchViewModel>()
     val systemUiController = rememberSystemUiController()
 
@@ -76,7 +76,7 @@ private fun SearchBar(viewModel: SearchViewModel) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ItemsList(viewModel: SearchViewModel, openDetails: (Int) -> Unit) {
+private fun ItemsList(viewModel: SearchViewModel, openDetails: (String) -> Unit) {
     val items = viewModel.itemsPagingData.collectAsState(initial = null).value ?: return
     val lazyPagingItems = items.collectAsLazyPagingItems()
 
@@ -102,15 +102,15 @@ private fun ItemsList(viewModel: SearchViewModel, openDetails: (Int) -> Unit) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ItemCard(item: ItemUiModel, openDetails: (Int) -> Unit) {
+private fun ItemCard(item: ItemUiModel, openDetails: (String) -> Unit) {
     Card(
         onClick = { openDetails(item.id) },
         elevation = 3.dp,
         modifier = Modifier.padding(8.dp),
     ) {
         Column {
-            Image(
-                painter = rememberImagePainter(data = item.imageUrl, builder = defaultImageRequestBuilder()),
+            AsyncImage(
+                model = defaultImageModel(context = LocalContext.current, imageUrl = item.imageUrl),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

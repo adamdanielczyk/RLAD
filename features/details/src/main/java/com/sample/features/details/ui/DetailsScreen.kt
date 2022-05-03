@@ -1,7 +1,6 @@
 package com.sample.features.details.ui
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,11 +28,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberImagePainter
-import com.sample.ui.defaultImageRequestBuilder
+import coil.compose.AsyncImage
+import com.sample.ui.defaultImageModel
 
 @Composable
 internal fun DetailScreen() {
@@ -81,8 +81,8 @@ private fun ImageWithGradient(imageUrl: String) {
     )
 
     Box {
-        Image(
-            painter = rememberImagePainter(data = imageUrl, builder = defaultImageRequestBuilder()),
+        AsyncImage(
+            model = defaultImageModel(context = LocalContext.current, imageUrl = imageUrl),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

@@ -27,18 +27,18 @@ class SearchViewModelTest {
 
     private val items = listOf(
         ItemUiModel(
-            id = 1,
+            id = "1",
             imageUrl = "url 1",
-            name = "Rick Sanchez",
+            name = "name1",
             cardCaptions = listOf("test1"),
             detailsKeyValues = listOf(
                 { "test2" } to { "test3" }
             ),
         ),
         ItemUiModel(
-            id = 2,
+            id = "2",
             imageUrl = "url 2",
-            name = "Morty Smith",
+            name = "name2",
             cardCaptions = listOf("test1"),
             detailsKeyValues = listOf(
                 { "test2" } to { "test3" }
@@ -46,7 +46,7 @@ class SearchViewModelTest {
         )
     )
 
-    private val searchedItems = listOf(items[0])
+    private val searchedItem = listOf(items.first())
 
     private lateinit var viewModel: SearchViewModel
 
@@ -60,8 +60,8 @@ class SearchViewModelTest {
         } returns flowOf(PagingData.from(items))
 
         every {
-            itemsRepository.getItems(name = "Rick")
-        } returns flowOf(PagingData.from(searchedItems))
+            itemsRepository.getItems(name = "name1")
+        } returns flowOf(PagingData.from(searchedItem))
 
         viewModel = SearchViewModel(itemsRepository)
     }
@@ -78,7 +78,7 @@ class SearchViewModelTest {
 
     @Test
     fun onQueryTextChanged_emitItemsAfterDebounce() = runTest {
-        viewModel.onQueryTextChanged("Rick")
+        viewModel.onQueryTextChanged("name1")
 
         assertEquals(items, viewModel.getCurrentItems())
 
@@ -90,7 +90,7 @@ class SearchViewModelTest {
         advanceTimeBy(SearchViewModel.DEBOUNCE_TIME / 2)
         runCurrent()
 
-        assertEquals(searchedItems, viewModel.getCurrentItems())
+        assertEquals(searchedItem, viewModel.getCurrentItems())
     }
 
     @Test
