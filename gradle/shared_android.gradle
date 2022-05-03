@@ -74,7 +74,9 @@ dependencies {
 
     implementation Libs.Accompanist.systemuicontroller
 
-    implementation Libs.coil
+    implementation Libs.Coil.compose
+    implementation Libs.Coil.gif
+
     implementation Libs.Google.material
 
     implementation Libs.Coroutines.core

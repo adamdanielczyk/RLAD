@@ -20,15 +20,15 @@ class DetailsViewModelTest {
     @Test
     fun getItem_returnMatchingRepositoryItem() = runTest {
         val item = ItemUiModel(
-            id = 1,
+            id = "1",
             imageUrl = "url 1",
-            name = "Morty Smith",
+            name = "Name",
             cardCaptions = listOf("test1"),
             detailsKeyValues = listOf(
                 { "test2" } to { "test3" }
             ),
         )
-        every { itemsRepository.getItemBy(id = 1) } returns flowOf(item)
+        every { itemsRepository.getItemBy(id = "1") } returns flowOf(item)
         every { savedStateHandle.get<String>("id") } returns "1"
 
         val viewModel = DetailsViewModel(itemsRepository, savedStateHandle)
