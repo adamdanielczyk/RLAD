@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.sample.domain.model.DataSourceUiModel
 import com.sample.domain.model.ItemUiModel
 import com.sample.features.search.R
 import com.sample.ui.defaultImageModel
@@ -82,12 +83,9 @@ private fun SearchScreenContent(
         sheetState = bottomSheetState,
         sheetContent = {
             SheetContent(
-                onGiphyDataSourceClicked = {
-                    viewModel.onGiphyDataSourceClicked()
-                    hideBottomSheet()
-                },
-                onRickAndMortyDataSourceClicked = {
-                    viewModel.onRickAndMortyDataSourceClicked()
+                availableDataSources = viewModel.getAvailableDataSourcesUseCase(),
+                onDataSourceClicked = { dataSource ->
+                    viewModel.onDataSourceClicked(dataSource)
                     hideBottomSheet()
                 },
             )
@@ -110,8 +108,8 @@ private fun SearchScreenContent(
 
 @Composable
 private fun SheetContent(
-    onGiphyDataSourceClicked: () -> Unit,
-    onRickAndMortyDataSourceClicked: () -> Unit,
+    availableDataSources: List<DataSourceUiModel>,
+    onDataSourceClicked: (DataSourceUiModel) -> Unit,
 ) {
     Column(modifier = Modifier.padding(vertical = 24.dp)) {
         Text(
@@ -124,15 +122,13 @@ private fun SheetContent(
             style = MaterialTheme.typography.h6,
         )
 
-        SheetItem(
-            textResId = R.string.data_source_picker_giphy,
-            onClicked = onGiphyDataSourceClicked,
-        )
+        availableDataSources.forEach { uiDataSource ->
+            SheetItem(
+                textResId = uiDataSource.pickerTextResId,
+                onClicked = { onDataSourceClicked(uiDataSource) },
+            )
 
-        SheetItem(
-            textResId = R.string.data_source_picker_rickandmorty,
-            onClicked = onRickAndMortyDataSourceClicked,
-        )
+        }
     }
 }
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sample.domain.model.ItemUiModel
-import com.sample.domain.usecase.ResolveItemsRepositoryUseCase
+import com.sample.domain.usecase.GetSelectedItemsRepositoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class DetailsViewModel @Inject constructor(
-    private val resolveItemsRepositoryUseCase: ResolveItemsRepositoryUseCase,
+    private val getSelectedItemsRepositoryUseCase: GetSelectedItemsRepositoryUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -24,7 +24,7 @@ internal class DetailsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val id = savedStateHandle.get<String>("id")!!
-            val itemFlow = resolveItemsRepositoryUseCase().getItemBy(id)
+            val itemFlow = getSelectedItemsRepositoryUseCase().getItemBy(id)
             itemFlow.collectLatest(_item::emit)
         }
     }

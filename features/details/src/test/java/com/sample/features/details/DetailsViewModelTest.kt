@@ -2,7 +2,7 @@ package com.sample.features.details
 
 import androidx.lifecycle.SavedStateHandle
 import com.sample.domain.model.ItemUiModel
-import com.sample.domain.usecase.ResolveItemsRepositoryUseCase
+import com.sample.domain.usecase.GetSelectedItemsRepositoryUseCase
 import com.sample.features.details.ui.DetailsViewModel
 import io.mockk.coEvery
 import io.mockk.every
@@ -22,7 +22,7 @@ import org.junit.Test
 
 class DetailsViewModelTest {
 
-    private val resolveItemsRepositoryUseCase = mockk<ResolveItemsRepositoryUseCase>()
+    private val getSelectedItemsRepositoryUseCase = mockk<GetSelectedItemsRepositoryUseCase>()
     private val savedStateHandle = mockk<SavedStateHandle>()
 
     @Before
@@ -46,10 +46,10 @@ class DetailsViewModelTest {
                 { "test2" } to { "test3" }
             ),
         )
-        coEvery { resolveItemsRepositoryUseCase().getItemBy(id = "1") } returns flowOf(item)
+        coEvery { getSelectedItemsRepositoryUseCase().getItemBy(id = "1") } returns flowOf(item)
         every { savedStateHandle.get<String>("id") } returns "1"
 
-        val viewModel = DetailsViewModel(resolveItemsRepositoryUseCase, savedStateHandle)
+        val viewModel = DetailsViewModel(getSelectedItemsRepositoryUseCase, savedStateHandle)
 
         advanceUntilIdle()
 
