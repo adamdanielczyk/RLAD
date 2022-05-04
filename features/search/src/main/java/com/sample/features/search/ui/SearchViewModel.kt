@@ -3,10 +3,11 @@ package com.sample.features.search.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.sample.domain.model.DataSource
+import com.sample.domain.model.DataSourceUiModel
 import com.sample.domain.model.ItemUiModel
 import com.sample.domain.repository.AppSettingsRepository
-import com.sample.domain.usecase.ResolveItemsRepositoryUseCase
+import com.sample.domain.usecase.GetAvailableDataSourcesUseCase
+import com.sample.domain.usecase.GetSelectedItemsRepositoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class SearchViewModel @Inject constructor(
-    private val resolveItemsRepositoryUseCase: ResolveItemsRepositoryUseCase,
+    val getAvailableDataSourcesUseCase: GetAvailableDataSourcesUseCase,
+    private val getSelectedItemsRepositoryUseCase: GetSelectedItemsRepositoryUseCase,
     private val appSettingsRepository: AppSettingsRepository,
 ) : ViewModel() {
 
@@ -72,28 +74,20 @@ internal class SearchViewModel @Inject constructor(
     }
 
     private suspend fun performSearch(name: String) {
-        postNewPagingData(resolveItemsRepositoryUseCase().getItems(name))
+        postNewPagingData(getSelectedItemsRepositoryUseCase().getItems(name))
     }
 
     private suspend fun displayAllItems() {
-        postNewPagingData(resolveItemsRepositoryUseCase().getItems())
+        postNewPagingData(getSelectedItemsRepositoryUseCase().getItems())
     }
 
     private suspend fun postNewPagingData(newItems: Flow<PagingData<ItemUiModel>>) {
         _itemsUpdates.emit(newItems)
     }
 
-    fun onGiphyDataSourceClicked() {
-        changeToDataSource(DataSource.GIPHY)
-    }
-
-    fun onRickAndMortyDataSourceClicked() {
-        changeToDataSource(DataSource.RICK_AND_MORTY)
-    }
-
-    private fun changeToDataSource(dataSource: DataSource) {
+    fun onDataSourceClicked(dataSource: DataSourceUiModel) {
         viewModelScope.launch {
-            appSettingsRepository.saveSelectedDataSource(dataSource)
+            appSettingsRepository.saveSelectedDataSourceName(dataSource.name)
             displayAllItems()
         }
     }

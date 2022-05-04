@@ -12,4 +12,5 @@
     <string name="details_gender">Gender</string>
     <string name="details_location">Location</string>
     <string name="details_created">Created</string>
+    <string name="data_source_picker_rickandmorty">Rick and Morty</string>
 </resources>

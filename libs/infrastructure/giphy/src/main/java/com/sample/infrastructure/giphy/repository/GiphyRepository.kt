@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.sample.domain.model.ItemUiModel
 import com.sample.domain.repository.ItemsRepository
+import com.sample.infrastructure.giphy.R
 import com.sample.infrastructure.giphy.local.GifDataEntity
 import com.sample.infrastructure.giphy.local.GiphyLocalDataSource
 import com.sample.infrastructure.giphy.paging.GiphyRemoteMediator
@@ -19,6 +20,10 @@ internal class GiphyRepository @Inject constructor(
     private val localDataSource: GiphyLocalDataSource,
     private val remoteDataSource: GiphyRemoteDataSource,
 ) : ItemsRepository {
+
+    override fun getDataSourceName(): String = "giphy"
+
+    override fun getDataSourcePickerTextResId(): Int = R.string.data_source_picker_giphy
 
     override fun getItemBy(id: String): Flow<ItemUiModel> {
         return localDataSource.getGifDataById(id).map { gifDataEntity -> gifDataEntity.toItemEntity() }
