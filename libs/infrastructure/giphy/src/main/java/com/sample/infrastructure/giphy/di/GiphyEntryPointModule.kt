@@ -1,6 +1,6 @@
 package com.sample.infrastructure.giphy.di
 
-import com.sample.domain.repository.ItemsRepository
+import com.sample.infrastructure.common.repository.ItemsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoints

@@ -1,10 +1,10 @@
-package com.sample.domain.usecase
+package com.sample.infrastructure.common.usecase
 
 import com.sample.domain.repository.AppSettingsRepository
-import com.sample.domain.repository.ItemsRepository
+import com.sample.infrastructure.common.repository.ItemsRepository
 import javax.inject.Inject
 
-class GetSelectedItemsRepositoryUseCase @Inject constructor(
+internal class GetSelectedItemsRepositoryUseCase @Inject constructor(
     private val repositories: Set<@JvmSuppressWildcards ItemsRepository>,
     private val appSettingsRepository: AppSettingsRepository,
 ) {
