@@ -25,7 +25,7 @@ internal class GiphyRepository @Inject constructor(
 
     override fun getDataSourcePickerTextResId(): Int = R.string.data_source_picker_giphy
 
-    override fun getItemBy(id: String): Flow<ItemUiModel> {
+    override fun getItemById(id: String): Flow<ItemUiModel> {
         return localDataSource.getGifDataById(id).map { gifDataEntity -> gifDataEntity.toItemEntity() }
     }
 
