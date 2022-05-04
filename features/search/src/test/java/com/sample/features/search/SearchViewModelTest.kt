@@ -31,18 +31,14 @@ class SearchViewModelTest {
             imageUrl = "url 1",
             name = "name1",
             cardCaptions = listOf("test1"),
-            detailsKeyValues = listOf(
-                { "test2" } to { "test3" }
-            ),
+            detailsKeyValues = listOf("test2" to "test3"),
         ),
         ItemUiModel(
             id = "2",
             imageUrl = "url 2",
             name = "name2",
             cardCaptions = listOf("test1"),
-            detailsKeyValues = listOf(
-                { "test2" } to { "test3" }
-            ),
+            detailsKeyValues = listOf("test2" to "test3"),
         )
     )
 
