@@ -2,7 +2,7 @@ package com.sample.infrastructure.giphy.remote
 
 import com.squareup.moshi.Json
 
-internal data class ServerTrendingGifs(
+internal data class ServerGifs(
     @Json(name = "data") val data: List<ServerGifData>,
 )
 

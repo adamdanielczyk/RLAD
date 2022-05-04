@@ -34,7 +34,7 @@ class RickAndMortyLocalDataSourceTest {
         addDatabaseCharacters(databaseCharacters)
 
         val expectedCharacter = databaseCharacters.first()
-        val characterFlow = localDataSource.getCharacterBy(expectedCharacter.id)
+        val characterFlow = localDataSource.getCharacterById(expectedCharacter.id)
 
         assertEquals(expectedCharacter, characterFlow.first())
     }
