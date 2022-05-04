@@ -2,9 +2,8 @@
 <resources>
 
     <style name="Theme.Sample" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/blue_400</item>
-        <item name="colorPrimaryDark">@color/blue_700</item>
-        <item name="colorSecondary">@color/blue_200</item>
+        <item name="colorPrimary">@color/gray_800</item>
+        <item name="colorPrimaryDark">@color/gray_900</item>
     </style>
 
 </resources>
