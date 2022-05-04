@@ -27,7 +27,7 @@ internal class RickAndMortyRepository @Inject constructor(
 
     override fun getDataSourceName(): String = "rickandmorty"
 
-    override fun getDataSourcePickerTextResId(): Int = R.string.data_source_picker_rickandmorty
+    override fun getDataSourcePickerText(): String = context.getString(R.string.data_source_picker_rickandmorty)
 
     override fun getItemById(id: String): Flow<ItemUiModel> = localDataSource.getCharacterById(id.toInt()).map { characterEntity -> characterEntity.toItemEntity() }
 

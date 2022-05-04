@@ -1,6 +1,5 @@
 package com.sample.features.search.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -124,7 +123,7 @@ private fun SheetContent(
 
         availableDataSources.forEach { uiDataSource ->
             SheetItem(
-                textResId = uiDataSource.pickerTextResId,
+                text = uiDataSource.pickerText,
                 onClicked = { onDataSourceClicked(uiDataSource) },
             )
 
@@ -134,7 +133,7 @@ private fun SheetContent(
 
 @Composable
 private fun SheetItem(
-    @StringRes textResId: Int,
+    text: String,
     onClicked: () -> Unit,
 ) {
     Box(
@@ -144,7 +143,7 @@ private fun SheetItem(
             .fillMaxWidth(),
     ) {
         Text(
-            text = stringResource(textResId),
+            text = text,
             style = MaterialTheme.typography.body1,
         )
     }
