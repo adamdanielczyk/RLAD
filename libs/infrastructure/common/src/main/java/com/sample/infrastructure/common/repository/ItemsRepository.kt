@@ -1,4 +1,4 @@
-package com.sample.domain.repository
+package com.sample.infrastructure.common.repository
 
 import androidx.annotation.StringRes
 import androidx.paging.PagingData

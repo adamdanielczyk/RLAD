@@ -7,7 +7,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.sample.domain.model.ItemUiModel
-import com.sample.domain.repository.ItemsRepository
+import com.sample.infrastructure.common.repository.ItemsRepository
 import com.sample.infrastructure.rickandmorty.R
 import com.sample.infrastructure.rickandmorty.local.CharacterEntity
 import com.sample.infrastructure.rickandmorty.local.CharacterEntity.Gender

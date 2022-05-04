@@ -29,6 +29,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 
 dependencies {
     implementation project(":libs:domain")
+    implementation project(":libs:infrastructure:common")
 
     implementation Libs.AndroidX.Arch.coreRuntime
     implementation Libs.AndroidX.Room.paging

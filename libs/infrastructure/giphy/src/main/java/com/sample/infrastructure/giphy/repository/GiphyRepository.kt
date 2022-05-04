@@ -6,7 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.sample.domain.model.ItemUiModel
-import com.sample.domain.repository.ItemsRepository
+import com.sample.infrastructure.common.repository.ItemsRepository
 import com.sample.infrastructure.giphy.R
 import com.sample.infrastructure.giphy.local.GifDataEntity
 import com.sample.infrastructure.giphy.local.GiphyLocalDataSource

@@ -3,7 +3,13 @@ package com.sample.infrastructure.common.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.sample.domain.repository.AppSettingsRepository
+import com.sample.domain.usecase.GetAvailableDataSourcesUseCase
+import com.sample.domain.usecase.GetItemByIdUseCase
+import com.sample.domain.usecase.GetItemsUseCase
 import com.sample.infrastructure.common.repository.AppSettingsRepositoryImpl
+import com.sample.infrastructure.common.usecase.GetAvailableDataSourcesUseCaseImpl
+import com.sample.infrastructure.common.usecase.GetItemByIdUseCaseImpl
+import com.sample.infrastructure.common.usecase.GetItemsUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -27,5 +33,14 @@ internal class CommonModule {
 
         @Binds
         fun bindAppSettingsRepository(impl: AppSettingsRepositoryImpl): AppSettingsRepository
+
+        @Binds
+        fun bindGetAvailableDataSourcesUseCase(impl: GetAvailableDataSourcesUseCaseImpl): GetAvailableDataSourcesUseCase
+
+        @Binds
+        fun bindGetItemByIdUseCase(impl: GetItemByIdUseCaseImpl): GetItemByIdUseCase
+
+        @Binds
+        fun bindGetItemsUseCase(impl: GetItemsUseCaseImpl): GetItemsUseCase
     }
 }
