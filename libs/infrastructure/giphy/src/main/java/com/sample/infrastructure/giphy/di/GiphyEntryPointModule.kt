@@ -1,14 +1,12 @@
 package com.sample.infrastructure.giphy.di
 
-import com.sample.domain.model.DataSource
-import com.sample.domain.model.DataSourceKey
 import com.sample.domain.repository.ItemsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoMap
+import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -21,7 +19,6 @@ internal object GiphyEntryPointModule {
         EntryPoints.get(componentBuilder.build(), GiphyEntryPoint::class.java)
 
     @Provides
-    @IntoMap
-    @DataSourceKey(DataSource.GIPHY)
+    @IntoSet
     fun provideItemsRepository(entryPoint: GiphyEntryPoint): ItemsRepository = entryPoint.provideGiphyRepository()
 }
