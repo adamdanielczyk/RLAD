@@ -7,7 +7,7 @@ import com.sample.domain.model.DataSourceUiModel
 import com.sample.domain.model.ItemUiModel
 import com.sample.domain.repository.AppSettingsRepository
 import com.sample.domain.usecase.GetAvailableDataSourcesUseCase
-import com.sample.domain.usecase.GetSelectedItemsRepositoryUseCase
+import com.sample.domain.usecase.GetItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class SearchViewModel @Inject constructor(
     val getAvailableDataSourcesUseCase: GetAvailableDataSourcesUseCase,
-    private val getSelectedItemsRepositoryUseCase: GetSelectedItemsRepositoryUseCase,
+    private val getItemsUseCase: GetItemsUseCase,
     private val appSettingsRepository: AppSettingsRepository,
 ) : ViewModel() {
 
@@ -74,11 +74,11 @@ internal class SearchViewModel @Inject constructor(
     }
 
     private suspend fun performSearch(name: String) {
-        postNewPagingData(getSelectedItemsRepositoryUseCase().getItems(name))
+        postNewPagingData(getItemsUseCase(name))
     }
 
     private suspend fun displayAllItems() {
-        postNewPagingData(getSelectedItemsRepositoryUseCase().getItems())
+        postNewPagingData(getItemsUseCase())
     }
 
     private suspend fun postNewPagingData(newItems: Flow<PagingData<ItemUiModel>>) {
