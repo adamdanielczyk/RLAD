@@ -5,7 +5,7 @@ import androidx.paging.NullPaddedList
 import androidx.paging.PagingData
 import androidx.paging.PagingDataDiffer
 import com.sample.domain.model.ItemUiModel
-import com.sample.domain.usecase.GetSelectedItemsRepositoryUseCase
+import com.sample.domain.usecase.GetItemsUseCase
 import com.sample.features.search.ui.SearchViewModel
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -53,19 +53,19 @@ class SearchViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(StandardTestDispatcher())
-        val getSelectedItemsRepositoryUseCase = mockk<GetSelectedItemsRepositoryUseCase>()
+        val getItemsUseCase = mockk<GetItemsUseCase>()
 
         coEvery {
-            getSelectedItemsRepositoryUseCase().getItems(name = null)
+            getItemsUseCase(name = null)
         } returns flowOf(PagingData.from(items))
 
         coEvery {
-            getSelectedItemsRepositoryUseCase().getItems(name = "name1")
+            getItemsUseCase(name = "name1")
         } returns flowOf(PagingData.from(searchedItem))
 
         viewModel = SearchViewModel(
             getAvailableDataSourcesUseCase = mockk(),
-            getSelectedItemsRepositoryUseCase = getSelectedItemsRepositoryUseCase,
+            getItemsUseCase = getItemsUseCase,
             appSettingsRepository = mockk(),
         )
     }

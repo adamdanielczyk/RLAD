@@ -12,7 +12,7 @@ interface ItemsRepository {
     @StringRes
     fun getDataSourcePickerTextResId(): Int
 
-    fun getItemBy(id: String): Flow<ItemUiModel>
+    fun getItemById(id: String): Flow<ItemUiModel>
 
-    fun getItems(name: String? = null): Flow<PagingData<ItemUiModel>>
+    fun getItems(name: String?): Flow<PagingData<ItemUiModel>>
 }
