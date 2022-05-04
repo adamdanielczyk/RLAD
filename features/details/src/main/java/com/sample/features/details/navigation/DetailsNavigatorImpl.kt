@@ -3,7 +3,7 @@ package com.sample.features.details.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.sample.domain.navigation.DetailsNavigator
-import com.sample.features.details.ui.DetailScreen
+import com.sample.features.details.ui.DetailsScreen
 import javax.inject.Inject
 
 internal class DetailsNavigatorImpl @Inject constructor() : DetailsNavigator {
@@ -17,6 +17,6 @@ internal class DetailsNavigatorImpl @Inject constructor() : DetailsNavigator {
 
     @Composable
     override fun Content(navController: NavHostController) {
-        DetailScreen()
+        DetailsScreen()
     }
 }
