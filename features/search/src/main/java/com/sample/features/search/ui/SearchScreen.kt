@@ -179,7 +179,7 @@ private fun ItemsList(
     viewModel: SearchViewModel,
     openDetails: (String) -> Unit,
 ) {
-    val items = viewModel.itemsPagingData.collectAsState(initial = null).value ?: return
+    val items = viewModel.itemsPagingData.collectAsState().value ?: return
     val lazyPagingItems = items.collectAsLazyPagingItems()
 
     val listState = rememberLazyListState()

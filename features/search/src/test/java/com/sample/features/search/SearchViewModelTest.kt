@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -73,12 +74,15 @@ class SearchViewModelTest {
 
     @Test
     fun allItemsDisplayedByDefault() = runTest {
+        advanceUntilIdle()
         assertEquals(items, viewModel.getCurrentItems())
     }
 
     @Test
     fun onQueryTextChanged_emitItemsAfterDebounce() = runTest {
         viewModel.onQueryTextChanged("name1")
+
+        runCurrent()
 
         assertEquals(items, viewModel.getCurrentItems())
 
@@ -116,7 +120,7 @@ class SearchViewModelTest {
     }
 
     private suspend fun SearchViewModel.getCurrentItems(): List<ItemUiModel> =
-        itemsPagingData.first().first().collectData()
+        itemsPagingData.value?.first()?.collectData().orEmpty()
 }
 
 private val differCallback = object : DifferCallback {
