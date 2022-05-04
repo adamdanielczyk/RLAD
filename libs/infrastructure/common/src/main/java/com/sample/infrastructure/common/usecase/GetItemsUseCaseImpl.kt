@@ -10,6 +10,6 @@ internal class GetItemsUseCaseImpl @Inject constructor(
     private val getSelectedItemsRepositoryUseCase: GetSelectedItemsRepositoryUseCase,
 ) : GetItemsUseCase {
 
-    override suspend operator fun invoke(name: String?): Flow<PagingData<ItemUiModel>> =
-        getSelectedItemsRepositoryUseCase().getItems(name)
+    override suspend operator fun invoke(query: String?): Flow<PagingData<ItemUiModel>> =
+        getSelectedItemsRepositoryUseCase().getItems(query)
 }

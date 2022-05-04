@@ -14,5 +14,5 @@ interface ItemsRepository {
 
     fun getItemById(id: String): Flow<ItemUiModel>
 
-    fun getItems(name: String?): Flow<PagingData<ItemUiModel>>
+    fun getItems(query: String?): Flow<PagingData<ItemUiModel>>
 }

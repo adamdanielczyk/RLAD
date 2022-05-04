@@ -13,8 +13,7 @@ import com.sample.infrastructure.rickandmorty.local.CharacterEntity
 import com.sample.infrastructure.rickandmorty.local.CharacterEntity.Gender
 import com.sample.infrastructure.rickandmorty.local.CharacterEntity.Status
 import com.sample.infrastructure.rickandmorty.local.RickAndMortyLocalDataSource
-import com.sample.infrastructure.rickandmorty.paging.CharacterRemoteMediator
-import com.sample.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
+import com.sample.infrastructure.rickandmorty.paging.RickAndMortyRemoteMediator
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,28 +22,24 @@ import javax.inject.Inject
 internal class RickAndMortyRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val localDataSource: RickAndMortyLocalDataSource,
-    private val remoteDataSource: RickAndMortyRemoteDataSource,
+    private val remoteMediatorFactory: RickAndMortyRemoteMediator.Factory,
 ) : ItemsRepository {
 
     override fun getDataSourceName(): String = "rickandmorty"
 
     override fun getDataSourcePickerTextResId(): Int = R.string.data_source_picker_rickandmorty
 
-    override fun getItemById(id: String): Flow<ItemUiModel> = localDataSource.getCharacterBy(id.toInt()).map { characterEntity -> characterEntity.toItemEntity() }
+    override fun getItemById(id: String): Flow<ItemUiModel> = localDataSource.getCharacterById(id.toInt()).map { characterEntity -> characterEntity.toItemEntity() }
 
-    override fun getItems(name: String?): Flow<PagingData<ItemUiModel>> {
+    override fun getItems(query: String?): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            remoteMediator = CharacterRemoteMediator(
-                localDataSource = localDataSource,
-                remoteDataSource = remoteDataSource,
-                name = name
-            ),
-            pagingSourceFactory = { localDataSource.getCharactersBy(name.orEmpty()) }
+            remoteMediator = remoteMediatorFactory.create(query),
+            pagingSourceFactory = { localDataSource.getCharactersByName(query.orEmpty()) }
         ).flow.map { pagingData -> pagingData.map { characterEntity -> characterEntity.toItemEntity() } }
     }
 

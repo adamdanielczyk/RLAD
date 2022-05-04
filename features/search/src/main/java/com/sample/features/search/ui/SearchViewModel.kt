@@ -42,11 +42,11 @@ internal class SearchViewModel @Inject constructor(
         }
     }
 
-    fun onQueryTextChanged(queryText: String?) {
+    fun onQueryTextChanged(query: String) {
         debounceJob?.cancel()
         debounceJob = viewModelScope.launch {
             delay(DEBOUNCE_TIME)
-            performSearch(queryText.orEmpty())
+            performSearch(query)
         }
     }
 
@@ -73,8 +73,8 @@ internal class SearchViewModel @Inject constructor(
         _scrollToTop.emit(Unit)
     }
 
-    private suspend fun performSearch(name: String) {
-        postNewPagingData(getItemsUseCase(name))
+    private suspend fun performSearch(query: String) {
+        postNewPagingData(getItemsUseCase(query))
     }
 
     private suspend fun displayAllItems() {
