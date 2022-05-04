@@ -10,11 +10,12 @@ import com.sample.domain.usecase.GetAvailableDataSourcesUseCase
 import com.sample.domain.usecase.GetItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,14 +26,11 @@ internal class SearchViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
 ) : ViewModel() {
 
-    private val _itemsUpdates = MutableSharedFlow<Flow<PagingData<ItemUiModel>>>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val itemsPagingData = _itemsUpdates.asSharedFlow()
+    private val _itemsUpdates = MutableStateFlow<Flow<PagingData<ItemUiModel>>?>(value = null)
+    val itemsPagingData = _itemsUpdates.asStateFlow()
 
-    private val _scrollToTop = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-    val scrollToTop = _scrollToTop.asSharedFlow()
+    private val _scrollToTop = Channel<Unit>(Channel.BUFFERED)
+    val scrollToTop = _scrollToTop.receiveAsFlow()
 
     private var debounceJob: Job? = null
 
@@ -70,7 +68,7 @@ internal class SearchViewModel @Inject constructor(
     }
 
     private suspend fun scrollToTop() {
-        _scrollToTop.emit(Unit)
+        _scrollToTop.send(Unit)
     }
 
     private suspend fun performSearch(query: String) {
