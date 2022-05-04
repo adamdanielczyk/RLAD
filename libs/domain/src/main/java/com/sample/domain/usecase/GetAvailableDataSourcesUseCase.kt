@@ -1,13 +1,14 @@
 package com.sample.domain.usecase
 
 import com.sample.domain.model.DataSourceUiModel
+import com.sample.domain.repository.ItemsRepository
 import javax.inject.Inject
 
 class GetAvailableDataSourcesUseCase @Inject constructor(
-    private val getAllItemsRepositoriesUseCase: GetAllItemsRepositoriesUseCase,
+    private val repositories: Set<@JvmSuppressWildcards ItemsRepository>,
 ) {
 
-    operator fun invoke(): List<DataSourceUiModel> = getAllItemsRepositoriesUseCase().map { itemsRepository ->
+    operator fun invoke(): List<DataSourceUiModel> = repositories.map { itemsRepository ->
         DataSourceUiModel(
             name = itemsRepository.getDataSourceName(),
             pickerTextResId = itemsRepository.getDataSourcePickerTextResId(),
