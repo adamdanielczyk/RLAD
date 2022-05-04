@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blue_200">#80DEEA</color>
-    <color name="blue_400">#26C6DA</color>
-    <color name="blue_700">#0097A7</color>
-    <color name="black">#000000</color>
+    <color name="gray_800">#ff424242</color>
+    <color name="gray_900">#ff1b1b1b</color>
+    <color name="black">#ff000000</color>
 </resources>

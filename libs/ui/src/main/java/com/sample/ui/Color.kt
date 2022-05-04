@@ -2,6 +2,5 @@ package com.sample.ui
 
 import androidx.compose.ui.graphics.Color
 
-val Blue200 = Color(0xFF80DEEA)
-val Blue400 = Color(0xFF26C6DA)
-val Blue700 = Color(0xFF0097A7)
+val Gray800 = Color(0xff424242)
+val Gray900 = Color(0xff1b1b1b)
