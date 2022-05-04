@@ -17,7 +17,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,13 +35,29 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.sample.domain.model.ItemUiModel
 import com.sample.ui.defaultImageModel
 
 @Composable
-internal fun DetailScreen() {
+internal fun DetailsScreen() {
     val viewModel = hiltViewModel<DetailsViewModel>()
     val item = viewModel.item.collectAsState().value ?: return
 
+    val systemUiController = rememberSystemUiController()
+    val surfaceColor = MaterialTheme.colors.primarySurface
+
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = surfaceColor,
+        )
+    }
+
+    DetailsScreenContent(item)
+}
+
+@Composable
+private fun DetailsScreenContent(item: ItemUiModel) {
     Scaffold(
         topBar = {
             val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
