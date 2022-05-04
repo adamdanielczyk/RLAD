@@ -5,12 +5,14 @@ import com.sample.domain.repository.ItemsRepository
 import javax.inject.Inject
 
 class GetSelectedItemsRepositoryUseCase @Inject constructor(
-    private val getAllItemsRepositoriesUseCase: GetAllItemsRepositoriesUseCase,
+    private val repositories: Set<@JvmSuppressWildcards ItemsRepository>,
     private val appSettingsRepository: AppSettingsRepository,
 ) {
 
     suspend operator fun invoke(): ItemsRepository {
         val selectedDataSourceName = appSettingsRepository.getSelectedDataSourceName()
-        return getAllItemsRepositoriesUseCase().first { it.getDataSourceName() == selectedDataSourceName }
+        return repositories.firstOrNull { itemsRepository ->
+            itemsRepository.getDataSourceName() == selectedDataSourceName
+        } ?: repositories.minByOrNull(ItemsRepository::getDataSourceName)!!
     }
 }
