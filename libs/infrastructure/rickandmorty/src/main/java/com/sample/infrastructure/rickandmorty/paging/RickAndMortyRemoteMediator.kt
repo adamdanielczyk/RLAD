@@ -8,15 +8,23 @@ import com.sample.infrastructure.rickandmorty.local.CharacterEntity
 import com.sample.infrastructure.rickandmorty.local.RickAndMortyLocalDataSource
 import com.sample.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
 import com.sample.infrastructure.rickandmorty.remote.ServerCharacter
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import retrofit2.HttpException
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
-internal class CharacterRemoteMediator(
+internal class RickAndMortyRemoteMediator @AssistedInject constructor(
     private val localDataSource: RickAndMortyLocalDataSource,
     private val remoteDataSource: RickAndMortyRemoteDataSource,
-    private val name: String? = null,
+    @Assisted private val query: String?,
 ) : RemoteMediator<Int, CharacterEntity>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(query: String? = null): RickAndMortyRemoteMediator
+    }
 
     /**
      * Store page key in memory.
@@ -40,7 +48,7 @@ internal class CharacterRemoteMediator(
         val characters = try {
             remoteDataSource.getCharacters(
                 page = nextKey,
-                name = name
+                name = query
             )
         } catch (exception: IOException) {
             return MediatorResult.Error(exception)

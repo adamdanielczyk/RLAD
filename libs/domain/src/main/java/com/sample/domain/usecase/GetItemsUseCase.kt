@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface GetItemsUseCase {
 
-    suspend operator fun invoke(name: String? = null): Flow<PagingData<ItemUiModel>>
+    suspend operator fun invoke(query: String? = null): Flow<PagingData<ItemUiModel>>
 }

@@ -52,11 +52,11 @@ class SearchViewModelTest {
         val getItemsUseCase = mockk<GetItemsUseCase>()
 
         coEvery {
-            getItemsUseCase(name = null)
+            getItemsUseCase(query = null)
         } returns flowOf(PagingData.from(items))
 
         coEvery {
-            getItemsUseCase(name = "name1")
+            getItemsUseCase(query = "name1")
         } returns flowOf(PagingData.from(searchedItem))
 
         viewModel = SearchViewModel(

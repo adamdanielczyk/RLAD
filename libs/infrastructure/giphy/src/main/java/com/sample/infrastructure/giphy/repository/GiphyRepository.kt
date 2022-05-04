@@ -11,14 +11,13 @@ import com.sample.infrastructure.giphy.R
 import com.sample.infrastructure.giphy.local.GifDataEntity
 import com.sample.infrastructure.giphy.local.GiphyLocalDataSource
 import com.sample.infrastructure.giphy.paging.GiphyRemoteMediator
-import com.sample.infrastructure.giphy.remote.GiphyRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class GiphyRepository @Inject constructor(
     private val localDataSource: GiphyLocalDataSource,
-    private val remoteDataSource: GiphyRemoteDataSource,
+    private val remoteMediatorFactory: GiphyRemoteMediator.Factory,
 ) : ItemsRepository {
 
     override fun getDataSourceName(): String = "giphy"
@@ -29,18 +28,15 @@ internal class GiphyRepository @Inject constructor(
         return localDataSource.getGifDataById(id).map { gifDataEntity -> gifDataEntity.toItemEntity() }
     }
 
-    override fun getItems(name: String?): Flow<PagingData<ItemUiModel>> {
+    override fun getItems(query: String?): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            remoteMediator = GiphyRemoteMediator(
-                localDataSource = localDataSource,
-                remoteDataSource = remoteDataSource,
-            ),
-            pagingSourceFactory = { localDataSource.getGifDataByTitle(name.orEmpty()) }
+            remoteMediator = remoteMediatorFactory.create(query),
+            pagingSourceFactory = { localDataSource.getGifDataByTitle(query.orEmpty()) }
         ).flow.map { pagingData -> pagingData.map { gifDataEntity -> gifDataEntity.toItemEntity() } }
     }
 

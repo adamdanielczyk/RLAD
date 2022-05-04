@@ -17,10 +17,10 @@ internal interface CharacterDao {
         ORDER BY id
         """
     )
-    fun getBy(name: String): PagingSource<Int, CharacterEntity>
+    fun getByName(name: String): PagingSource<Int, CharacterEntity>
 
     @Query("SELECT * FROM character WHERE id = :id")
-    fun getBy(id: Int): Flow<CharacterEntity>
+    fun getById(id: Int): Flow<CharacterEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(characters: List<CharacterEntity>)
