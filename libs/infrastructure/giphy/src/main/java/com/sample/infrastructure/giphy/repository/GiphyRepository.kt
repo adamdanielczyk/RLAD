@@ -44,15 +44,13 @@ internal class GiphyRepository @Inject constructor(
         ).flow.map { pagingData -> pagingData.map { gifDataEntity -> gifDataEntity.toItemEntity() } }
     }
 
-    private fun GifDataEntity.toItemEntity(): ItemUiModel {
-        return ItemUiModel(
-            id = id,
-            imageUrl = imageUrl,
-            name = title,
-            cardCaptions = emptyList(),
-            detailsKeyValues = emptyList(),
-        )
-    }
+    private fun GifDataEntity.toItemEntity() = ItemUiModel(
+        id = id,
+        imageUrl = imageUrl,
+        name = title,
+        cardCaptions = emptyList(),
+        detailsKeyValues = emptyList(),
+    )
 
     companion object {
         const val PAGE_SIZE = 20

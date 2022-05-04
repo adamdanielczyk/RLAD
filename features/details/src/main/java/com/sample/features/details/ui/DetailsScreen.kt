@@ -63,7 +63,7 @@ internal fun DetailScreen() {
 
             Column(modifier = Modifier.padding(16.dp)) {
                 item.detailsKeyValues.forEach { (title, text) ->
-                    DetailsText(title = title(), text = text())
+                    DetailsText(title, text)
                 }
             }
         }
