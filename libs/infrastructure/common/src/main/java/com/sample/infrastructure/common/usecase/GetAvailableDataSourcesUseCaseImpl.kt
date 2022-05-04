@@ -11,7 +11,7 @@ internal class GetAvailableDataSourcesUseCaseImpl @Inject constructor(
     override operator fun invoke(): List<DataSourceUiModel> = getAllItemsRepositoriesUseCase().map { itemsRepository ->
         DataSourceUiModel(
             name = itemsRepository.getDataSourceName(),
-            pickerTextResId = itemsRepository.getDataSourcePickerTextResId(),
+            pickerText = itemsRepository.getDataSourcePickerText(),
         )
     }
 }
