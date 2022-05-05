@@ -18,19 +18,7 @@ android {
             }
         }
 
-        def localProperties = new Properties()
-        def localPropertiesFile = rootProject.file('local.properties')
-        if (localPropertiesFile.exists()) {
-            localPropertiesFile.withReader('UTF-8') { reader ->
-                localProperties.load(reader)
-            }
-        }
-
-        def giphyApiKey = localProperties["GIPHY_API_KEY"]
-        if (giphyApiKey == null) {
-            giphyApiKey = ""
-        }
-
+        def giphyApiKey = project.property("GIPHY_API_KEY")
         buildConfigField "String", "GIPHY_API_KEY", "\"$giphyApiKey\""
     }
 }
