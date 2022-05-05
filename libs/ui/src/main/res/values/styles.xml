@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Sample" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Rlad" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/gray_800</item>
         <item name="colorPrimaryDark">@color/gray_900</item>
     </style>
