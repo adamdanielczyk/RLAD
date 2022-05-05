@@ -1,4 +1,4 @@
-import com.sample.buildsrc.Libs
+import com.rlad.buildsrc.Libs
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
