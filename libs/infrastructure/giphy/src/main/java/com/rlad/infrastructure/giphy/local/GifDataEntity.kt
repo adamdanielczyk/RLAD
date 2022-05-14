@@ -7,14 +7,24 @@ import com.rlad.infrastructure.giphy.remote.ServerGifData
 
 @Entity(tableName = "gif_data")
 internal data class GifDataEntity(
-    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "image") val imageUrl: String,
+    @ColumnInfo(name = "origin_type") val originType: OriginType,
 ) {
 
-    constructor(serverGifData: ServerGifData) : this(
-        id = serverGifData.id,
+    constructor(serverGifData: ServerGifData, originType: OriginType) : this(
         title = serverGifData.title,
         imageUrl = serverGifData.images.fixedHeight.url,
+        originType = originType,
     )
+
+    enum class OriginType(val id: String) {
+        Search("search"),
+        Trending("trending");
+
+        companion object {
+            fun fromId(id: String): OriginType = values().first { it.id == id }
+        }
+    }
 }

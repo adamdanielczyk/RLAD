@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
     entities = [CharacterEntity::class],
     version = 1
 )
-@TypeConverters(Converters::class)
+@TypeConverters(RickAndMortyTypeConverters::class)
 internal abstract class RickAndMortyDatabase : RoomDatabase() {
 
     abstract fun characterDao(): CharacterDao

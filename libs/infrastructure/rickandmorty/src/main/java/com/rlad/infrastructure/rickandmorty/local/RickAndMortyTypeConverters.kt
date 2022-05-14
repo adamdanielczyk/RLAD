@@ -2,7 +2,7 @@ package com.rlad.infrastructure.rickandmorty.local
 
 import androidx.room.TypeConverter
 
-internal class Converters {
+internal class RickAndMortyTypeConverters {
 
     @TypeConverter
     fun CharacterEntity.Status.toInt() = id
