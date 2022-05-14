@@ -15,10 +15,10 @@ internal object RickAndMortyEntryPointModule {
 
     @Singleton
     @Provides
-    fun provideEntryPoint(componentBuilder: RickAndMortyComponent.Builder): RickAndMortyEntryPoint =
+    fun entryPoint(componentBuilder: RickAndMortyComponent.Builder): RickAndMortyEntryPoint =
         EntryPoints.get(componentBuilder.build(), RickAndMortyEntryPoint::class.java)
 
     @Provides
     @IntoSet
-    fun provideItemsRepository(entryPoint: RickAndMortyEntryPoint): ItemsRepository = entryPoint.provideRickAndMortyRepository()
+    fun itemsRepository(entryPoint: RickAndMortyEntryPoint): ItemsRepository = entryPoint.rickAndMortyRepository()
 }

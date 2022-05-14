@@ -24,5 +24,5 @@ internal interface RickAndMortyComponent {
 @InstallIn(RickAndMortyComponent::class)
 @EntryPoint
 internal interface RickAndMortyEntryPoint {
-    fun provideRickAndMortyRepository(): RickAndMortyRepository
+    fun rickAndMortyRepository(): RickAndMortyRepository
 }
