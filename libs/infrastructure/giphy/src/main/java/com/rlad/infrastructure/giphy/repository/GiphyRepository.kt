@@ -28,7 +28,7 @@ internal class GiphyRepository @Inject constructor(
     override fun getDataSourcePickerText(): String = context.getString(R.string.data_source_picker_giphy)
 
     override fun getItemById(id: String): Flow<ItemUiModel> =
-        localDataSource.getGifDataById(id.toInt()).map { gifDataEntity -> gifDataEntity.toUiModel() }
+        localDataSource.getGifDataById(id).map { gifDataEntity -> gifDataEntity.toUiModel() }
 
     override fun getItems(query: String?): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)
@@ -49,7 +49,7 @@ internal class GiphyRepository @Inject constructor(
     }
 
     private fun GifDataEntity.toUiModel() = ItemUiModel(
-        id = id.toString(),
+        id = giphyId,
         imageUrl = imageUrl,
         name = title,
         cardCaptions = listOf(

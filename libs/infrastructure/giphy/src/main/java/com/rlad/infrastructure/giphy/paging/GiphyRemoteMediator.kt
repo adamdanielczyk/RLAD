@@ -75,10 +75,11 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
     }
 
     private suspend fun insertGifsData(gifsData: List<ServerGifData>) {
-        val newGifsData = gifsData.map { serverGifData ->
+        val newGifsData = gifsData.mapIndexed { index, serverGifData ->
             GifDataEntity(
                 serverGifData = serverGifData,
-                originType = if (isSearchMode) OriginType.Search else OriginType.Trending
+                originType = if (isSearchMode) OriginType.Search else OriginType.Trending,
+                orderId = index,
             )
         }
         localDataSource.insertGifsData(newGifsData)

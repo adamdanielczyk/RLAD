@@ -7,7 +7,8 @@ import com.rlad.infrastructure.giphy.remote.ServerGifData
 
 @Entity(tableName = "gif_data")
 internal data class GifDataEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
+    @PrimaryKey @ColumnInfo(name = "giphy_id") val giphyId: String,
+    @ColumnInfo(name = "order_id") val orderId: Int,
     @ColumnInfo(name = "origin_type") val originType: OriginType,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "image") val imageUrl: String,
@@ -16,8 +17,14 @@ internal data class GifDataEntity(
     @ColumnInfo(name = "trending_datetime") val trendingDatetime: String,
 ) {
 
-    constructor(serverGifData: ServerGifData, originType: OriginType) : this(
+    constructor(
+        serverGifData: ServerGifData,
+        originType: OriginType,
+        orderId: Int,
+    ) : this(
+        orderId = orderId,
         originType = originType,
+        giphyId = serverGifData.id,
         title = serverGifData.title,
         imageUrl = serverGifData.images.fixedHeight.url,
         username = serverGifData.username,
