@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -25,9 +27,15 @@ internal class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     private fun RladApp() = RladTheme {
         val navController = rememberNavController()
+
+        val keyboardController = LocalSoftwareKeyboardController.current
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            keyboardController?.hide()
+        }
 
         NavHost(
             navController = navController,
