@@ -52,8 +52,14 @@ internal class GiphyRepository @Inject constructor(
         id = id.toString(),
         imageUrl = imageUrl,
         name = title,
-        cardCaptions = emptyList(),
-        detailsKeyValues = emptyList(),
+        cardCaptions = listOf(
+            username,
+        ),
+        detailsKeyValues = listOf(
+            context.getString(R.string.details_username) to username,
+            context.getString(R.string.details_import_date) to importDatetime,
+            context.getString(R.string.details_trending_date) to trendingDatetime,
+        ),
     )
 
     companion object {

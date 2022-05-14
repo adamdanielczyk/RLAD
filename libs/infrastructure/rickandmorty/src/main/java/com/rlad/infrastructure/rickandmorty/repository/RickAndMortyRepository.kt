@@ -54,16 +54,16 @@ internal class RickAndMortyRepository @Inject constructor(
         ),
         detailsKeyValues = listOf(
             context.getString(R.string.details_status) to when (status) {
-                Status.ALIVE -> context.getString(R.string.status_alive)
-                Status.DEAD -> context.getString(R.string.status_dead)
-                Status.UNKNOWN -> context.getString(R.string.unknown)
+                Status.ALIVE -> context.getString(R.string.details_status_alive)
+                Status.DEAD -> context.getString(R.string.details_status_dead)
+                Status.UNKNOWN -> context.getString(R.string.details_status_unknown)
             },
             context.getString(R.string.details_species) to species,
             context.getString(R.string.details_gender) to when (gender) {
-                Gender.FEMALE -> context.getString(R.string.gender_female)
-                Gender.MALE -> context.getString(R.string.gender_male)
-                Gender.GENDERLESS -> context.getString(R.string.gender_genderless)
-                Gender.UNKNOWN -> context.getString(R.string.unknown)
+                Gender.FEMALE -> context.getString(R.string.details_gender_female)
+                Gender.MALE -> context.getString(R.string.details_gender_male)
+                Gender.GENDERLESS -> context.getString(R.string.details_gender_genderless)
+                Gender.UNKNOWN -> context.getString(R.string.details_gender_unknown)
             },
             context.getString(R.string.details_location) to location.name,
             context.getString(R.string.details_created) to created,

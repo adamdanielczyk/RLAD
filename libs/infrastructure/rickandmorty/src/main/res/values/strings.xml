@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="status_alive">Alive</string>
-    <string name="status_dead">Dead</string>
-    <string name="gender_female">Female</string>
-    <string name="gender_male">Male</string>
-    <string name="gender_genderless">Genderless</string>
-    <string name="unknown">Unknown</string>
+    <string name="data_source_picker_rickandmorty">Rick and Morty</string>
     <string name="details_status">Status</string>
+    <string name="details_status_dead">Dead</string>
+    <string name="details_status_alive">Alive</string>
+    <string name="details_status_unknown">Unknown</string>
     <string name="details_species">Species</string>
     <string name="details_type">Type</string>
     <string name="details_gender">Gender</string>
+    <string name="details_gender_female">Female</string>
+    <string name="details_gender_male">Male</string>
+    <string name="details_gender_genderless">Genderless</string>
+    <string name="details_gender_unknown">Unknown</string>
     <string name="details_location">Location</string>
     <string name="details_created">Created</string>
-    <string name="data_source_picker_rickandmorty">Rick and Morty</string>
 </resources>
