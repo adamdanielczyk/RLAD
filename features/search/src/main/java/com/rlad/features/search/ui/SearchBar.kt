@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
@@ -109,7 +110,6 @@ internal fun SearchBar(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SearchTextField(
     query: String,
@@ -146,6 +146,7 @@ private fun SearchTextField(
                     SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
                 }
 
+                val focusManager = LocalFocusManager.current
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     BasicTextField(
                         value = query,
@@ -162,6 +163,7 @@ private fun SearchTextField(
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Search
                         ),
+                        keyboardActions = KeyboardActions { focusManager.clearFocus() },
                         textStyle = TextStyle(MaterialTheme.colors.onSurface),
                         cursorBrush = SolidColor(MaterialTheme.colors.onSurface),
                     )
