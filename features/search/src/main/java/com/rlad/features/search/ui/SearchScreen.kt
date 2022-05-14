@@ -25,9 +25,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,6 +42,8 @@ import com.rlad.domain.model.ItemUiModel
 import com.rlad.features.search.R
 import com.rlad.ui.defaultImageModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
@@ -173,7 +178,7 @@ private fun SearchBar(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 private fun ItemsList(
     viewModel: SearchViewModel,
@@ -188,6 +193,16 @@ private fun ItemsList(
         viewModel.scrollToTop.collectLatest {
             listState.animateScrollToItem(index = 0)
         }
+    }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemScrollOffset }
+            .map { offset -> offset > 0 }
+            .filter { it }
+            .collect {
+                keyboardController?.hide()
+            }
     }
 
     LazyVerticalGrid(
