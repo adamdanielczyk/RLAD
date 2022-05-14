@@ -29,7 +29,8 @@ internal class RickAndMortyRepository @Inject constructor(
 
     override fun getDataSourcePickerText(): String = context.getString(R.string.data_source_picker_rickandmorty)
 
-    override fun getItemById(id: String): Flow<ItemUiModel> = localDataSource.getCharacterById(id.toInt()).map { characterEntity -> characterEntity.toItemEntity() }
+    override fun getItemById(id: String): Flow<ItemUiModel> =
+        localDataSource.getCharacterById(id.toInt()).map { characterEntity -> characterEntity.toUiModel() }
 
     override fun getItems(query: String?): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)
@@ -40,10 +41,10 @@ internal class RickAndMortyRepository @Inject constructor(
             ),
             remoteMediator = remoteMediatorFactory.create(query),
             pagingSourceFactory = { localDataSource.getCharactersByName(query.orEmpty()) }
-        ).flow.map { pagingData -> pagingData.map { characterEntity -> characterEntity.toItemEntity() } }
+        ).flow.map { pagingData -> pagingData.map { characterEntity -> characterEntity.toUiModel() } }
     }
 
-    private fun CharacterEntity.toItemEntity() = ItemUiModel(
+    private fun CharacterEntity.toUiModel() = ItemUiModel(
         id = id.toString(),
         imageUrl = imageUrl,
         name = name,

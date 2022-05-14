@@ -27,9 +27,8 @@ internal class GiphyRepository @Inject constructor(
 
     override fun getDataSourcePickerText(): String = context.getString(R.string.data_source_picker_giphy)
 
-    override fun getItemById(id: String): Flow<ItemUiModel> {
-        return localDataSource.getGifDataById(id).map { gifDataEntity -> gifDataEntity.toItemEntity() }
-    }
+    override fun getItemById(id: String): Flow<ItemUiModel> =
+        localDataSource.getGifDataById(id.toInt()).map { gifDataEntity -> gifDataEntity.toUiModel() }
 
     override fun getItems(query: String?): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)
@@ -39,12 +38,18 @@ internal class GiphyRepository @Inject constructor(
                 enablePlaceholders = false
             ),
             remoteMediator = remoteMediatorFactory.create(query),
-            pagingSourceFactory = { localDataSource.getGifDataByTitle(query.orEmpty()) }
-        ).flow.map { pagingData -> pagingData.map { gifDataEntity -> gifDataEntity.toItemEntity() } }
+            pagingSourceFactory = {
+                if (query != null) {
+                    localDataSource.searchGifDataByTitle(query.orEmpty())
+                } else {
+                    localDataSource.getTrendingGifData()
+                }
+            }
+        ).flow.map { pagingData -> pagingData.map { gifDataEntity -> gifDataEntity.toUiModel() } }
     }
 
-    private fun GifDataEntity.toItemEntity() = ItemUiModel(
-        id = id,
+    private fun GifDataEntity.toUiModel() = ItemUiModel(
+        id = id.toString(),
         imageUrl = imageUrl,
         name = title,
         cardCaptions = emptyList(),
