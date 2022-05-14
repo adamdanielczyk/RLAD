@@ -24,16 +24,8 @@ internal data class ServerGifData(
 
 internal data class Images(
     @Json(name = "original") val original: Image,
-    @Json(name = "downsized") val downsized: Image,
-    @Json(name = "downsized_large") val downsizedLarge: Image,
-    @Json(name = "downsized_medium") val downsizedMedium: Image,
-    @Json(name = "downsized_still") val downsizedStill: Image,
     @Json(name = "fixed_height") val fixedHeight: Image,
-    @Json(name = "fixed_height_downsampled") val fixedHeightDownsampled: Image,
-    @Json(name = "fixed_height_small") val fixedHeightSmall: Image,
     @Json(name = "fixed_width") val fixedWidth: Image,
-    @Json(name = "fixed_width_downsampled") val fixedWidthDownsampled: Image,
-    @Json(name = "fixed_width_small") val fixedWidthSmall: Image,
 )
 
 internal data class Image(
