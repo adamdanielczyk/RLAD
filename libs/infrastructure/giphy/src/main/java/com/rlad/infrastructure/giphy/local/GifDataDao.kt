@@ -13,14 +13,15 @@ internal interface GifDataDao {
     @Query(
         """
         SELECT * FROM gif_data 
-        WHERE title LIKE '%' || :title || '%' 
+        WHERE title LIKE '%' || :title || '%'
+        AND origin_type = :originType
         ORDER BY id
         """
     )
-    fun getByTitle(title: String): PagingSource<Int, GifDataEntity>
+    fun get(originType: GifDataEntity.OriginType, title: String): PagingSource<Int, GifDataEntity>
 
     @Query("SELECT * FROM gif_data WHERE id = :id")
-    fun getById(id: String): Flow<GifDataEntity>
+    fun getById(id: Int): Flow<GifDataEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(gifData: List<GifDataEntity>)
