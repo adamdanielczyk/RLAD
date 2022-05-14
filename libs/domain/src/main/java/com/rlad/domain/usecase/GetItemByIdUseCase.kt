@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface GetItemByIdUseCase {
 
-    suspend operator fun invoke(id: String): Flow<ItemUiModel>
+    operator fun invoke(id: String): Flow<ItemUiModel>
 }
