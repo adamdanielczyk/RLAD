@@ -2,6 +2,8 @@ package com.rlad.infrastructure.common.usecase
 
 import com.rlad.domain.repository.AppSettingsRepository
 import com.rlad.infrastructure.common.repository.ItemsRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class GetSelectedItemsRepositoryUseCase @Inject constructor(
@@ -9,10 +11,9 @@ internal class GetSelectedItemsRepositoryUseCase @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
 ) {
 
-    suspend operator fun invoke(): ItemsRepository {
-        val selectedDataSourceName = appSettingsRepository.getSelectedDataSourceName()
+    operator fun invoke(): Flow<ItemsRepository> = appSettingsRepository.getSelectedDataSourceName().map { selectedDataSourceName ->
         val allItemsRepositories = getAllItemsRepositoriesUseCase()
-        return allItemsRepositories.firstOrNull { itemsRepository ->
+        allItemsRepositories.firstOrNull { itemsRepository ->
             itemsRepository.getDataSourceName() == selectedDataSourceName
         } ?: allItemsRepositories.first()
     }

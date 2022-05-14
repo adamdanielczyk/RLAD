@@ -1,7 +1,9 @@
 package com.rlad.domain.repository
 
+import kotlinx.coroutines.flow.Flow
+
 interface AppSettingsRepository {
 
-    suspend fun getSelectedDataSourceName(): String?
+    fun getSelectedDataSourceName(): Flow<String?>
     suspend fun saveSelectedDataSourceName(dataSourceName: String)
 }

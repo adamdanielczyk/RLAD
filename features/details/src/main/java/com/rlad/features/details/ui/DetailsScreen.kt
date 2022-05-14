@@ -42,7 +42,7 @@ import com.rlad.ui.defaultImageModel
 @Composable
 internal fun DetailsScreen() {
     val viewModel = hiltViewModel<DetailsViewModel>()
-    val item = viewModel.item.collectAsState().value ?: return
+    val item = viewModel.item.collectAsState(initial = null).value ?: return
 
     val systemUiController = rememberSystemUiController()
     val surfaceColor = MaterialTheme.colors.primarySurface
