@@ -25,6 +25,6 @@ internal interface GiphyComponent {
 @InstallIn(GiphyComponent::class)
 @EntryPoint
 internal interface GiphyEntryPoint {
-    fun provideGiphyRepository(): GiphyRepository
-    fun provideClearTrendingGifsDataAppInitializer(): ClearTrendingGifsDataAppInitializer
+    fun giphyRepository(): GiphyRepository
+    fun clearTrendingGifsDataAppInitializer(): ClearTrendingGifsDataAppInitializer
 }

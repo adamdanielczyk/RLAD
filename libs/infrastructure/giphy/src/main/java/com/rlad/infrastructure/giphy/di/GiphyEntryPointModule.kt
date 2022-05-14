@@ -16,14 +16,14 @@ internal object GiphyEntryPointModule {
 
     @Singleton
     @Provides
-    fun provideEntryPoint(componentBuilder: GiphyComponent.Builder): GiphyEntryPoint =
+    fun entryPoint(componentBuilder: GiphyComponent.Builder): GiphyEntryPoint =
         EntryPoints.get(componentBuilder.build(), GiphyEntryPoint::class.java)
 
     @Provides
     @IntoSet
-    fun provideItemsRepository(entryPoint: GiphyEntryPoint): ItemsRepository = entryPoint.provideGiphyRepository()
+    fun itemsRepository(entryPoint: GiphyEntryPoint): ItemsRepository = entryPoint.giphyRepository()
 
     @Provides
     @IntoSet
-    fun provideClearTrendingGifsDataAppInitializer(entryPoint: GiphyEntryPoint): AppInitializer = entryPoint.provideClearTrendingGifsDataAppInitializer()
+    fun clearTrendingGifsDataAppInitializer(entryPoint: GiphyEntryPoint): AppInitializer = entryPoint.clearTrendingGifsDataAppInitializer()
 }
