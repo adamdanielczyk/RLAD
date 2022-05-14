@@ -13,7 +13,7 @@ internal class GiphyLocalDataSource @Inject constructor(private val gifDataDao: 
     fun getTrendingGifData(): PagingSource<Int, GifDataEntity> =
         gifDataDao.get(originType = OriginType.Trending, title = "")
 
-    fun getGifDataById(id: Int): Flow<GifDataEntity> = gifDataDao.getById(id)
+    fun getGifDataById(giphyId: String): Flow<GifDataEntity> = gifDataDao.getById(giphyId)
 
     suspend fun insertGifsData(gifData: List<GifDataEntity>) {
         gifDataDao.insert(gifData)

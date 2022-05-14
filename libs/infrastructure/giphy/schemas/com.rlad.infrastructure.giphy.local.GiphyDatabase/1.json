@@ -2,15 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0b81c4bff35e9283ad8424e8e9cff223",
+    "identityHash": "a653b11114a924b19088b5e40ddeeffe",
     "entities": [
       {
         "tableName": "gif_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `origin_type` TEXT NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `username` TEXT NOT NULL, `import_datetime` TEXT NOT NULL, `trending_datetime` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`giphy_id` TEXT NOT NULL, `order_id` INTEGER NOT NULL, `origin_type` TEXT NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `username` TEXT NOT NULL, `import_datetime` TEXT NOT NULL, `trending_datetime` TEXT NOT NULL, PRIMARY KEY(`giphy_id`))",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
+            "fieldPath": "giphyId",
+            "columnName": "giphy_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderId",
+            "columnName": "order_id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -53,9 +59,9 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "giphy_id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -64,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b81c4bff35e9283ad8424e8e9cff223')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a653b11114a924b19088b5e40ddeeffe')"
     ]
   }
 }
