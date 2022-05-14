@@ -25,4 +25,7 @@ internal interface GifDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(gifData: List<GifDataEntity>)
+
+    @Query("DELETE FROM gif_data WHERE origin_type = :originType")
+    suspend fun deleteByOriginType(originType: GifDataEntity.OriginType)
 }
