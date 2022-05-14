@@ -1,29 +1,34 @@
 package com.rlad.infrastructure.common.repository
 
-import android.content.SharedPreferences
+import android.content.Context
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.rlad.domain.repository.AppSettingsRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+private val Context.dataStore by preferencesDataStore("app_settings")
+
 internal class AppSettingsRepositoryImpl @Inject constructor(
-    private val sharedPreferences: SharedPreferences,
+    @ApplicationContext private val context: Context,
 ) : AppSettingsRepository {
 
-    override suspend fun getSelectedDataSourceName(): String? = withContext(Dispatchers.IO) {
-        sharedPreferences.getString(SELECTED_DATA_SOURCE_KEY, null)
+    private val settingsDataStore = context.dataStore
+
+    override fun getSelectedDataSourceName(): Flow<String?> = settingsDataStore.data.map { settings ->
+        settings[SELECTED_DATA_SOURCE_KEY]
     }
 
     override suspend fun saveSelectedDataSourceName(dataSourceName: String) {
-        withContext(Dispatchers.IO) {
-            with(sharedPreferences.edit()) {
-                putString(SELECTED_DATA_SOURCE_KEY, dataSourceName)
-                apply()
-            }
+        settingsDataStore.edit { settings ->
+            settings[SELECTED_DATA_SOURCE_KEY] = dataSourceName
         }
     }
 
     private companion object {
-        const val SELECTED_DATA_SOURCE_KEY = "SELECTED_DATA_SOURCE_KEY"
+        val SELECTED_DATA_SOURCE_KEY = stringPreferencesKey("SELECTED_DATA_SOURCE_KEY")
     }
 }
