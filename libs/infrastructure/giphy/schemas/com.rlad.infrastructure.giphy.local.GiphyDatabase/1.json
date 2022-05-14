@@ -2,16 +2,22 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d1d33e22f3a7b5392d58bac156e295d2",
+    "identityHash": "0b81c4bff35e9283ad8424e8e9cff223",
     "entities": [
       {
         "tableName": "gif_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `origin_type` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `origin_type` TEXT NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `username` TEXT NOT NULL, `import_datetime` TEXT NOT NULL, `trending_datetime` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originType",
+            "columnName": "origin_type",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -27,8 +33,20 @@
             "notNull": true
           },
           {
-            "fieldPath": "originType",
-            "columnName": "origin_type",
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "importDatetime",
+            "columnName": "import_datetime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trendingDatetime",
+            "columnName": "trending_datetime",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -46,7 +64,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd1d33e22f3a7b5392d58bac156e295d2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b81c4bff35e9283ad8424e8e9cff223')"
     ]
   }
 }

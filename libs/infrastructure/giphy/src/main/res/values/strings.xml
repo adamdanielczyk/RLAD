@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="data_source_picker_giphy">Giphy</string>
+    <string name="details_username">Username</string>
+    <string name="details_import_date">Import date</string>
+    <string name="details_trending_date">Trending date</string>
 </resources>
