@@ -1,5 +1,6 @@
 package com.rlad.infrastructure.giphy.di
 
+import com.rlad.infrastructure.giphy.initializer.ClearTrendingGifsDataAppInitializer
 import com.rlad.infrastructure.giphy.repository.GiphyRepository
 import dagger.hilt.DefineComponent
 import dagger.hilt.EntryPoint
@@ -25,4 +26,5 @@ internal interface GiphyComponent {
 @EntryPoint
 internal interface GiphyEntryPoint {
     fun provideGiphyRepository(): GiphyRepository
+    fun provideClearTrendingGifsDataAppInitializer(): ClearTrendingGifsDataAppInitializer
 }

@@ -1,6 +1,9 @@
 package com.rlad.infrastructure.giphy.repository
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -14,14 +17,20 @@ import com.rlad.infrastructure.giphy.local.GiphyLocalDataSource
 import com.rlad.infrastructure.giphy.paging.GiphyRemoteMediator
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
+
+private val Context.dataStore by preferencesDataStore("giphy_settings")
 
 internal class GiphyRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val localDataSource: GiphyLocalDataSource,
     private val remoteMediatorFactory: GiphyRemoteMediator.Factory,
 ) : ItemsRepository {
+
+    private val giphyDataStore = context.dataStore
 
     override fun getDataSourceName(): String = "giphy"
 
@@ -45,7 +54,9 @@ internal class GiphyRepository @Inject constructor(
                     localDataSource.getTrendingGifData()
                 }
             }
-        ).flow.map { pagingData -> pagingData.map { gifDataEntity -> gifDataEntity.toUiModel() } }
+        ).flow
+            .onStart { saveLastSyncedTimestamp(timestamp = System.currentTimeMillis()) }
+            .map { pagingData -> pagingData.map { gifDataEntity -> gifDataEntity.toUiModel() } }
     }
 
     private fun GifDataEntity.toUiModel() = ItemUiModel(
@@ -62,7 +73,18 @@ internal class GiphyRepository @Inject constructor(
         ),
     )
 
+    suspend fun getLastSyncedTimestamp(): Long? = giphyDataStore.data.map { settings ->
+        settings[LAST_SYNCED_TIMESTAMP_KEY]
+    }.first()
+
+    private suspend fun saveLastSyncedTimestamp(timestamp: Long) {
+        giphyDataStore.edit { settings ->
+            settings[LAST_SYNCED_TIMESTAMP_KEY] = timestamp
+        }
+    }
+
     companion object {
+        private val LAST_SYNCED_TIMESTAMP_KEY = longPreferencesKey("LAST_SYNCED_TIMESTAMP_KEY")
         const val PAGE_SIZE = 20
     }
 }
