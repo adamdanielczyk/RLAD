@@ -74,6 +74,7 @@ dependencies {
     implementation Libs.AndroidX.Lifecycle.runtime
 
     implementation Libs.Accompanist.systemuicontroller
+    implementation Libs.Accompanist.swiperefresh
 
     implementation Libs.Coil.compose
     implementation Libs.Coil.gif

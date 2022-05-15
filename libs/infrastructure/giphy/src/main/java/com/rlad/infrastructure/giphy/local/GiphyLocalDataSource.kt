@@ -22,4 +22,8 @@ internal class GiphyLocalDataSource @Inject constructor(private val gifDataDao: 
     suspend fun deleteTrendingGifs() {
         gifDataDao.deleteByOriginType(OriginType.Trending)
     }
+
+    suspend fun clearGifsData() {
+        gifDataDao.clearTable()
+    }
 }

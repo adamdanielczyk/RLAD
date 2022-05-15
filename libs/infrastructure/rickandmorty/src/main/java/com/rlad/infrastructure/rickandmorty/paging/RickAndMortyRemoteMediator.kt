@@ -41,8 +41,11 @@ internal class RickAndMortyRemoteMediator @AssistedInject constructor(
         state: PagingState<Int, CharacterEntity>,
     ): MediatorResult {
         if (loadType == LoadType.PREPEND) {
-            // Paging is not supported in two directions currently, return early in case of prepend load type
             return MediatorResult.Success(endOfPaginationReached = true)
+        }
+
+        if (loadType == LoadType.REFRESH) {
+            clearCachedDataOnRefresh()
         }
 
         val characters = try {
@@ -60,6 +63,11 @@ internal class RickAndMortyRemoteMediator @AssistedInject constructor(
         nextKey++
 
         return MediatorResult.Success(endOfPaginationReached = characters.isEmpty())
+    }
+
+    private suspend fun clearCachedDataOnRefresh() {
+        nextKey = 1
+        localDataSource.clearCharacters()
     }
 
     private suspend fun insertCharacters(serverCharacters: List<ServerCharacter>) {

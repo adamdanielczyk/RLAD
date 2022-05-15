@@ -40,8 +40,11 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
         state: PagingState<Int, GifDataEntity>,
     ): MediatorResult {
         if (loadType == LoadType.PREPEND) {
-            // Paging is not supported in two directions currently, return early in case of prepend load type
             return MediatorResult.Success(endOfPaginationReached = true)
+        }
+
+        if (loadType == LoadType.REFRESH) {
+            clearCachedDataOnRefresh()
         }
 
         val pageSize = state.config.pageSize
@@ -59,6 +62,11 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
         pageOffsetMultiplier++
 
         return MediatorResult.Success(endOfPaginationReached = gifsData.isEmpty())
+    }
+
+    private suspend fun clearCachedDataOnRefresh() {
+        pageOffsetMultiplier = 0
+        localDataSource.clearGifsData()
     }
 
     private suspend fun getGifsData(offset: Int, pageSize: Int): List<ServerGifData> = if (isSearchMode) {
