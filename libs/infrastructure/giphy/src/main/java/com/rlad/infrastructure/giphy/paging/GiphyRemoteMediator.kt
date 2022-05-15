@@ -9,16 +9,19 @@ import com.rlad.infrastructure.giphy.local.GifDataEntity.OriginType
 import com.rlad.infrastructure.giphy.local.GiphyLocalDataSource
 import com.rlad.infrastructure.giphy.remote.GiphyRemoteDataSource
 import com.rlad.infrastructure.giphy.remote.ServerGifData
+import com.rlad.infrastructure.giphy.repository.GiphyRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import retrofit2.HttpException
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
 internal class GiphyRemoteMediator @AssistedInject constructor(
     private val localDataSource: GiphyLocalDataSource,
     private val remoteDataSource: GiphyRemoteDataSource,
+    private val giphyRepository: GiphyRepository,
     @Assisted private val query: String?,
 ) : RemoteMediator<Int, GifDataEntity>() {
 
@@ -31,8 +34,10 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
 
     private val isSearchMode: Boolean = query != null
 
-    override suspend fun initialize(): InitializeAction {
-        return InitializeAction.SKIP_INITIAL_REFRESH
+    override suspend fun initialize(): InitializeAction = if (shouldClearCache()) {
+        InitializeAction.LAUNCH_INITIAL_REFRESH
+    } else {
+        InitializeAction.SKIP_INITIAL_REFRESH
     }
 
     override suspend fun load(
@@ -60,6 +65,7 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
 
         insertGifsData(gifsData)
         pageOffsetMultiplier++
+        saveSyncTimestamp()
 
         return MediatorResult.Success(endOfPaginationReached = gifsData.isEmpty())
     }
@@ -91,5 +97,20 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
             )
         }
         localDataSource.insertGifsData(newGifsData)
+    }
+
+    private suspend fun shouldClearCache(): Boolean {
+        val lastSyncedTimestamp = giphyRepository.getLastSyncedTimestamp() ?: return false
+        val millisSinceLastSync = System.currentTimeMillis() - lastSyncedTimestamp
+        val minutesSinceLastSync = TimeUnit.MILLISECONDS.toMinutes(millisSinceLastSync)
+        return minutesSinceLastSync > CACHE_TIMEOUT_IN_MINUTES
+    }
+
+    private suspend fun saveSyncTimestamp() {
+        giphyRepository.saveLastSyncedTimestamp(System.currentTimeMillis())
+    }
+
+    private companion object {
+        const val CACHE_TIMEOUT_IN_MINUTES = 10
     }
 }

@@ -1,6 +1,5 @@
 package com.rlad.infrastructure.giphy.di
 
-import com.rlad.domain.initializer.AppInitializer
 import com.rlad.infrastructure.common.repository.ItemsRepository
 import dagger.Module
 import dagger.Provides
@@ -22,8 +21,4 @@ internal object GiphyEntryPointModule {
     @Provides
     @IntoSet
     fun itemsRepository(entryPoint: GiphyEntryPoint): ItemsRepository = entryPoint.giphyRepository()
-
-    @Provides
-    @IntoSet
-    fun clearTrendingGifsDataAppInitializer(entryPoint: GiphyEntryPoint): AppInitializer = entryPoint.clearTrendingGifsDataAppInitializer()
 }
