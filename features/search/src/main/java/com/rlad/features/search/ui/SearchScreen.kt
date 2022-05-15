@@ -116,8 +116,7 @@ private fun SearchScreenContent(
             Column {
                 SearchBar(
                     onQueryTextChanged = viewModel::onQueryTextChanged,
-                    onSearchExpanded = viewModel::onSearchExpanded,
-                    onSearchCollapsed = viewModel::onSearchCollapsed,
+                    onSearchFocused = viewModel::onSearchFocused,
                     onClearSearchClicked = viewModel::onClearSearchClicked,
                 )
                 ItemsList(viewModel, openDetails)
@@ -181,17 +180,14 @@ private fun SheetItem(
 @Composable
 private fun SearchBar(
     onQueryTextChanged: (String) -> Unit,
-    onSearchExpanded: () -> Unit,
-    onSearchCollapsed: () -> Unit,
+    onSearchFocused: () -> Unit,
     onClearSearchClicked: () -> Unit,
 ) {
     SearchBar(
         onQueryChanged = { newQuery -> onQueryTextChanged(newQuery) },
         onSearchFocusChanged = { focused ->
             if (focused) {
-                onSearchExpanded()
-            } else {
-                onSearchCollapsed()
+                onSearchFocused()
             }
         },
         onClearQueryClicked = { onClearSearchClicked() },

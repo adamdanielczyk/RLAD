@@ -98,15 +98,8 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun onSearchExpanded_scrollToTop() = runTest {
-        viewModel.onSearchExpanded()
-
-        assertEquals(Unit, viewModel.scrollToTop.first())
-    }
-
-    @Test
-    fun onSearchCollapsed_scrollToTop() = runTest {
-        viewModel.onSearchCollapsed()
+    fun onSearchFocused_scrollToTop() = runTest {
+        viewModel.onSearchFocused()
 
         assertEquals(Unit, viewModel.scrollToTop.first())
     }
