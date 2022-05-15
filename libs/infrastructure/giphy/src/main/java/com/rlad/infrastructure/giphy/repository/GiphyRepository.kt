@@ -19,7 +19,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 private val Context.dataStore by preferencesDataStore("giphy_settings")
@@ -54,9 +53,7 @@ internal class GiphyRepository @Inject constructor(
                     localDataSource.getTrendingGifData()
                 }
             }
-        ).flow
-            .onStart { saveLastSyncedTimestamp(timestamp = System.currentTimeMillis()) }
-            .map { pagingData -> pagingData.map { gifDataEntity -> gifDataEntity.toUiModel() } }
+        ).flow.map { pagingData -> pagingData.map { gifDataEntity -> gifDataEntity.toUiModel() } }
     }
 
     private fun GifDataEntity.toUiModel() = ItemUiModel(
@@ -77,7 +74,7 @@ internal class GiphyRepository @Inject constructor(
         settings[LAST_SYNCED_TIMESTAMP_KEY]
     }.first()
 
-    private suspend fun saveLastSyncedTimestamp(timestamp: Long) {
+    suspend fun saveLastSyncedTimestamp(timestamp: Long) {
         giphyDataStore.edit { settings ->
             settings[LAST_SYNCED_TIMESTAMP_KEY] = timestamp
         }
