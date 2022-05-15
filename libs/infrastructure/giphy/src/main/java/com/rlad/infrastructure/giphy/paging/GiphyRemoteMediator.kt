@@ -7,9 +7,10 @@ import androidx.paging.RemoteMediator
 import com.rlad.infrastructure.giphy.local.GifDataEntity
 import com.rlad.infrastructure.giphy.local.GifDataEntity.OriginType
 import com.rlad.infrastructure.giphy.local.GiphyLocalDataSource
+import com.rlad.infrastructure.giphy.local.GiphyPreferencesLocalDataSource
 import com.rlad.infrastructure.giphy.remote.GiphyRemoteDataSource
 import com.rlad.infrastructure.giphy.remote.ServerGifData
-import com.rlad.infrastructure.giphy.repository.GiphyRepository
+import com.rlad.infrastructure.giphy.remote.ServerGifs
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit
 internal class GiphyRemoteMediator @AssistedInject constructor(
     private val localDataSource: GiphyLocalDataSource,
     private val remoteDataSource: GiphyRemoteDataSource,
-    private val giphyRepository: GiphyRepository,
+    private val preferencesLocalDataSource: GiphyPreferencesLocalDataSource,
     @Assisted private val query: String?,
 ) : RemoteMediator<Int, GifDataEntity>() {
 
@@ -29,8 +30,6 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
     interface Factory {
         fun create(query: String?): GiphyRemoteMediator
     }
-
-    private var pageOffsetMultiplier = 0
 
     private val isSearchMode: Boolean = query != null
 
@@ -52,30 +51,39 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
             clearCachedDataOnRefresh()
         }
 
-        val pageSize = state.config.pageSize
-
-        val gifsData = try {
-            val offset = pageSize * pageOffsetMultiplier
-            getGifsData(offset, pageSize)
+        val serverGifs = try {
+            getServerGifs(
+                offset = getLastFetchedOffset(),
+                pageSize = state.config.pageSize,
+            )
         } catch (exception: IOException) {
             return MediatorResult.Error(exception)
         } catch (exception: HttpException) {
             return MediatorResult.Error(exception)
         }
 
+        val gifsData = serverGifs.data
+        val pagination = serverGifs.pagination
+
         insertGifsData(gifsData)
-        pageOffsetMultiplier++
-        saveSyncTimestamp()
+        saveLastFetchedOffset(offset = pagination.offset + pagination.count)
+        saveCurrentSyncTimestamp()
 
         return MediatorResult.Success(endOfPaginationReached = gifsData.isEmpty())
     }
 
+    private suspend fun getLastFetchedOffset(): Int = preferencesLocalDataSource.getLastFetchedOffset() ?: 0
+
+    private suspend fun saveLastFetchedOffset(offset: Int) {
+        preferencesLocalDataSource.saveLastFetchedOffset(offset)
+    }
+
     private suspend fun clearCachedDataOnRefresh() {
-        pageOffsetMultiplier = 0
+        saveLastFetchedOffset(offset = 0)
         localDataSource.clearGifsData()
     }
 
-    private suspend fun getGifsData(offset: Int, pageSize: Int): List<ServerGifData> = if (isSearchMode) {
+    private suspend fun getServerGifs(offset: Int, pageSize: Int): ServerGifs = if (isSearchMode) {
         remoteDataSource.searchGifs(
             offset = offset,
             limit = pageSize,
@@ -100,14 +108,14 @@ internal class GiphyRemoteMediator @AssistedInject constructor(
     }
 
     private suspend fun shouldClearCache(): Boolean {
-        val lastSyncedTimestamp = giphyRepository.getLastSyncedTimestamp() ?: return false
+        val lastSyncedTimestamp = preferencesLocalDataSource.getLastSyncedTimestamp() ?: return false
         val millisSinceLastSync = System.currentTimeMillis() - lastSyncedTimestamp
         val minutesSinceLastSync = TimeUnit.MILLISECONDS.toMinutes(millisSinceLastSync)
         return minutesSinceLastSync > CACHE_TIMEOUT_IN_MINUTES
     }
 
-    private suspend fun saveSyncTimestamp() {
-        giphyRepository.saveLastSyncedTimestamp(System.currentTimeMillis())
+    private suspend fun saveCurrentSyncTimestamp() {
+        preferencesLocalDataSource.saveLastSyncedTimestamp(System.currentTimeMillis())
     }
 
     private companion object {

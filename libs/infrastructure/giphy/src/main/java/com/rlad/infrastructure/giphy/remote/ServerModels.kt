@@ -4,6 +4,12 @@ import com.squareup.moshi.Json
 
 internal data class ServerGifs(
     @Json(name = "data") val data: List<ServerGifData>,
+    @Json(name = "pagination") val pagination: ServerPagination,
+)
+
+internal data class ServerPagination(
+    @Json(name = "offset") val offset: Int,
+    @Json(name = "count") val count: Int,
 )
 
 internal data class ServerGifData(
