@@ -48,13 +48,7 @@ internal class SearchViewModel @Inject constructor(
         }
     }
 
-    fun onSearchExpanded() {
-        viewModelScope.launch {
-            scrollToTop()
-        }
-    }
-
-    fun onSearchCollapsed() {
+    fun onSearchFocused() {
         viewModelScope.launch {
             scrollToTop()
         }
