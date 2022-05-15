@@ -1,6 +1,9 @@
 package com.rlad.features.search.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
@@ -25,6 +29,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.rememberModalBottomSheetState
@@ -32,6 +37,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -94,6 +102,13 @@ private fun SearchScreenContent(
         }
     }
 
+    val listState = rememberLazyListState()
+    val isScrollToTopButtonVisible by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0
+        }
+    }
+
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
@@ -108,8 +123,21 @@ private fun SearchScreenContent(
     ) {
         Scaffold(
             floatingActionButton = {
-                FloatingActionButton(onClick = { showBottomSheet() }) {
-                    Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
+                Column {
+                    AnimatedVisibility(
+                        visible = isScrollToTopButtonVisible,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    ) {
+                        FloatingActionButton(onClick = viewModel::onScrollToTopClicked) {
+                            Icon(imageVector = Icons.Default.ArrowUpward, contentDescription = null)
+                        }
+                    }
+
+                    FloatingActionButton(onClick = ::showBottomSheet) {
+                        Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
+                    }
                 }
             }
         ) {
@@ -119,7 +147,11 @@ private fun SearchScreenContent(
                     onSearchFocused = viewModel::onSearchFocused,
                     onClearSearchClicked = viewModel::onClearSearchClicked,
                 )
-                ItemsList(viewModel, openDetails)
+                ItemsList(
+                    viewModel = viewModel,
+                    openDetails = openDetails,
+                    listState = listState,
+                )
             }
         }
     }
@@ -200,11 +232,10 @@ private fun SearchBar(
 private fun ItemsList(
     viewModel: SearchViewModel,
     openDetails: (String) -> Unit,
+    listState: LazyListState,
 ) {
     val items = viewModel.itemsPagingData.collectAsState().value ?: return
     val lazyPagingItems = items.collectAsLazyPagingItems()
-
-    val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         viewModel.scrollToTop.collectLatest {
