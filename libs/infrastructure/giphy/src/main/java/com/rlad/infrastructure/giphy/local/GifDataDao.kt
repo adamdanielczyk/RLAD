@@ -28,4 +28,7 @@ internal interface GifDataDao {
 
     @Query("DELETE FROM gif_data WHERE origin_type = :originType")
     suspend fun deleteByOriginType(originType: GifDataEntity.OriginType)
+
+    @Query("DELETE FROM gif_data")
+    suspend fun clearTable()
 }
