@@ -10,11 +10,13 @@ import java.util.Random
 private val DarkThemeColors = darkColors(
     primary = Color.Black,
     primaryVariant = Gray900,
+    secondary = Yellow200,
 )
 
 private val LightThemeColors = lightColors(
     primary = Gray800,
     primaryVariant = Gray900,
+    secondary = Yellow400,
 )
 
 @Composable
