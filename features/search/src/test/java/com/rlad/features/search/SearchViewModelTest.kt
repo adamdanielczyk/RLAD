@@ -98,6 +98,13 @@ class SearchViewModelTest {
     }
 
     @Test
+    fun onScrollToTopClicked_scrollToTop() = runTest {
+        viewModel.onScrollToTopClicked()
+
+        assertEquals(Unit, viewModel.scrollToTop.first())
+    }
+
+    @Test
     fun onSearchFocused_scrollToTop() = runTest {
         viewModel.onSearchFocused()
 
