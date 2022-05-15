@@ -2,7 +2,6 @@ package com.rlad.features.search.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,13 +10,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -25,6 +25,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +35,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -102,14 +102,19 @@ private fun SearchScreenContent(
             )
         }
     ) {
-        Scaffold {
+        Scaffold(
+            floatingActionButton = {
+                FloatingActionButton(onClick = { showBottomSheet() }) {
+                    Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
+                }
+            }
+        ) {
             Column {
                 SearchBar(
                     onQueryTextChanged = viewModel::onQueryTextChanged,
                     onSearchExpanded = viewModel::onSearchExpanded,
                     onSearchCollapsed = viewModel::onSearchCollapsed,
                     onClearSearchClicked = viewModel::onClearSearchClicked,
-                    onDoubleClick = ::showBottomSheet,
                 )
                 ItemsList(viewModel, openDetails)
             }
@@ -156,12 +161,7 @@ private fun SheetItem(
             .fillMaxWidth(),
     ) {
         if (isSelected) {
-            Image(
-                imageVector = Icons.Default.Check,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onSurface),
-                modifier = Modifier.size(24.dp),
-            )
+            Icon(imageVector = Icons.Default.Check, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
         } else {
             Spacer(modifier = Modifier.width(32.dp))
@@ -180,7 +180,6 @@ private fun SearchBar(
     onSearchExpanded: () -> Unit,
     onSearchCollapsed: () -> Unit,
     onClearSearchClicked: () -> Unit,
-    onDoubleClick: () -> Unit,
 ) {
     SearchBar(
         onQueryChanged = { newQuery -> onQueryTextChanged(newQuery) },
@@ -193,7 +192,6 @@ private fun SearchBar(
         },
         onClearQueryClicked = { onClearSearchClicked() },
         onBack = { onClearSearchClicked() },
-        onDoubleClick = onDoubleClick,
     )
 }
 

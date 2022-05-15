@@ -4,6 +4,7 @@
     <style name="Theme.Rlad" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/gray_800</item>
         <item name="colorPrimaryDark">@color/gray_900</item>
+        <item name="colorSecondary">@color/yellow_400</item>
     </style>
 
 </resources>
