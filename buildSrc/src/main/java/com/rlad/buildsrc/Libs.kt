@@ -91,8 +91,9 @@ object Libs {
     }
 
     object Accompanist {
-        private val version = "0.24.7-alpha"
+        private val version = "0.23.1"
         val systemuicontroller = "com.google.accompanist:accompanist-systemuicontroller:$version"
+        val swiperefresh = "com.google.accompanist:accompanist-swiperefresh:$version"
     }
 
     object Hilt {

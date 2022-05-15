@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,8 +42,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.domain.model.DataSourceUiModel
 import com.rlad.domain.model.ItemUiModel
@@ -222,14 +226,22 @@ private fun ItemsList(
             }
     }
 
-    LazyVerticalGrid(
-        cells = GridCells.Adaptive(minSize = 150.dp),
-        contentPadding = PaddingValues(8.dp),
-        state = listState,
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(
+            isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
+        ),
+        onRefresh = lazyPagingItems::refresh,
+        modifier = Modifier.fillMaxSize(),
     ) {
-        items(lazyPagingItems.itemCount) { index ->
-            val item = lazyPagingItems[index] ?: return@items
-            ItemCard(item, openDetails)
+        LazyVerticalGrid(
+            cells = GridCells.Adaptive(minSize = 150.dp),
+            contentPadding = PaddingValues(8.dp),
+            state = listState,
+        ) {
+            items(lazyPagingItems.itemCount) { index ->
+                val item = lazyPagingItems[index] ?: return@items
+                ItemCard(item, openDetails)
+            }
         }
     }
 }

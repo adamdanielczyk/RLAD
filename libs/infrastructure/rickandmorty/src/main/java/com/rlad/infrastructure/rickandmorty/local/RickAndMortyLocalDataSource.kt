@@ -14,4 +14,8 @@ internal class RickAndMortyLocalDataSource @Inject constructor(private val chara
     suspend fun insertCharacters(characters: List<CharacterEntity>) {
         characterDao.insert(characters)
     }
+
+    suspend fun clearCharacters() {
+        characterDao.clearTable()
+    }
 }
