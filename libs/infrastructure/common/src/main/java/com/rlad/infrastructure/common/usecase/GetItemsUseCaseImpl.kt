@@ -12,5 +12,11 @@ internal class GetItemsUseCaseImpl @Inject constructor(
 ) : GetItemsUseCase {
 
     override operator fun invoke(query: String?): Flow<PagingData<ItemUiModel>> =
-        getSelectedItemsRepositoryUseCase().flatMapLatest { itemsRepository -> itemsRepository.getItems(query) }
+        getSelectedItemsRepositoryUseCase().flatMapLatest { itemsRepository ->
+            if (query != null) {
+                itemsRepository.getSearchItems(query)
+            } else {
+                itemsRepository.getAllItems()
+            }
+        }
 }
