@@ -14,6 +14,7 @@ import com.rlad.infrastructure.rickandmorty.local.CharacterEntity.Gender
 import com.rlad.infrastructure.rickandmorty.local.CharacterEntity.Status
 import com.rlad.infrastructure.rickandmorty.local.RickAndMortyLocalDataSource
 import com.rlad.infrastructure.rickandmorty.paging.RickAndMortyRemoteMediator
+import com.rlad.infrastructure.rickandmorty.paging.RickAndMortySearchPagingSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -22,7 +23,8 @@ import javax.inject.Inject
 internal class RickAndMortyRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val localDataSource: RickAndMortyLocalDataSource,
-    private val remoteMediatorFactory: RickAndMortyRemoteMediator.Factory,
+    private val remoteMediator: RickAndMortyRemoteMediator,
+    private val searchPagingSourceFactory: RickAndMortySearchPagingSource.Factory,
 ) : ItemsRepository {
 
     override fun getDataSourceName(): String = "rickandmorty"
@@ -32,16 +34,30 @@ internal class RickAndMortyRepository @Inject constructor(
     override fun getItemById(id: String): Flow<ItemUiModel> =
         localDataSource.getCharacterById(id.toInt()).map { characterEntity -> characterEntity.toUiModel() }
 
-    override fun getItems(query: String?): Flow<PagingData<ItemUiModel>> {
+    override fun getAllItems(): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            remoteMediator = remoteMediatorFactory.create(query),
-            pagingSourceFactory = { localDataSource.getCharactersByName(query.orEmpty()) }
+            remoteMediator = remoteMediator,
+            pagingSourceFactory = { localDataSource.getAllCharacters() }
         ).flow.map { pagingData -> pagingData.map { characterEntity -> characterEntity.toUiModel() } }
+    }
+
+    override fun getSearchItems(query: String): Flow<PagingData<ItemUiModel>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { searchPagingSourceFactory.create(query) }
+        ).flow.map { pagingData ->
+            pagingData
+                .map(::CharacterEntity)
+                .map { characterEntity -> characterEntity.toUiModel() }
+        }
     }
 
     private fun CharacterEntity.toUiModel() = ItemUiModel(

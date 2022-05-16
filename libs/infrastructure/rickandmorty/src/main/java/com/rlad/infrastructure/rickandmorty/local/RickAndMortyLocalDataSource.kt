@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 internal class RickAndMortyLocalDataSource @Inject constructor(private val characterDao: CharacterDao) {
 
-    fun getCharactersByName(name: String): PagingSource<Int, CharacterEntity> =
-        characterDao.getByName(name)
+    fun getAllCharacters(): PagingSource<Int, CharacterEntity> =
+        characterDao.getAll()
 
     fun getCharacterById(id: Int): Flow<CharacterEntity> = characterDao.getById(id)
 
