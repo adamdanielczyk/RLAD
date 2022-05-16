@@ -6,8 +6,10 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.rlad.infrastructure.rickandmorty.local.CharacterEntity
 import com.rlad.infrastructure.rickandmorty.local.RickAndMortyLocalDataSource
+import com.rlad.infrastructure.rickandmorty.local.RickAndMortyPreferencesLocalDataSource
 import com.rlad.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
 import com.rlad.infrastructure.rickandmorty.remote.ServerCharacter
+import com.rlad.infrastructure.rickandmorty.repository.RickAndMortyRepository.Companion.INITIAL_PAGING_KEY
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -16,13 +18,8 @@ import javax.inject.Inject
 internal class RickAndMortyRemoteMediator @Inject constructor(
     private val localDataSource: RickAndMortyLocalDataSource,
     private val remoteDataSource: RickAndMortyRemoteDataSource,
+    private val preferencesLocalDataSource: RickAndMortyPreferencesLocalDataSource,
 ) : RemoteMediator<Int, CharacterEntity>() {
-
-    /**
-     * Store page key in memory.
-     * For better experience, last loaded page key could be stored on disk.
-     */
-    private var nextKey = 1
 
     override suspend fun initialize(): InitializeAction {
         return InitializeAction.SKIP_INITIAL_REFRESH
@@ -40,9 +37,10 @@ internal class RickAndMortyRemoteMediator @Inject constructor(
             clearCachedDataOnRefresh()
         }
 
+        val nextPageToLoad = getNextPageToLoad()
         val characters = try {
             remoteDataSource.getCharacters(
-                page = nextKey,
+                page = nextPageToLoad,
                 name = null,
             )
         } catch (exception: IOException) {
@@ -52,18 +50,24 @@ internal class RickAndMortyRemoteMediator @Inject constructor(
         }
 
         insertCharacters(characters)
-        nextKey++
+        saveNextPageToLoad(page = nextPageToLoad + 1)
 
         return MediatorResult.Success(endOfPaginationReached = characters.isEmpty())
     }
 
     private suspend fun clearCachedDataOnRefresh() {
-        nextKey = 1
+        saveNextPageToLoad(INITIAL_PAGING_KEY)
         localDataSource.clearCharacters()
     }
 
     private suspend fun insertCharacters(serverCharacters: List<ServerCharacter>) {
         val newLocalCharacters = serverCharacters.map(::CharacterEntity)
         localDataSource.insertCharacters(newLocalCharacters)
+    }
+
+    private suspend fun getNextPageToLoad(): Int = preferencesLocalDataSource.getNextPageToLoad() ?: INITIAL_PAGING_KEY
+
+    private suspend fun saveNextPageToLoad(page: Int) {
+        preferencesLocalDataSource.saveNextPageToLoad(page)
     }
 }

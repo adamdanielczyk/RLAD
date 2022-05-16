@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.rlad.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
 import com.rlad.infrastructure.rickandmorty.remote.ServerCharacter
+import com.rlad.infrastructure.rickandmorty.repository.RickAndMortyRepository.Companion.INITIAL_PAGING_KEY
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -21,7 +22,7 @@ internal class RickAndMortySearchPagingSource @AssistedInject constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ServerCharacter> = try {
-        val nextKey = if (params is LoadParams.Append) params.key else INITIAL_KEY
+        val nextKey = if (params is LoadParams.Append) params.key else INITIAL_PAGING_KEY
         val characters = remoteDataSource.getCharacters(
             page = nextKey,
             name = query
@@ -38,9 +39,5 @@ internal class RickAndMortySearchPagingSource @AssistedInject constructor(
         LoadResult.Error(exception)
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ServerCharacter>): Int = INITIAL_KEY
-
-    private companion object {
-        const val INITIAL_KEY = 1
-    }
+    override fun getRefreshKey(state: PagingState<Int, ServerCharacter>): Int = INITIAL_PAGING_KEY
 }

@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.rlad.infrastructure.giphy.remote.GiphyRemoteDataSource
 import com.rlad.infrastructure.giphy.remote.ServerGifData
+import com.rlad.infrastructure.giphy.repository.GiphyRepository.Companion.INITIAL_PAGING_OFFSET
 import com.rlad.infrastructure.giphy.repository.GiphyRepository.Companion.PAGE_SIZE
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -23,7 +24,7 @@ internal class GiphySearchPagingSource @AssistedInject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ServerGifData> = try {
         val searchedGifs = remoteDataSource.searchGifs(
-            offset = if (params is LoadParams.Append) params.key else INITIAL_KEY,
+            offset = if (params is LoadParams.Append) params.key else INITIAL_PAGING_OFFSET,
             limit = PAGE_SIZE,
             query = query,
         )
@@ -40,9 +41,5 @@ internal class GiphySearchPagingSource @AssistedInject constructor(
         LoadResult.Error(exception)
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ServerGifData>): Int = INITIAL_KEY
-
-    private companion object {
-        const val INITIAL_KEY = 0
-    }
+    override fun getRefreshKey(state: PagingState<Int, ServerGifData>): Int = INITIAL_PAGING_OFFSET
 }
