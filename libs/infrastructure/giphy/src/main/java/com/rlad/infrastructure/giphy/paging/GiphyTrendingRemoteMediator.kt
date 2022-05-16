@@ -73,12 +73,7 @@ internal class GiphyTrendingRemoteMediator @Inject constructor(
     }
 
     private suspend fun insertGifsData(gifsData: List<ServerGifData>) {
-        val newGifsData = gifsData.mapIndexed { index, serverGifData ->
-            GifDataEntity(
-                serverGifData = serverGifData,
-                orderId = index,
-            )
-        }
+        val newGifsData = gifsData.map(::GifDataEntity)
         localDataSource.insertGifsData(newGifsData)
     }
 

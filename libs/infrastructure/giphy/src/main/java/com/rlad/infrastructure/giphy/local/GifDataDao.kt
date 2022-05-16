@@ -13,7 +13,7 @@ internal interface GifDataDao {
     @Query(
         """
         SELECT * FROM gif_data 
-        ORDER BY order_id
+        ORDER BY id
         """
     )
     fun getAll(): PagingSource<Int, GifDataEntity>

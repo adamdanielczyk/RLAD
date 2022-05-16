@@ -2,13 +2,19 @@ package com.rlad.infrastructure.giphy.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.rlad.infrastructure.giphy.remote.ServerGifData
 
-@Entity(tableName = "gif_data")
+@Entity(
+    tableName = "gif_data",
+    indices = [
+        Index(value = ["giphy_id"], unique = true)
+    ],
+)
 internal data class GifDataEntity(
-    @PrimaryKey @ColumnInfo(name = "giphy_id") val giphyId: String,
-    @ColumnInfo(name = "order_id") val orderId: Int,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
+    @ColumnInfo(name = "giphy_id") val giphyId: String,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "image") val imageUrl: String,
     @ColumnInfo(name = "username") val username: String,
@@ -16,11 +22,7 @@ internal data class GifDataEntity(
     @ColumnInfo(name = "trending_datetime") val trendingDatetime: String,
 ) {
 
-    constructor(
-        serverGifData: ServerGifData,
-        orderId: Int,
-    ) : this(
-        orderId = orderId,
+    constructor(serverGifData: ServerGifData) : this(
         giphyId = serverGifData.id,
         title = serverGifData.title,
         imageUrl = serverGifData.images.fixedHeight.url,
