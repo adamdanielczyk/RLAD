@@ -9,6 +9,7 @@ import com.rlad.infrastructure.giphy.local.GiphyLocalDataSource
 import com.rlad.infrastructure.giphy.local.GiphyPreferencesLocalDataSource
 import com.rlad.infrastructure.giphy.remote.GiphyRemoteDataSource
 import com.rlad.infrastructure.giphy.remote.ServerGifData
+import com.rlad.infrastructure.giphy.repository.GiphyRepository.Companion.INITIAL_PAGING_OFFSET
 import com.rlad.infrastructure.giphy.repository.GiphyRepository.Companion.PAGE_SIZE
 import retrofit2.HttpException
 import java.io.IOException
@@ -42,7 +43,7 @@ internal class GiphyTrendingRemoteMediator @Inject constructor(
 
         val serverGifs = try {
             remoteDataSource.trendingGifs(
-                offset = getLastFetchedOffset(),
+                offset = getNextOffsetToLoad(),
                 limit = PAGE_SIZE,
             )
         } catch (exception: IOException) {
@@ -55,20 +56,20 @@ internal class GiphyTrendingRemoteMediator @Inject constructor(
         val pagination = serverGifs.pagination
 
         insertGifsData(gifsData)
-        saveLastFetchedOffset(offset = pagination.offset + pagination.count)
+        saveNextOffsetToLoad(offset = pagination.offset + pagination.count)
         saveCurrentSyncTimestamp()
 
         return MediatorResult.Success(endOfPaginationReached = gifsData.isEmpty())
     }
 
-    private suspend fun getLastFetchedOffset(): Int = preferencesLocalDataSource.getLastFetchedOffset() ?: 0
+    private suspend fun getNextOffsetToLoad(): Int = preferencesLocalDataSource.getNextOffsetToLoad() ?: INITIAL_PAGING_OFFSET
 
-    private suspend fun saveLastFetchedOffset(offset: Int) {
-        preferencesLocalDataSource.saveLastFetchedOffset(offset)
+    private suspend fun saveNextOffsetToLoad(offset: Int) {
+        preferencesLocalDataSource.saveNextOffsetToLoad(offset)
     }
 
     private suspend fun clearCachedDataOnRefresh() {
-        saveLastFetchedOffset(offset = 0)
+        saveNextOffsetToLoad(offset = INITIAL_PAGING_OFFSET)
         localDataSource.clearGifsData()
     }
 

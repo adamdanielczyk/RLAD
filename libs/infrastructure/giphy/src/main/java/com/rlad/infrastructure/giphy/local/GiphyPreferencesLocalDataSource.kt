@@ -17,17 +17,17 @@ internal class GiphyPreferencesLocalDataSource @Inject constructor(
         )
     }
 
-    suspend fun getLastFetchedOffset(): Int? = appPreferencesLocalDataSource.get(LAST_FETCHED_OFFSET).firstOrNull()?.toInt()
+    suspend fun getNextOffsetToLoad(): Int? = appPreferencesLocalDataSource.get(NEXT_OFFSET_TO_LOAD).firstOrNull()?.toInt()
 
-    suspend fun saveLastFetchedOffset(offset: Int) {
+    suspend fun saveNextOffsetToLoad(offset: Int) {
         appPreferencesLocalDataSource.save(
-            key = LAST_FETCHED_OFFSET,
+            key = NEXT_OFFSET_TO_LOAD,
             value = offset.toString()
         )
     }
 
     private companion object {
         const val LAST_SYNCED_TIMESTAMP_KEY = "GIPHY_LAST_SYNCED_TIMESTAMP_KEY"
-        const val LAST_FETCHED_OFFSET = "GIPHY_LAST_FETCHED_OFFSET"
+        const val NEXT_OFFSET_TO_LOAD = "GIPHY_NEXT_OFFSET_TO_LOAD"
     }
 }
