@@ -53,12 +53,7 @@ internal class GiphyRepository @Inject constructor(
             pagingSourceFactory = { searchPagingSourceFactory.create(query) }
         ).flow.map { pagingData ->
             pagingData
-                .map { serverGifData ->
-                    GifDataEntity(
-                        serverGifData = serverGifData,
-                        orderId = 0,
-                    )
-                }
+                .map(::GifDataEntity)
                 .map { gifDataEntity -> gifDataEntity.toUiModel() }
         }
     }
