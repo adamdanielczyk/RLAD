@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.rlad.infrastructure.giphy.local.GifDataDao
 import com.rlad.infrastructure.giphy.local.GiphyDatabase
-import com.rlad.infrastructure.giphy.local.GiphyPreferencesDao
 import com.rlad.infrastructure.giphy.remote.GiphyApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -33,11 +32,6 @@ internal object GiphyModule {
     @GiphyScope
     fun gifDataDao(giphyDatabase: GiphyDatabase): GifDataDao =
         giphyDatabase.gifDataDao()
-
-    @Provides
-    @GiphyScope
-    fun giphyPreferencesDao(giphyDatabase: GiphyDatabase): GiphyPreferencesDao =
-        giphyDatabase.giphyPreferencesDao()
 
     @Provides
     @GiphyScope
