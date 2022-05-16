@@ -33,7 +33,6 @@ object Libs {
     }
 
     object AndroidX {
-        val datastore = "androidx.datastore:datastore-preferences:1.0.0"
         val navigation = "androidx.navigation:navigation-compose:2.4.2"
 
         object Activity {

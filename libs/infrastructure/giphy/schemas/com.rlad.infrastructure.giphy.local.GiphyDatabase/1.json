@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d5559f27b4b5a58f7c85e9ce88be5318",
+    "identityHash": "a653b11114a924b19088b5e40ddeeffe",
     "entities": [
       {
         "tableName": "gif_data",
@@ -65,38 +65,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "giphy_preferences",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`preference_key` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`preference_key`))",
-        "fields": [
-          {
-            "fieldPath": "key",
-            "columnName": "preference_key",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "value",
-            "columnName": "value",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "preference_key"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd5559f27b4b5a58f7c85e9ce88be5318')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a653b11114a924b19088b5e40ddeeffe')"
     ]
   }
 }
