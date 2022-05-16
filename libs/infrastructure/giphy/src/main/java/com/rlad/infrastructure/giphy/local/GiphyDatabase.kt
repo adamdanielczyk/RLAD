@@ -7,7 +7,6 @@ import androidx.room.TypeConverters
 @Database(
     entities = [
         GifDataEntity::class,
-        GiphyPreferencesEntity::class,
     ],
     version = 1
 )
@@ -15,5 +14,4 @@ import androidx.room.TypeConverters
 internal abstract class GiphyDatabase : RoomDatabase() {
 
     abstract fun gifDataDao(): GifDataDao
-    abstract fun giphyPreferencesDao(): GiphyPreferencesDao
 }
