@@ -2,22 +2,22 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a6028a617b7bec0c96ac2620ecb8a258",
+    "identityHash": "cb141edba04a176a535b1c330ce40c6e",
     "entities": [
       {
         "tableName": "gif_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`giphy_id` TEXT NOT NULL, `order_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `username` TEXT NOT NULL, `import_datetime` TEXT NOT NULL, `trending_datetime` TEXT NOT NULL, PRIMARY KEY(`giphy_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `giphy_id` TEXT NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `username` TEXT NOT NULL, `import_datetime` TEXT NOT NULL, `trending_datetime` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "giphyId",
             "columnName": "giphy_id",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "orderId",
-            "columnName": "order_id",
-            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -53,18 +53,28 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "giphy_id"
+            "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_gif_data_giphy_id",
+            "unique": true,
+            "columnNames": [
+              "giphy_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_gif_data_giphy_id` ON `${TABLE_NAME}` (`giphy_id`)"
+          }
+        ],
         "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a6028a617b7bec0c96ac2620ecb8a258')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cb141edba04a176a535b1c330ce40c6e')"
     ]
   }
 }
