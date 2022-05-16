@@ -92,5 +92,6 @@ internal class RickAndMortyRepository @Inject constructor(
 
     companion object {
         const val PAGE_SIZE = 20
+        const val INITIAL_PAGING_KEY = 1
     }
 }
