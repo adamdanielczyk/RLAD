@@ -13,11 +13,10 @@ internal interface CharacterDao {
     @Query(
         """
         SELECT * FROM character 
-        WHERE name LIKE '%' || :name || '%' 
         ORDER BY id
         """
     )
-    fun getByName(name: String): PagingSource<Int, CharacterEntity>
+    fun getAll(): PagingSource<Int, CharacterEntity>
 
     @Query("SELECT * FROM character WHERE id = :id")
     fun getById(id: Int): Flow<CharacterEntity>

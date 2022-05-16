@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a653b11114a924b19088b5e40ddeeffe",
+    "identityHash": "a6028a617b7bec0c96ac2620ecb8a258",
     "entities": [
       {
         "tableName": "gif_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`giphy_id` TEXT NOT NULL, `order_id` INTEGER NOT NULL, `origin_type` TEXT NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `username` TEXT NOT NULL, `import_datetime` TEXT NOT NULL, `trending_datetime` TEXT NOT NULL, PRIMARY KEY(`giphy_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`giphy_id` TEXT NOT NULL, `order_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `username` TEXT NOT NULL, `import_datetime` TEXT NOT NULL, `trending_datetime` TEXT NOT NULL, PRIMARY KEY(`giphy_id`))",
         "fields": [
           {
             "fieldPath": "giphyId",
@@ -18,12 +18,6 @@
             "fieldPath": "orderId",
             "columnName": "order_id",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "originType",
-            "columnName": "origin_type",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -70,7 +64,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a653b11114a924b19088b5e40ddeeffe')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a6028a617b7bec0c96ac2620ecb8a258')"
     ]
   }
 }
