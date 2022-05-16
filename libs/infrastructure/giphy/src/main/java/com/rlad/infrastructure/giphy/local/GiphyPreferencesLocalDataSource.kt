@@ -27,7 +27,7 @@ internal class GiphyPreferencesLocalDataSource @Inject constructor(
     }
 
     private companion object {
-        const val LAST_SYNCED_TIMESTAMP_KEY = "LAST_SYNCED_TIMESTAMP_KEY"
-        const val LAST_FETCHED_OFFSET = "LAST_FETCHED_OFFSET"
+        const val LAST_SYNCED_TIMESTAMP_KEY = "GIPHY_LAST_SYNCED_TIMESTAMP_KEY"
+        const val LAST_FETCHED_OFFSET = "GIPHY_LAST_FETCHED_OFFSET"
     }
 }
