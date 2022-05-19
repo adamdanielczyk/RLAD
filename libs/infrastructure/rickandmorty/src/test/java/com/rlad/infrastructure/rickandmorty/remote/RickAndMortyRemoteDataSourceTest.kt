@@ -65,5 +65,9 @@ class RickAndMortyRemoteDataSourceTest {
             }
             return ServerGetCharacters(characters)
         }
+
+        override suspend fun getCharacter(id: Int): ServerCharacter {
+            return characters.first { it.id == id }
+        }
     }
 }

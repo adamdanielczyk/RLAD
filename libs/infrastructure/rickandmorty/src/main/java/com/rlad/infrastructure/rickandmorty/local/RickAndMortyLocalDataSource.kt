@@ -9,7 +9,7 @@ internal class RickAndMortyLocalDataSource @Inject constructor(private val chara
     fun getAllCharacters(): PagingSource<Int, CharacterEntity> =
         characterDao.getAll()
 
-    fun getCharacterById(id: Int): Flow<CharacterEntity> = characterDao.getById(id)
+    fun getCharacterById(id: Int): Flow<CharacterEntity?> = characterDao.getById(id)
 
     suspend fun insertCharacters(characters: List<CharacterEntity>) {
         characterDao.insert(characters)

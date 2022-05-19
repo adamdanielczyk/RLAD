@@ -2,6 +2,10 @@ package com.rlad.infrastructure.giphy.remote
 
 import com.squareup.moshi.Json
 
+internal data class ServerGif(
+    @Json(name = "data") val data: ServerGifData,
+)
+
 internal data class ServerGifs(
     @Json(name = "data") val data: List<ServerGifData>,
     @Json(name = "pagination") val pagination: ServerPagination,
