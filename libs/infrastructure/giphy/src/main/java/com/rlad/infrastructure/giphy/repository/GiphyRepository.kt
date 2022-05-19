@@ -73,7 +73,7 @@ internal class GiphyRepository @Inject constructor(
     )
 
     companion object {
-        const val PAGE_SIZE = 20
+        const val PAGE_SIZE = 80
         const val INITIAL_PAGING_OFFSET = 0
     }
 }
