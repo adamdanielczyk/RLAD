@@ -13,6 +13,7 @@ import com.rlad.infrastructure.giphy.local.GifDataEntity
 import com.rlad.infrastructure.giphy.local.GiphyLocalDataSource
 import com.rlad.infrastructure.giphy.paging.GiphySearchPagingSource
 import com.rlad.infrastructure.giphy.paging.GiphyTrendingRemoteMediator
+import com.rlad.infrastructure.giphy.remote.GiphyRemoteDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,6 +22,7 @@ import javax.inject.Inject
 internal class GiphyRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val localDataSource: GiphyLocalDataSource,
+    private val remoteDataSource: GiphyRemoteDataSource,
     private val trendingRemoteMediator: GiphyTrendingRemoteMediator,
     private val searchPagingSourceFactory: GiphySearchPagingSource.Factory,
 ) : ItemsRepository {
@@ -29,8 +31,12 @@ internal class GiphyRepository @Inject constructor(
 
     override fun getDataSourcePickerText(): String = context.getString(R.string.data_source_picker_giphy)
 
-    override fun getItemById(id: String): Flow<ItemUiModel> =
-        localDataSource.getGifDataById(id).map { gifDataEntity -> gifDataEntity.toUiModel() }
+    override fun getItemById(id: String): Flow<ItemUiModel> = localDataSource.getGifDataById(id).map { gifDataEntity ->
+        if (gifDataEntity == null) {
+            val serverGifData = remoteDataSource.getGif(id).data
+            GifDataEntity(serverGifData)
+        } else gifDataEntity
+    }.map { gifDataEntity -> gifDataEntity.toUiModel() }
 
     override fun getAllItems(): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)

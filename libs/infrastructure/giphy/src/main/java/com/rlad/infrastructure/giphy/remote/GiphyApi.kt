@@ -1,6 +1,7 @@
 package com.rlad.infrastructure.giphy.remote
 
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface GiphyApi {
@@ -19,4 +20,10 @@ internal interface GiphyApi {
         @Query("limit") limit: Int,
         @Query("q") query: String,
     ): ServerGifs
+
+    @GET("/v1/gifs/{gif_id}")
+    suspend fun getGif(
+        @Path("gif_id") gifId: String,
+        @Query("api_key") apiKey: String,
+    ): ServerGif
 }

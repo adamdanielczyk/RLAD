@@ -15,6 +15,7 @@ import com.rlad.infrastructure.rickandmorty.local.CharacterEntity.Status
 import com.rlad.infrastructure.rickandmorty.local.RickAndMortyLocalDataSource
 import com.rlad.infrastructure.rickandmorty.paging.RickAndMortyRemoteMediator
 import com.rlad.infrastructure.rickandmorty.paging.RickAndMortySearchPagingSource
+import com.rlad.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,6 +24,7 @@ import javax.inject.Inject
 internal class RickAndMortyRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val localDataSource: RickAndMortyLocalDataSource,
+    private val remoteDataSource: RickAndMortyRemoteDataSource,
     private val remoteMediator: RickAndMortyRemoteMediator,
     private val searchPagingSourceFactory: RickAndMortySearchPagingSource.Factory,
 ) : ItemsRepository {
@@ -31,8 +33,12 @@ internal class RickAndMortyRepository @Inject constructor(
 
     override fun getDataSourcePickerText(): String = context.getString(R.string.data_source_picker_rickandmorty)
 
-    override fun getItemById(id: String): Flow<ItemUiModel> =
-        localDataSource.getCharacterById(id.toInt()).map { characterEntity -> characterEntity.toUiModel() }
+    override fun getItemById(id: String): Flow<ItemUiModel> = localDataSource.getCharacterById(id.toInt()).map { characterEntity ->
+        if (characterEntity == null) {
+            val serverCharacter = remoteDataSource.getCharacter(id.toInt())
+            CharacterEntity(serverCharacter)
+        } else characterEntity
+    }.map { characterEntity -> characterEntity.toUiModel() }
 
     override fun getAllItems(): Flow<PagingData<ItemUiModel>> {
         @OptIn(ExperimentalPagingApi::class)

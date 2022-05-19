@@ -8,11 +8,27 @@ internal class GiphyRemoteDataSource @Inject constructor(private val giphyApi: G
     suspend fun trendingGifs(
         offset: Int,
         limit: Int,
-    ): ServerGifs = giphyApi.trendingGifs(BuildConfig.GIPHY_API_KEY, offset, limit)
+    ): ServerGifs = giphyApi.trendingGifs(
+        apiKey = BuildConfig.GIPHY_API_KEY,
+        offset = offset,
+        limit = limit,
+    )
 
     suspend fun searchGifs(
         query: String,
         offset: Int,
         limit: Int,
-    ): ServerGifs = giphyApi.searchGifs(BuildConfig.GIPHY_API_KEY, offset, limit, query)
+    ): ServerGifs = giphyApi.searchGifs(
+        apiKey = BuildConfig.GIPHY_API_KEY,
+        offset = offset,
+        limit = limit,
+        query = query,
+    )
+
+    suspend fun getGif(
+        gifId: String,
+    ): ServerGif = giphyApi.getGif(
+        gifId = gifId,
+        apiKey = BuildConfig.GIPHY_API_KEY,
+    )
 }
