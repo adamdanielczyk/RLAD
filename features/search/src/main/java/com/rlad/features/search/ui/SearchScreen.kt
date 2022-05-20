@@ -54,6 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
@@ -158,7 +159,7 @@ private fun SearchScreenContent(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.TopCenter,
                 ) {
-                    ItemsList(
+                    ItemsContainer(
                         viewModel = viewModel,
                         openDetails = openDetails,
                         listState = listState,
@@ -239,9 +240,8 @@ private fun SearchBar(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-private fun ItemsList(
+private fun ItemsContainer(
     viewModel: SearchViewModel,
     openDetails: (String) -> Unit,
     listState: LazyListState,
@@ -249,23 +249,8 @@ private fun ItemsList(
     val items = viewModel.itemsPagingData.collectAsState().value ?: return
     val lazyPagingItems = items.collectAsLazyPagingItems()
 
-    LaunchedEffect(Unit) {
-        viewModel.scrollToTop.collectLatest {
-            listState.animateScrollToItem(index = 0)
-        }
-    }
-
-    val keyboardController = LocalSoftwareKeyboardController.current
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemScrollOffset }
-            .map { offset -> offset > 0 }
-            .filter { it }
-            .collect {
-                keyboardController?.hide()
-            }
-    }
-
-    val isEmpty = lazyPagingItems.loadState.append is LoadState.NotLoading && lazyPagingItems.loadState.append.endOfPaginationReached && lazyPagingItems.itemCount == 0
+    val loadState = lazyPagingItems.loadState
+    val isEmpty = loadState.append is LoadState.NotLoading && loadState.append.endOfPaginationReached && lazyPagingItems.itemCount == 0
 
     AnimatedVisibility(
         visible = isEmpty,
@@ -276,23 +261,7 @@ private fun ItemsList(
     }
 
     if (!isEmpty) {
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(
-                isRefreshing = lazyPagingItems.loadState.mediator?.refresh is LoadState.Loading
-            ),
-            onRefresh = lazyPagingItems::refresh,
-        ) {
-            LazyVerticalGrid(
-                cells = GridCells.Adaptive(minSize = 150.dp),
-                contentPadding = PaddingValues(8.dp),
-                state = listState,
-            ) {
-                items(lazyPagingItems.itemCount) { index ->
-                    val item = lazyPagingItems[index] ?: return@items
-                    ItemCard(item, openDetails)
-                }
-            }
-        }
+        SwipeRefreshWithGrid(viewModel, lazyPagingItems, listState, openDetails)
     }
 }
 
@@ -313,6 +282,50 @@ private fun EmptyState() {
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.padding(top = 8.dp),
         )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@Composable
+private fun SwipeRefreshWithGrid(
+    viewModel: SearchViewModel,
+    lazyPagingItems: LazyPagingItems<ItemUiModel>,
+    listState: LazyListState,
+    openDetails: (String) -> Unit,
+) {
+    LaunchedEffect(Unit) {
+        viewModel.scrollToTop.collectLatest {
+            listState.animateScrollToItem(index = 0)
+        }
+    }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemScrollOffset }
+            .map { offset -> offset > 0 }
+            .filter { it }
+            .collect {
+                keyboardController?.hide()
+            }
+    }
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(
+            isRefreshing = lazyPagingItems.loadState.mediator?.refresh is LoadState.Loading
+        ),
+        onRefresh = lazyPagingItems::refresh,
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        LazyVerticalGrid(
+            cells = GridCells.Adaptive(minSize = 150.dp),
+            contentPadding = PaddingValues(8.dp),
+            state = listState,
+        ) {
+            items(lazyPagingItems.itemCount) { index ->
+                val item = lazyPagingItems[index] ?: return@items
+                ItemCard(item, openDetails)
+            }
+        }
     }
 }
 
