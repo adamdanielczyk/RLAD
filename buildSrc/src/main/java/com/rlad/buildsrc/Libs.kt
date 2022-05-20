@@ -3,8 +3,8 @@ package com.rlad.buildsrc
 @Suppress("MayBeConstant")
 object Libs {
     val androidGradlePlugin = "com.android.tools.build:gradle:7.2.0"
-
     val moshi = "com.squareup.moshi:moshi-kotlin:1.13.0"
+    val lottie = "com.airbnb.android:lottie-compose:5.0.3"
 
     object Coil {
         private val version = "2.0.0"

@@ -30,10 +30,11 @@ internal class GiphySearchPagingSource @AssistedInject constructor(
         )
 
         val pagination = searchedGifs.pagination
+        val data = searchedGifs.data
         LoadResult.Page(
-            data = searchedGifs.data,
+            data = data,
             prevKey = null,
-            nextKey = pagination.offset + pagination.count
+            nextKey = if (data.isNotEmpty()) pagination.offset + pagination.count else null,
         )
     } catch (exception: IOException) {
         LoadResult.Error(exception)

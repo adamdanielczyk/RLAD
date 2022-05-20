@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyListState
@@ -42,6 +44,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -53,6 +56,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -147,11 +154,16 @@ private fun SearchScreenContent(
                     onSearchFocused = viewModel::onSearchFocused,
                     onClearSearchClicked = viewModel::onClearSearchClicked,
                 )
-                ItemsList(
-                    viewModel = viewModel,
-                    openDetails = openDetails,
-                    listState = listState,
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.TopCenter,
+                ) {
+                    ItemsList(
+                        viewModel = viewModel,
+                        openDetails = openDetails,
+                        listState = listState,
+                    )
+                }
             }
         }
     }
@@ -253,23 +265,54 @@ private fun ItemsList(
             }
     }
 
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(
-            isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
-        ),
-        onRefresh = lazyPagingItems::refresh,
-        modifier = Modifier.fillMaxSize(),
+    val isEmpty = lazyPagingItems.loadState.append is LoadState.NotLoading && lazyPagingItems.loadState.append.endOfPaginationReached && lazyPagingItems.itemCount == 0
+
+    AnimatedVisibility(
+        visible = isEmpty,
+        enter = fadeIn(),
+        exit = fadeOut(),
     ) {
-        LazyVerticalGrid(
-            cells = GridCells.Adaptive(minSize = 150.dp),
-            contentPadding = PaddingValues(8.dp),
-            state = listState,
+        EmptyState()
+    }
+
+    if (!isEmpty) {
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(
+                isRefreshing = lazyPagingItems.loadState.mediator?.refresh is LoadState.Loading
+            ),
+            onRefresh = lazyPagingItems::refresh,
         ) {
-            items(lazyPagingItems.itemCount) { index ->
-                val item = lazyPagingItems[index] ?: return@items
-                ItemCard(item, openDetails)
+            LazyVerticalGrid(
+                cells = GridCells.Adaptive(minSize = 150.dp),
+                contentPadding = PaddingValues(8.dp),
+                state = listState,
+            ) {
+                items(lazyPagingItems.itemCount) { index ->
+                    val item = lazyPagingItems[index] ?: return@items
+                    ItemCard(item, openDetails)
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun EmptyState() {
+    Column(
+        modifier = Modifier.padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.search_empty))
+        LottieAnimation(
+            composition = composition,
+            iterations = LottieConstants.IterateForever,
+            modifier = Modifier.size(120.dp),
+        )
+        Text(
+            text = stringResource(R.string.search_no_results),
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.padding(top = 8.dp),
+        )
     }
 }
 

@@ -10,6 +10,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.HttpURLConnection
 
 internal class RickAndMortySearchPagingSource @AssistedInject constructor(
     private val remoteDataSource: RickAndMortyRemoteDataSource,
@@ -36,7 +37,15 @@ internal class RickAndMortySearchPagingSource @AssistedInject constructor(
     } catch (exception: IOException) {
         LoadResult.Error(exception)
     } catch (exception: HttpException) {
-        LoadResult.Error(exception)
+        if (exception.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+            LoadResult.Page(
+                data = emptyList(),
+                prevKey = null,
+                nextKey = null
+            )
+        } else {
+            LoadResult.Error(exception)
+        }
     }
 
     override fun getRefreshKey(state: PagingState<Int, ServerCharacter>): Int = INITIAL_PAGING_KEY
