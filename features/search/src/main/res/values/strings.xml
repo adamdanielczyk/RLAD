@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_hint">Search</string>
+    <string name="search_no_results">No results found</string>
     <string name="data_source_picker_title">Pick data source</string>
 </resources>
