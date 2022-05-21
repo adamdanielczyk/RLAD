@@ -118,6 +118,7 @@ private fun ImageWithGradient(imageUrl: String) {
 
 @Composable
 private fun DetailsText(title: String, text: String) {
+    if (text.isEmpty()) return
     Text(
         text = title,
         modifier = Modifier.padding(bottom = 4.dp),
