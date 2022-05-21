@@ -75,3 +75,29 @@ jobs:
         with:
           name: app-release
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+  bundleRelease:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.2
+
+      - uses: actions/setup-java@v3.1.1
+        with:
+          distribution: temurin
+          java-version: 11
+
+      - run: ./gradlew bundleRelease
+
+      - uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.RELEASE_SIGNING_KEY }}
+          alias: ${{ secrets.RELEASE_ALIAS }}
+          keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
+
+      - uses: actions/upload-artifact@v3.0.0
+        with:
+          name: app-bundle-release
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
