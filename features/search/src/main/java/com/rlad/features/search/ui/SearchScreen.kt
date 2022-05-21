@@ -351,14 +351,14 @@ private fun ItemCard(item: ItemUiModel, openDetails: (String) -> Unit) {
                 Text(
                     text = item.name,
                     style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(bottom = 8.dp),
                 )
 
                 item.cardCaptions.forEach { caption ->
+                    if (caption.isEmpty()) return@forEach
                     Text(
                         text = caption,
                         style = MaterialTheme.typography.caption,
-                        modifier = Modifier.padding(bottom = 8.dp),
+                        modifier = Modifier.padding(vertical = 8.dp),
                     )
                 }
             }
