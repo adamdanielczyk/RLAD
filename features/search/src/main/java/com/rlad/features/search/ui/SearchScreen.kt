@@ -300,9 +300,32 @@ private fun SwipeRefreshWithGrid(
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    var previousIndex by remember {
+        mutableStateOf(listState.firstVisibleItemIndex)
+    }
+
+    var previousScrollOffset by remember {
+        mutableStateOf(listState.firstVisibleItemScrollOffset)
+    }
+
     LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemScrollOffset }
-            .map { offset -> offset > 0 }
+        combine(
+            snapshotFlow { listState.firstVisibleItemIndex },
+            snapshotFlow { listState.firstVisibleItemScrollOffset },
+        ) { index, offset ->
+            index to offset
+        }
+            .map { (newIndex, newOffset) ->
+                val isScrollingDown = if (newIndex != previousIndex) {
+                    newIndex > previousIndex
+                } else {
+                    newOffset > previousScrollOffset
+                }
+                previousIndex = newIndex
+                previousScrollOffset = newOffset
+                isScrollingDown
+            }
             .filter { it }
             .collect {
                 keyboardController?.hide()
