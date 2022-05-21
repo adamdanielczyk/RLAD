@@ -1,11 +1,14 @@
 package com.rlad.infrastructure.rickandmorty.remote
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 internal data class ServerGetCharacters(
     @Json(name = "results") val results: List<ServerCharacter>,
 )
 
+@JsonClass(generateAdapter = true)
 internal data class ServerCharacter(
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String,
@@ -18,6 +21,7 @@ internal data class ServerCharacter(
     @Json(name = "created") val created: String,
 ) {
 
+    @JsonClass(generateAdapter = false)
     enum class Status {
         @Json(name = "Alive")
         ALIVE,
@@ -29,6 +33,7 @@ internal data class ServerCharacter(
         UNKNOWN
     }
 
+    @JsonClass(generateAdapter = false)
     enum class Gender {
         @Json(name = "Female")
         FEMALE,
@@ -43,6 +48,7 @@ internal data class ServerCharacter(
         UNKNOWN
     }
 
+    @JsonClass(generateAdapter = true)
     data class Location(
         @Json(name = "name") val name: String,
     )

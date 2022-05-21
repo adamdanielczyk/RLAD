@@ -5,8 +5,6 @@ import androidx.room.Room
 import com.rlad.infrastructure.rickandmorty.local.CharacterDao
 import com.rlad.infrastructure.rickandmorty.local.RickAndMortyDatabase
 import com.rlad.infrastructure.rickandmorty.remote.RickAndMortyApi
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,18 +33,10 @@ internal object RickAndMortyModule {
 
     @Provides
     @RickAndMortyScope
-    fun moshi(): Moshi {
-        return Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-    }
-
-    @Provides
-    @RickAndMortyScope
-    fun retrofit(moshi: Moshi): Retrofit {
+    fun retrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com")
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
 
