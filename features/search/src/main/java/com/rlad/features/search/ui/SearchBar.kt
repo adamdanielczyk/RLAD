@@ -53,7 +53,7 @@ import com.rlad.features.search.R
 @Composable
 internal fun SearchBar(
     onQueryChanged: (String) -> Unit,
-    onSearchFocusChanged: (Boolean) -> Unit,
+    onSearchFocusChanged: (Boolean) -> Unit = {},
     onClearQueryClicked: () -> Unit,
     onBack: () -> Unit,
 ) {
