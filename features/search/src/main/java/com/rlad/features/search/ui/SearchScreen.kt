@@ -41,8 +41,10 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -69,6 +71,7 @@ import com.rlad.domain.model.ItemUiModel
 import com.rlad.features.search.R
 import com.rlad.ui.defaultImageModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -249,8 +252,12 @@ private fun ItemsContainer(
     val items = viewModel.itemsPagingData.collectAsState().value ?: return
     val lazyPagingItems = items.collectAsLazyPagingItems()
 
-    val loadState = lazyPagingItems.loadState
-    val isEmpty = loadState.append is LoadState.NotLoading && loadState.append.endOfPaginationReached && lazyPagingItems.itemCount == 0
+    val isEmpty by remember(lazyPagingItems) {
+        derivedStateOf {
+            val append = lazyPagingItems.loadState.append
+            append is LoadState.NotLoading && append.endOfPaginationReached && lazyPagingItems.itemCount == 0
+        }
+    }
 
     AnimatedVisibility(
         visible = isEmpty,
