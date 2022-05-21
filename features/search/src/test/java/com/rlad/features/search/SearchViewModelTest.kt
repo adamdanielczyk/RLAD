@@ -105,13 +105,6 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun onSearchFocused_scrollToTop() = runTest {
-        viewModel.onSearchFocused()
-
-        assertEquals(Unit, viewModel.scrollToTop.first())
-    }
-
-    @Test
     fun onClearSearchClicked_onSearchCollapsed_displayAllItemsAndScrollToTop() = runTest {
         viewModel.onClearSearchClicked()
 

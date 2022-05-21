@@ -54,12 +54,6 @@ internal class SearchViewModel @Inject constructor(
         }
     }
 
-    fun onSearchFocused() {
-        viewModelScope.launch {
-            scrollToTop()
-        }
-    }
-
     fun onClearSearchClicked() {
         viewModelScope.launch {
             displayAllItems()
