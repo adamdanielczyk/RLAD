@@ -42,5 +42,6 @@ dependencies {
 
     implementation Libs.Retrofit.retrofit
     implementation Libs.Retrofit.moshiConverter
-    implementation Libs.moshi
+    implementation Libs.Moshi.moshi
+    kapt Libs.Moshi.kapt
 }
