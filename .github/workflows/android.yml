@@ -77,6 +77,8 @@ jobs:
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
   bundleRelease:
+    if: github.ref == 'refs/heads/master'
+    needs: [ test, connectedCheck, assembleDebug, assembleRelease ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.4.2
@@ -85,6 +87,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
+
+      - uses: chkfung/android-version-actions@v1.1
+        with:
+          gradlePath: app/build.gradle
+          versionCode: ${{github.run_number}}
+          versionName: '1.0.${{github.run_number}}'
 
       - run: ./gradlew bundleRelease
 
@@ -101,3 +109,12 @@ jobs:
         with:
           name: app-bundle-release
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+      - uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.RELEASE_SERVICE_ACCOUNT_JSON }}
+          packageName: com.rlad
+          track: production
+          status: completed
+          releaseFiles: ${{steps.sign_app.outputs.signedReleaseFile}}
+          mappingFile: app/build/outputs/mapping/release/mapping.txt
