@@ -7,13 +7,6 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 apply from: "$rootProject.projectDir/gradle/shared_lib.gradle"
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions.freeCompilerArgs += [
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-opt-in=kotlinx.coroutines.FlowPreview"
-    ]
-}
-
 dependencies {
     api Libs.Coroutines.Test.test
     api Libs.Test.junit
