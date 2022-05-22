@@ -3,10 +3,6 @@ import com.rlad.buildsrc.Libs
 apply from: "$rootProject.projectDir/gradle/shared_lib.gradle"
 
 android {
-    defaultConfig {
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments clearPackageData: 'true'
-    }
 
     buildFeatures {
         compose = true
