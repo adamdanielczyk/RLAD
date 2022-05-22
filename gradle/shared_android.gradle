@@ -1,32 +1,11 @@
 import com.rlad.buildsrc.Libs
 
+apply from: "$rootProject.projectDir/gradle/shared_lib.gradle"
+
 android {
-    compileSdkVersion 31
-    buildToolsVersion "32.0.0"
-
     defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 31
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-        freeCompilerArgs += ["-opt-in=kotlin.RequiresOptIn"]
-    }
-
-    packagingOptions {
-        exclude "**/attach_hotspot_windows.dll"
-        exclude "META-INF/AL2.0"
-        exclude "META-INF/LGPL2.1"
-        exclude "META-INF/licenses/**"
     }
 
     buildFeatures {
@@ -39,13 +18,6 @@ android {
 }
 
 dependencies {
-    implementation Libs.Kotlin.stdlib
-
-    implementation Libs.Hilt.hilt
-    implementation Libs.Hilt.navigation
-    kapt Libs.Hilt.compiler
-
-    implementation Libs.AndroidX.Paging.paging
     implementation Libs.AndroidX.Paging.compose
 
     implementation Libs.AndroidX.navigation
@@ -71,19 +43,5 @@ dependencies {
 
     implementation Libs.Google.material
 
-    implementation Libs.Coroutines.core
-    implementation Libs.Coroutines.android
-
     implementation Libs.lottie
-
-    testImplementation Libs.AndroidX.Arch.Test.coreTesting
-    testImplementation Libs.Coroutines.Test.test
-    testImplementation Libs.Test.junit
-    testImplementation Libs.Test.mockk
-
-    androidTestImplementation Libs.Coroutines.Test.test
-    androidTestImplementation Libs.AndroidX.Test.runner
-    androidTestImplementation Libs.AndroidX.Test.core
-    androidTestImplementation Libs.AndroidX.Arch.Test.coreTesting
-    androidTestImplementation Libs.Test.junit
 }

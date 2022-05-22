@@ -29,4 +29,7 @@ dependencies {
     implementation project(":libs:ui")
     implementation project(":features:search")
     implementation project(":features:details")
+
+    testImplementation project(":libs:testutils")
+    androidTestImplementation project(":libs:testutils")
 }
