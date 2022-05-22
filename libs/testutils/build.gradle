@@ -1,9 +1,11 @@
+import com.rlad.buildsrc.Libs
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
-apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
+apply from: "$rootProject.projectDir/gradle/shared_lib.gradle"
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions.freeCompilerArgs += [
@@ -13,9 +15,9 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 dependencies {
-    implementation project(":libs:domain")
-    implementation project(":libs:ui")
-
-    testImplementation project(":libs:testutils")
-    androidTestImplementation project(":libs:testutils")
+    api Libs.Coroutines.Test.test
+    api Libs.Test.junit
+    api Libs.Test.mockk
+    api Libs.AndroidX.Test.runner
+    api Libs.AndroidX.Test.core
 }

@@ -7,24 +7,23 @@ import androidx.paging.PagingDataDiffer
 import com.rlad.domain.model.ItemUiModel
 import com.rlad.domain.usecase.GetItemsUseCase
 import com.rlad.features.search.ui.SearchViewModel
+import com.rlad.testutils.rule.TestDispatcherRule
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class SearchViewModelTest {
+
+    @Rule @JvmField val dispatcherRule = TestDispatcherRule()
 
     private val items = listOf(
         ItemUiModel(
@@ -49,7 +48,6 @@ class SearchViewModelTest {
 
     @Before
     fun setup() {
-        Dispatchers.setMain(StandardTestDispatcher())
         val getItemsUseCase = mockk<GetItemsUseCase>()
 
         coEvery {
@@ -65,11 +63,6 @@ class SearchViewModelTest {
             getItemsUseCase = getItemsUseCase,
             appSettingsRepository = mockk(),
         )
-    }
-
-    @After
-    fun teardown() {
-        Dispatchers.resetMain()
     }
 
     @Test

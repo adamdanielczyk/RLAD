@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
-apply from: "$rootProject.projectDir/gradle/shared_android.gradle"
+apply from: "$rootProject.projectDir/gradle/shared_lib.gradle"
 
 android {
     defaultConfig {
@@ -34,7 +34,9 @@ dependencies {
     implementation project(":libs:domain")
     implementation project(":libs:infrastructure:common")
 
-    implementation Libs.AndroidX.Arch.coreRuntime
+    testImplementation project(":libs:testutils")
+    androidTestImplementation project(":libs:testutils")
+
     implementation Libs.AndroidX.Room.paging
     implementation Libs.AndroidX.Room.room
     implementation Libs.AndroidX.Room.runtime
