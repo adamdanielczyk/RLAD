@@ -19,7 +19,7 @@ internal interface CharacterDao {
     fun getAll(): PagingSource<Int, CharacterEntity>
 
     @Query("SELECT * FROM character WHERE id = :id")
-    fun getById(id: Int): Flow<CharacterEntity>
+    fun getById(id: Int): Flow<CharacterEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(characters: List<CharacterEntity>)

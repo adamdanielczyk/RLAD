@@ -19,7 +19,7 @@ internal interface GifDataDao {
     fun getAll(): PagingSource<Int, GifDataEntity>
 
     @Query("SELECT * FROM gif_data WHERE giphy_id = :giphyId")
-    fun getById(giphyId: String): Flow<GifDataEntity>
+    fun getById(giphyId: String): Flow<GifDataEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(gifData: List<GifDataEntity>)

@@ -2,55 +2,57 @@ package com.rlad.infrastructure.rickandmorty.local
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.rlad.infrastructure.rickandmorty.remote.ServerCharacter
-import com.rlad.infrastructure.rickandmorty.repository.RickAndMortyRepository
+import com.rlad.infrastructure.rickandmorty.local.CharacterEntity.Gender
+import com.rlad.infrastructure.rickandmorty.local.CharacterEntity.Location
+import com.rlad.infrastructure.rickandmorty.local.CharacterEntity.Status
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class RickAndMortyLocalDataSourceTest {
 
-    private val rickAndMortyDatabase = Room.inMemoryDatabaseBuilder(
-        ApplicationProvider.getApplicationContext(),
-        RickAndMortyDatabase::class.java
-    ).build()
+    private lateinit var localDataSource: RickAndMortyLocalDataSource
 
-    private val characterDao = rickAndMortyDatabase.characterDao()
+    private val characters: List<CharacterEntity> = (1..5).map(::createFakeCharacter)
 
-    private val localDataSource = RickAndMortyLocalDataSource(characterDao)
+    @Before
+    fun createDb() = runTest {
+        val database = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            RickAndMortyDatabase::class.java
+        ).build()
 
-    private val databaseCharacters: List<CharacterEntity> =
-        (0 until RickAndMortyRepository.PAGE_SIZE)
-            .map { createFakeCharacter(id = it, source = "database") }
-            .map(::CharacterEntity)
-
-    @Test
-    fun getCharacterById_loadCharacterFromDb() = runTest {
-        addDatabaseCharacters(databaseCharacters)
-
-        val expectedCharacter = databaseCharacters.first()
-        val characterFlow = localDataSource.getCharacterById(expectedCharacter.id)
-
-        assertEquals(expectedCharacter, characterFlow.first())
-    }
-
-    private suspend fun addDatabaseCharacters(characters: List<CharacterEntity>) {
+        localDataSource = RickAndMortyLocalDataSource(database.characterDao())
         localDataSource.insertCharacters(characters)
     }
 
-    private fun createFakeCharacter(id: Int, source: String): ServerCharacter {
-        val sourceWithId = "$source-$id"
-        return ServerCharacter(
-            id = id,
-            name = "Rick Sanchez",
-            status = ServerCharacter.Status.ALIVE,
-            species = "species $sourceWithId",
-            type = "type $sourceWithId",
-            gender = ServerCharacter.Gender.MALE,
-            location = ServerCharacter.Location("location $sourceWithId"),
-            imageUrl = "url $sourceWithId",
-            created = "created $sourceWithId"
+    @Test
+    fun getCharacterById_loadCharacterFromDb() = runTest {
+        assertEquals(
+            characters.first(),
+            localDataSource.getCharacterById(id = 1).first()
         )
     }
+
+    @Test
+    fun getCharacterById_returnNullIfDoesNotExist() = runTest {
+        assertEquals(
+            null,
+            localDataSource.getCharacterById(id = 10).first()
+        )
+    }
+
+    private fun createFakeCharacter(id: Int) = CharacterEntity(
+        id = id,
+        name = "Rick Sanchez",
+        status = Status.ALIVE,
+        species = "species",
+        type = "type",
+        gender = Gender.MALE,
+        location = Location("location"),
+        imageUrl = "url",
+        created = "created"
+    )
 }
