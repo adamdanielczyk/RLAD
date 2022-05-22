@@ -1,6 +1,6 @@
 package com.rlad.domain.model
 
-class DataSourceUiModel(
+data class DataSourceUiModel(
     val name: String,
     val pickerText: String,
     val isSelected: Boolean,

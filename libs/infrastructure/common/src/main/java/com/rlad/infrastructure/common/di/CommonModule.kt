@@ -9,9 +9,13 @@ import com.rlad.domain.usecase.GetItemsUseCase
 import com.rlad.infrastructure.common.local.AppPreferencesDao
 import com.rlad.infrastructure.common.local.CommonDatabase
 import com.rlad.infrastructure.common.repository.AppSettingsRepositoryImpl
+import com.rlad.infrastructure.common.usecase.GetAllItemsRepositoriesUseCase
+import com.rlad.infrastructure.common.usecase.GetAllItemsRepositoriesUseCaseImpl
 import com.rlad.infrastructure.common.usecase.GetAvailableDataSourcesUseCaseImpl
 import com.rlad.infrastructure.common.usecase.GetItemByIdUseCaseImpl
 import com.rlad.infrastructure.common.usecase.GetItemsUseCaseImpl
+import com.rlad.infrastructure.common.usecase.GetSelectedItemsRepositoryUseCase
+import com.rlad.infrastructure.common.usecase.GetSelectedItemsRepositoryUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -52,5 +56,11 @@ internal class CommonModule {
 
         @Binds
         fun bindGetItemsUseCase(impl: GetItemsUseCaseImpl): GetItemsUseCase
+
+        @Binds
+        fun bindGetSelectedItemsRepositoryUseCase(impl: GetSelectedItemsRepositoryUseCaseImpl): GetSelectedItemsRepositoryUseCase
+
+        @Binds
+        fun bindGetAllItemsRepositoriesUseCase(impl: GetAllItemsRepositoriesUseCaseImpl): GetAllItemsRepositoriesUseCase
     }
 }

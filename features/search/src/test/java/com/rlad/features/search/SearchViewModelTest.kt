@@ -1,14 +1,15 @@
 package com.rlad.features.search
 
-import androidx.paging.DifferCallback
-import androidx.paging.NullPaddedList
 import androidx.paging.PagingData
-import androidx.paging.PagingDataDiffer
+import com.rlad.domain.model.DataSourceUiModel
 import com.rlad.domain.model.ItemUiModel
+import com.rlad.domain.repository.AppSettingsRepository
 import com.rlad.domain.usecase.GetItemsUseCase
 import com.rlad.features.search.ui.SearchViewModel
+import com.rlad.testutils.paging.collectData
 import com.rlad.testutils.rule.TestDispatcherRule
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -44,6 +45,8 @@ class SearchViewModelTest {
 
     private val searchedItem = listOf(items.first())
 
+    private val appSettingsRepository: AppSettingsRepository = mockk()
+
     private lateinit var viewModel: SearchViewModel
 
     @Before
@@ -61,7 +64,7 @@ class SearchViewModelTest {
         viewModel = SearchViewModel(
             getAvailableDataSourcesUseCase = mockk(),
             getItemsUseCase = getItemsUseCase,
-            appSettingsRepository = mockk(),
+            appSettingsRepository = appSettingsRepository,
         )
     }
 
@@ -105,32 +108,20 @@ class SearchViewModelTest {
         assertEquals(items, viewModel.getCurrentItems())
     }
 
+    @Test
+    fun onDataSourceClicked_saveSelectedDataSourceAndDisplayAllItems() = runTest {
+        viewModel.onDataSourceClicked(DataSourceUiModel(
+            name = "name", pickerText = "picker text", isSelected = true
+        ))
+
+        advanceUntilIdle()
+
+        coVerify {
+            appSettingsRepository.saveSelectedDataSourceName(dataSourceName = "name")
+        }
+        assertEquals(items, viewModel.getCurrentItems())
+    }
+
     private suspend fun SearchViewModel.getCurrentItems(): List<ItemUiModel> =
         itemsPagingData.value?.first()?.collectData().orEmpty()
-}
-
-private val differCallback = object : DifferCallback {
-    override fun onChanged(position: Int, count: Int) {}
-    override fun onInserted(position: Int, count: Int) {}
-    override fun onRemoved(position: Int, count: Int) {}
-}
-
-private suspend fun <T : Any> PagingData<T>.collectData(): List<T> {
-    val items = mutableListOf<T>()
-    val differ = object : PagingDataDiffer<T>(differCallback) {
-        override suspend fun presentNewList(
-            previousList: NullPaddedList<T>,
-            newList: NullPaddedList<T>,
-            lastAccessedIndex: Int,
-            onListPresentable: () -> Unit,
-        ): Int? {
-            for (idx in 0 until newList.size) {
-                items.add(newList.getFromStorage(idx))
-            }
-            onListPresentable()
-            return null
-        }
-    }
-    differ.collectFrom(this)
-    return items
 }

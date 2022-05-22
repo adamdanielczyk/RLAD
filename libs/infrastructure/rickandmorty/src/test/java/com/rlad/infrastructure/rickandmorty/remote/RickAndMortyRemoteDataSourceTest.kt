@@ -53,6 +53,14 @@ class RickAndMortyRemoteDataSourceTest {
         )
     }
 
+    @Test
+    fun getCharacter_itemWithMatchingIdIsReturned() = runTest {
+        assertEquals(
+            characters[1],
+            remoteDataSource.getCharacter(id = 2)
+        )
+    }
+
     private class FakeRickAndMortyApi(
         private val characters: List<ServerCharacter>,
     ) : RickAndMortyApi {
