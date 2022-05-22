@@ -46,15 +46,6 @@ object Libs {
             val core = "androidx.test:core:$version"
         }
 
-        object Arch {
-            private val version = "2.1.0"
-            val coreRuntime = "androidx.arch.core:core-runtime:$version"
-
-            object Test {
-                val coreTesting = "androidx.arch.core:core-testing:$version"
-            }
-        }
-
         object Lifecycle {
             private val version = "2.4.1"
             val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
@@ -74,7 +65,7 @@ object Libs {
         }
 
         object Compose {
-            val version = "1.1.1"
+            private val version = "1.1.1"
             val ui = "androidx.compose.ui:ui:$version"
             val tooling = "androidx.compose.ui:ui-tooling:$version"
             val foundation = "androidx.compose.foundation:foundation:$version"
