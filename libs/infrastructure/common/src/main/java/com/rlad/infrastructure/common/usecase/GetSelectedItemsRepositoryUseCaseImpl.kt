@@ -6,12 +6,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class GetSelectedItemsRepositoryUseCase @Inject constructor(
+internal interface GetSelectedItemsRepositoryUseCase {
+    operator fun invoke(): Flow<ItemsRepository>
+}
+
+internal class GetSelectedItemsRepositoryUseCaseImpl @Inject constructor(
     private val getAllItemsRepositoriesUseCase: GetAllItemsRepositoriesUseCase,
     private val appSettingsRepository: AppSettingsRepository,
-) {
+) : GetSelectedItemsRepositoryUseCase {
 
-    operator fun invoke(): Flow<ItemsRepository> = appSettingsRepository.getSelectedDataSourceName().map { selectedDataSourceName ->
+    override operator fun invoke(): Flow<ItemsRepository> = appSettingsRepository.getSelectedDataSourceName().map { selectedDataSourceName ->
         val allItemsRepositories = getAllItemsRepositoriesUseCase()
         allItemsRepositories.firstOrNull { itemsRepository ->
             itemsRepository.getDataSourceName() == selectedDataSourceName
