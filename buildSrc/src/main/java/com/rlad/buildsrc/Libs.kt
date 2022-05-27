@@ -2,11 +2,11 @@ package com.rlad.buildsrc
 
 @Suppress("MayBeConstant")
 object Libs {
-    val androidGradlePlugin = "com.android.tools.build:gradle:7.2.0"
-    val lottie = "com.airbnb.android:lottie-compose:5.0.3"
+    val androidGradlePlugin = "com.android.tools.build:gradle:7.2.1"
+    val lottie = "com.airbnb.android:lottie-compose:5.1.1"
 
     object Coil {
-        private val version = "2.0.0"
+        private val version = "2.1.0"
         val compose = "io.coil-kt:coil-compose:$version"
         val gif = "io.coil-kt:coil-gif:$version"
     }
@@ -22,7 +22,7 @@ object Libs {
     }
 
     object Coroutines {
-        private val version = "1.6.1"
+        private val version = "1.6.2"
         val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
 
