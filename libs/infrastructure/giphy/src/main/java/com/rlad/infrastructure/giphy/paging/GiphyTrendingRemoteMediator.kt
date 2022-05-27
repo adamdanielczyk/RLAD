@@ -90,6 +90,6 @@ internal class GiphyTrendingRemoteMediator @Inject constructor(
     }
 
     private companion object {
-        const val CACHE_TIMEOUT_IN_MINUTES = 10
+        const val CACHE_TIMEOUT_IN_MINUTES = 30
     }
 }
