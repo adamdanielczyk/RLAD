@@ -26,16 +26,16 @@ android {
 }
 
 dependencies {
-    implementation(project(":libs:domain"))
-    implementation(project(":libs:infrastructure:common"))
-    implementation(project(":libs:infrastructure:rickandmorty"))
-    implementation(project(":libs:infrastructure:giphy"))
-    implementation(project(":libs:ui"))
-    implementation(project(":features:search"))
-    implementation(project(":features:details"))
+    implementation(projects.libs.domain)
+    implementation(projects.libs.infrastructure.common)
+    implementation(projects.libs.infrastructure.rickandmorty)
+    implementation(projects.libs.infrastructure.giphy)
+    implementation(projects.libs.ui)
+    implementation(projects.features.search)
+    implementation(projects.features.details)
 
-    testImplementation(project(":libs:testutils"))
-    androidTestImplementation(project(":libs:testutils"))
+    testImplementation(projects.libs.testutils)
+    androidTestImplementation(projects.libs.testutils)
 
     implementation(Libs.Kotlin.stdlib)
 

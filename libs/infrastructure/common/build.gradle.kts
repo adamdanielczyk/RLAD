@@ -17,10 +17,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":libs:domain"))
+    implementation(projects.libs.domain)
 
-    testImplementation(project(":libs:testutils"))
-    androidTestImplementation(project(":libs:testutils"))
+    testImplementation(projects.libs.testutils)
+    androidTestImplementation(projects.libs.testutils)
 
     implementation(Libs.AndroidX.Room.paging)
     implementation(Libs.AndroidX.Room.room)
