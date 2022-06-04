@@ -1,5 +1,3 @@
-package com.rlad.buildsrc
-
 @Suppress("MayBeConstant")
 object Libs {
     val androidGradlePlugin = "com.android.tools.build:gradle:7.2.1"
@@ -65,7 +63,7 @@ object Libs {
         }
 
         object Compose {
-            private val version = "1.1.1"
+            val version = "1.1.1"
             val ui = "androidx.compose.ui:ui:$version"
             val tooling = "androidx.compose.ui:ui-tooling:$version"
             val foundation = "androidx.compose.foundation:foundation:$version"
