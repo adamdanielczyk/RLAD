@@ -4,9 +4,9 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":libs:domain"))
-    implementation(project(":libs:ui"))
+    implementation(projects.libs.domain)
+    implementation(projects.libs.ui)
 
-    testImplementation(project(":libs:testutils"))
-    androidTestImplementation(project(":libs:testutils"))
+    testImplementation(projects.libs.testutils)
+    androidTestImplementation(projects.libs.testutils)
 }
