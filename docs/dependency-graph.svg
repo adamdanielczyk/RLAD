@@ -1,0 +1,151 @@
+<svg width="1219px" height="426px"
+ viewBox="0.00 0.00 877.52 307.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.9999928000575995 0.9999928000575995) rotate(0.0) translate(4.0 303.0)">
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-303 873.52,-303 873.52,4 -4,4"/>
+<text text-anchor="middle" x="434.76" y="-267" font-family="Times,serif" font-size="35.00">RLAD</text>
+<!-- :app -->
+<g id="node1" class="node">
+<title>:app</title>
+<polygon fill="#ffffff" stroke="black" points="460.23,-252 406.23,-252 406.23,-216 460.23,-216 460.23,-252"/>
+<text text-anchor="middle" x="433.23" y="-230.3" font-family="Times,serif" font-size="14.00">:app</text>
+</g>
+<!-- :libs:domain -->
+<g id="node2" class="node">
+<title>:libs:domain</title>
+<ellipse fill="#ffffff" stroke="black" cx="370.23" cy="-18" rx="55.49" ry="18"/>
+<text text-anchor="middle" x="370.23" y="-14.3" font-family="Times,serif" font-size="14.00">:libs:domain</text>
+</g>
+<!-- :app&#45;&gt;:libs:domain -->
+<g id="edge1" class="edge">
+<title>:app&#45;&gt;:libs:domain</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M406.07,-231.58C317.93,-226.69 43.96,-209.23 18.23,-180 -69.02,-80.9 184.99,-39.08 307.83,-24.99"/>
+<polygon fill="black" stroke="black" points="308.32,-28.46 317.87,-23.87 307.55,-21.5 308.32,-28.46"/>
+</g>
+<!-- :libs:infrastructure:common -->
+<g id="node3" class="node">
+<title>:libs:infrastructure:common</title>
+<ellipse fill="#ffffff" stroke="black" cx="301.23" cy="-90" rx="109.68" ry="18"/>
+<text text-anchor="middle" x="301.23" y="-86.3" font-family="Times,serif" font-size="14.00">:libs:infrastructure:common</text>
+</g>
+<!-- :app&#45;&gt;:libs:infrastructure:common -->
+<g id="edge2" class="edge">
+<title>:app&#45;&gt;:libs:infrastructure:common</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M405.98,-226.31C381.64,-218.95 346.74,-204.73 326.23,-180 311.86,-162.67 305.73,-137.62 303.12,-118.5"/>
+<polygon fill="black" stroke="black" points="306.57,-117.86 301.99,-108.31 299.62,-118.64 306.57,-117.86"/>
+</g>
+<!-- :libs:infrastructure:rickandmorty -->
+<g id="node4" class="node">
+<title>:libs:infrastructure:rickandmorty</title>
+<ellipse fill="#ffffff" stroke="black" cx="153.23" cy="-162" rx="126.18" ry="18"/>
+<text text-anchor="middle" x="153.23" y="-158.3" font-family="Times,serif" font-size="14.00">:libs:infrastructure:rickandmorty</text>
+</g>
+<!-- :app&#45;&gt;:libs:infrastructure:rickandmorty -->
+<g id="edge3" class="edge">
+<title>:app&#45;&gt;:libs:infrastructure:rickandmorty</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M406.12,-226.22C364.15,-215.73 282.1,-195.22 222.82,-180.4"/>
+<polygon fill="black" stroke="black" points="223.32,-176.92 212.77,-177.89 221.62,-183.71 223.32,-176.92"/>
+</g>
+<!-- :libs:infrastructure:giphy -->
+<g id="node5" class="node">
+<title>:libs:infrastructure:giphy</title>
+<ellipse fill="#ffffff" stroke="black" cx="433.23" cy="-162" rx="98.28" ry="18"/>
+<text text-anchor="middle" x="433.23" y="-158.3" font-family="Times,serif" font-size="14.00">:libs:infrastructure:giphy</text>
+</g>
+<!-- :app&#45;&gt;:libs:infrastructure:giphy -->
+<g id="edge4" class="edge">
+<title>:app&#45;&gt;:libs:infrastructure:giphy</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M433.23,-215.7C433.23,-207.98 433.23,-198.71 433.23,-190.11"/>
+<polygon fill="black" stroke="black" points="436.73,-190.1 433.23,-180.1 429.73,-190.1 436.73,-190.1"/>
+</g>
+<!-- :libs:ui -->
+<g id="node6" class="node">
+<title>:libs:ui</title>
+<ellipse fill="#ffffff" stroke="black" cx="709.23" cy="-90" rx="35.19" ry="18"/>
+<text text-anchor="middle" x="709.23" y="-86.3" font-family="Times,serif" font-size="14.00">:libs:ui</text>
+</g>
+<!-- :app&#45;&gt;:libs:ui -->
+<g id="edge5" class="edge">
+<title>:app&#45;&gt;:libs:ui</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M460.43,-219.19C463.35,-218 466.32,-216.9 469.23,-216 564.26,-186.46 618.16,-248.63 690.23,-180 706.71,-164.3 710.66,-138.07 710.96,-118.15"/>
+<polygon fill="black" stroke="black" points="714.46,-118.06 710.82,-108.11 707.46,-118.16 714.46,-118.06"/>
+</g>
+<!-- :features:search -->
+<g id="node7" class="node">
+<title>:features:search</title>
+<ellipse fill="#ffffff" stroke="black" cx="615.23" cy="-162" rx="65.79" ry="18"/>
+<text text-anchor="middle" x="615.23" y="-158.3" font-family="Times,serif" font-size="14.00">:features:search</text>
+</g>
+<!-- :app&#45;&gt;:features:search -->
+<g id="edge6" class="edge">
+<title>:app&#45;&gt;:features:search</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M460.23,-219.92C463.25,-218.55 466.29,-217.22 469.23,-216 500.84,-202.83 537.03,-189.68 565.47,-179.77"/>
+<polygon fill="black" stroke="black" points="566.88,-182.99 575.18,-176.41 564.59,-176.37 566.88,-182.99"/>
+</g>
+<!-- :features:details -->
+<g id="node8" class="node">
+<title>:features:details</title>
+<ellipse fill="#ffffff" stroke="black" cx="803.23" cy="-162" rx="66.09" ry="18"/>
+<text text-anchor="middle" x="803.23" y="-158.3" font-family="Times,serif" font-size="14.00">:features:details</text>
+</g>
+<!-- :app&#45;&gt;:features:details -->
+<g id="edge7" class="edge">
+<title>:app&#45;&gt;:features:details</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M460.41,-219.13C463.34,-217.95 466.31,-216.87 469.23,-216 578.45,-183.29 610.95,-199.86 723.23,-180 729.9,-178.82 736.86,-177.49 743.77,-176.11"/>
+<polygon fill="black" stroke="black" points="744.73,-179.48 753.83,-174.05 743.33,-172.62 744.73,-179.48"/>
+</g>
+<!-- :libs:infrastructure:common&#45;&gt;:libs:domain -->
+<g id="edge8" class="edge">
+<title>:libs:infrastructure:common&#45;&gt;:libs:domain</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M317.93,-72.05C326.61,-63.24 337.37,-52.33 346.87,-42.69"/>
+<polygon fill="black" stroke="black" points="349.62,-44.89 354.15,-35.31 344.64,-39.97 349.62,-44.89"/>
+</g>
+<!-- :libs:infrastructure:rickandmorty&#45;&gt;:libs:domain -->
+<g id="edge9" class="edge">
+<title>:libs:infrastructure:rickandmorty&#45;&gt;:libs:domain</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M154.13,-143.74C156.13,-123.72 162.42,-91.03 182.23,-72 215.14,-40.38 265.41,-27.36 305.69,-22.12"/>
+<polygon fill="black" stroke="black" points="306.17,-25.59 315.7,-20.95 305.36,-18.64 306.17,-25.59"/>
+</g>
+<!-- :libs:infrastructure:rickandmorty&#45;&gt;:libs:infrastructure:common -->
+<g id="edge10" class="edge">
+<title>:libs:infrastructure:rickandmorty&#45;&gt;:libs:infrastructure:common</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M187.93,-144.59C208.78,-134.72 235.51,-122.08 257.76,-111.56"/>
+<polygon fill="black" stroke="black" points="259.46,-114.63 267,-107.19 256.46,-108.3 259.46,-114.63"/>
+</g>
+<!-- :libs:infrastructure:giphy&#45;&gt;:libs:domain -->
+<g id="edge11" class="edge">
+<title>:libs:infrastructure:giphy&#45;&gt;:libs:domain</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M433.72,-143.71C433.58,-125.09 431.38,-95.05 420.23,-72 414.81,-60.82 406.19,-50.41 397.62,-41.83"/>
+<polygon fill="black" stroke="black" points="399.86,-39.13 390.19,-34.79 395.04,-44.21 399.86,-39.13"/>
+</g>
+<!-- :libs:infrastructure:giphy&#45;&gt;:libs:infrastructure:common -->
+<g id="edge12" class="edge">
+<title>:libs:infrastructure:giphy&#45;&gt;:libs:infrastructure:common</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M402.61,-144.76C384.33,-135.07 360.91,-122.65 341.19,-112.19"/>
+<polygon fill="black" stroke="black" points="342.61,-108.98 332.13,-107.39 339.33,-115.17 342.61,-108.98"/>
+</g>
+<!-- :features:search&#45;&gt;:libs:domain -->
+<g id="edge13" class="edge">
+<title>:features:search&#45;&gt;:libs:domain</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M588.54,-145.53C543.94,-119.68 454.29,-67.72 404.88,-39.08"/>
+<polygon fill="black" stroke="black" points="406.55,-36.01 396.14,-34.02 403.04,-42.06 406.55,-36.01"/>
+</g>
+<!-- :features:search&#45;&gt;:libs:ui -->
+<g id="edge14" class="edge">
+<title>:features:search&#45;&gt;:libs:ui</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M637.03,-144.76C650.45,-134.77 667.76,-121.88 682.07,-111.23"/>
+<polygon fill="black" stroke="black" points="684.16,-114.03 690.09,-105.25 679.98,-108.42 684.16,-114.03"/>
+</g>
+<!-- :features:details&#45;&gt;:libs:domain -->
+<g id="edge15" class="edge">
+<title>:features:details&#45;&gt;:libs:domain</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M798.63,-143.73C792.17,-123.04 778.27,-89.07 753.23,-72 702.78,-37.62 530.7,-25.34 435.28,-21.11"/>
+<polygon fill="black" stroke="black" points="435.3,-17.61 425.16,-20.68 435,-24.6 435.3,-17.61"/>
+</g>
+<!-- :features:details&#45;&gt;:libs:ui -->
+<g id="edge16" class="edge">
+<title>:features:details&#45;&gt;:libs:ui</title>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M781.42,-144.76C768,-134.77 750.69,-121.88 736.39,-111.23"/>
+<polygon fill="black" stroke="black" points="738.47,-108.42 728.36,-105.25 734.29,-114.03 738.47,-108.42"/>
+</g>
+</g>
+</svg>
