@@ -28,6 +28,15 @@ fun CommonExtension<*, *, *, *>.configureKotlinAndroid() {
             "-opt-in=kotlin.Experimental",
         )
     }
+
+    packagingOptions {
+        resources {
+            excludes += listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+            )
+        }
+    }
 }
 
 private fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
