@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
@@ -113,10 +112,10 @@ private fun SearchScreenContent(
         }
     }
 
-    val listState = rememberLazyListState()
+    val gridState = rememberLazyGridState()
     val isScrollToTopButtonVisible by remember {
         derivedStateOf {
-            listState.firstVisibleItemIndex > 0
+            gridState.firstVisibleItemIndex > 0
         }
     }
 
@@ -151,8 +150,10 @@ private fun SearchScreenContent(
                     }
                 }
             }
-        ) {
-            Column {
+        ) { contentPadding ->
+            Column(
+                modifier = Modifier.padding(contentPadding)
+            ) {
                 SearchBar(
                     onQueryTextChanged = viewModel::onQueryTextChanged,
                     onClearSearchClicked = viewModel::onClearSearchClicked,
@@ -164,7 +165,7 @@ private fun SearchScreenContent(
                     ItemsContainer(
                         viewModel = viewModel,
                         openDetails = openDetails,
-                        listState = listState,
+                        gridState = gridState,
                     )
                 }
             }
@@ -240,7 +241,7 @@ private fun SearchBar(
 private fun ItemsContainer(
     viewModel: SearchViewModel,
     openDetails: (String) -> Unit,
-    listState: LazyListState,
+    gridState: LazyGridState,
 ) {
     val items = viewModel.itemsPagingData.collectAsState().value ?: return
     val lazyPagingItems = items.collectAsLazyPagingItems()
@@ -261,7 +262,7 @@ private fun ItemsContainer(
     }
 
     if (!isEmpty) {
-        SwipeRefreshWithGrid(viewModel, lazyPagingItems, listState, openDetails)
+        SwipeRefreshWithGrid(viewModel, lazyPagingItems, gridState, openDetails)
     }
 }
 
@@ -285,34 +286,34 @@ private fun EmptyState() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SwipeRefreshWithGrid(
     viewModel: SearchViewModel,
     lazyPagingItems: LazyPagingItems<ItemUiModel>,
-    listState: LazyListState,
+    gridState: LazyGridState,
     openDetails: (String) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.scrollToTop.collectLatest {
-            listState.animateScrollToItem(index = 0)
+            gridState.animateScrollToItem(index = 0)
         }
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var previousIndex by remember {
-        mutableStateOf(listState.firstVisibleItemIndex)
+        mutableStateOf(gridState.firstVisibleItemIndex)
     }
 
     var previousScrollOffset by remember {
-        mutableStateOf(listState.firstVisibleItemScrollOffset)
+        mutableStateOf(gridState.firstVisibleItemScrollOffset)
     }
 
-    LaunchedEffect(listState) {
+    LaunchedEffect(gridState) {
         combine(
-            snapshotFlow { listState.firstVisibleItemIndex },
-            snapshotFlow { listState.firstVisibleItemScrollOffset },
+            snapshotFlow { gridState.firstVisibleItemIndex },
+            snapshotFlow { gridState.firstVisibleItemScrollOffset },
         ) { index, offset ->
             index to offset
         }
@@ -340,9 +341,9 @@ private fun SwipeRefreshWithGrid(
         modifier = Modifier.fillMaxSize(),
     ) {
         LazyVerticalGrid(
-            cells = GridCells.Adaptive(minSize = 150.dp),
+            columns = GridCells.Adaptive(minSize = 150.dp),
             contentPadding = PaddingValues(8.dp),
-            state = listState,
+            state = gridState,
         ) {
             items(lazyPagingItems.itemCount) { index ->
                 val item = lazyPagingItems[index] ?: return@items

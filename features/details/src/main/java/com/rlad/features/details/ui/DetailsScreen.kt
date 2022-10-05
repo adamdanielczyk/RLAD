@@ -75,8 +75,11 @@ private fun DetailsScreenContent(item: ItemUiModel) {
                 },
             )
         },
-    ) {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    ) { contentPadding ->
+        Column(modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(contentPadding)
+        ) {
             ImageWithGradient(item.imageUrl)
 
             Column(modifier = Modifier.padding(16.dp)) {

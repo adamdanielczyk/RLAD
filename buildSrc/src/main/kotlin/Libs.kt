@@ -1,26 +1,26 @@
 @Suppress("MayBeConstant")
 object Libs {
-    val androidGradlePlugin = "com.android.tools.build:gradle:7.2.1"
-    val lottie = "com.airbnb.android:lottie-compose:5.1.1"
+    val androidGradlePlugin = "com.android.tools.build:gradle:7.3.0"
+    val lottie = "com.airbnb.android:lottie-compose:5.2.0"
 
     object Coil {
-        private val version = "2.1.0"
+        private val version = "2.2.2"
         val compose = "io.coil-kt:coil-compose:$version"
         val gif = "io.coil-kt:coil-gif:$version"
     }
 
     object Google {
-        val material = "com.google.android.material:material:1.6.0"
+        val material = "com.google.android.material:material:1.6.1"
     }
 
     object Kotlin {
-        private val version = "1.6.10"
+        private val version = "1.7.10"
         val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
     object Coroutines {
-        private val version = "1.6.2"
+        private val version = "1.6.4"
         val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
 
@@ -30,10 +30,10 @@ object Libs {
     }
 
     object AndroidX {
-        val navigation = "androidx.navigation:navigation-compose:2.4.2"
+        val navigation = "androidx.navigation:navigation-compose:2.5.2"
 
         object Activity {
-            private val version = "1.4.0"
+            private val version = "1.6.0"
             val activity = "androidx.activity:activity-ktx:$version"
             val compose = "androidx.activity:activity-compose:$version"
         }
@@ -45,7 +45,7 @@ object Libs {
         }
 
         object Lifecycle {
-            private val version = "2.4.1"
+            private val version = "2.5.1"
             val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
 
             object ViewModel {
@@ -55,7 +55,7 @@ object Libs {
         }
 
         object Room {
-            private val version = "2.4.2"
+            private val version = "2.4.3"
             val runtime = "androidx.room:room-runtime:$version"
             val compiler = "androidx.room:room-compiler:$version"
             val room = "androidx.room:room-ktx:$version"
@@ -63,7 +63,8 @@ object Libs {
         }
 
         object Compose {
-            val version = "1.1.1"
+            val compilerVersion = "1.3.1"
+            val version = "1.2.1"
             val ui = "androidx.compose.ui:ui:$version"
             val tooling = "androidx.compose.ui:ui-tooling:$version"
             val foundation = "androidx.compose.foundation:foundation:$version"
@@ -78,13 +79,13 @@ object Libs {
     }
 
     object Accompanist {
-        private val version = "0.23.1"
+        private val version = "0.25.1"
         val systemuicontroller = "com.google.accompanist:accompanist-systemuicontroller:$version"
         val swiperefresh = "com.google.accompanist:accompanist-swiperefresh:$version"
     }
 
     object Hilt {
-        private val version = "2.42"
+        private val version = "2.44"
         val hilt = "com.google.dagger:hilt-android:$version"
         val compiler = "com.google.dagger:hilt-compiler:$version"
         val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
@@ -98,13 +99,13 @@ object Libs {
     }
 
     object Moshi {
-        private val version = "1.13.0"
+        private val version = "1.14.0"
         val moshi = "com.squareup.moshi:moshi:$version"
         val kapt = "com.squareup.moshi:moshi-kotlin-codegen:$version"
     }
 
     object Test {
         val junit = "junit:junit:4.13.2"
-        val mockk = "io.mockk:mockk:1.12.4"
+        val mockk = "io.mockk:mockk:1.13.2"
     }
 }
