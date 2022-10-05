@@ -10,7 +10,7 @@ android {
     configureCompose()
 
     defaultConfig {
-        targetSdk = 31
+        targetSdk = 33
         applicationId = "com.rlad"
         versionCode = 1
         versionName = "1.0.0"
