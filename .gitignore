@@ -162,6 +162,7 @@ obj/
 .idea/uiDesigner.xml
 .idea/jarRepositories.xml
 .idea/deploymentTargetDropDown.xml
+.idea/androidTestResultsUserPreferences.xml
 
 # OS-specific files
 .DS_Store
