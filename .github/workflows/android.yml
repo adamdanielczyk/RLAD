@@ -2,6 +2,10 @@ name: Android CI
 
 on: push
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 env:
   ORG_GRADLE_PROJECT_GIPHY_API_KEY: ${{ secrets.ORG_GRADLE_PROJECT_GIPHY_API_KEY }}
 
