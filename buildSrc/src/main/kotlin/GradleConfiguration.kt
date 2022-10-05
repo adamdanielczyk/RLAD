@@ -4,8 +4,8 @@ import org.gradle.api.plugins.ExtensionAware
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 fun CommonExtension<*, *, *, *>.configureKotlinAndroid() {
-    compileSdk = 31
-    buildToolsVersion = "32.0.0"
+    compileSdk = 33
+    buildToolsVersion = "33.0.0"
 
     defaultConfig {
         minSdk = 26
@@ -28,6 +28,15 @@ fun CommonExtension<*, *, *, *>.configureKotlinAndroid() {
             "-opt-in=kotlin.Experimental",
         )
     }
+
+    packagingOptions {
+        resources {
+            excludes += listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+            )
+        }
+    }
 }
 
 private fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
@@ -40,6 +49,6 @@ fun CommonExtension<*, *, *, *>.configureCompose() {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion = Libs.AndroidX.Compose.compilerVersion
     }
 }
