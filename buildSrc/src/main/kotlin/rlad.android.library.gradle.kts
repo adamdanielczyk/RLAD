@@ -19,4 +19,6 @@ dependencies {
     implementation(Libs.Coroutines.android)
 
     implementation(Libs.AndroidX.Paging.paging)
+
+    implementation(Libs.AndroidX.Lifecycle.ViewModel.viewmodel)
 }
