@@ -14,7 +14,7 @@ object Libs {
     }
 
     object Kotlin {
-        private val version = "1.7.10"
+        private val version = "1.7.20"
         val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
         val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
@@ -63,7 +63,7 @@ object Libs {
         }
 
         object Compose {
-            val compilerVersion = "1.3.1"
+            val compilerVersion = "1.3.2"
             val version = "1.2.1"
             val ui = "androidx.compose.ui:ui:$version"
             val tooling = "androidx.compose.ui:ui-tooling:$version"
