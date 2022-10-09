@@ -22,8 +22,8 @@ dependencies {
     testImplementation(projects.libs.testutils)
     androidTestImplementation(projects.libs.testutils)
 
-    implementation(Libs.AndroidX.Room.paging)
-    implementation(Libs.AndroidX.Room.room)
-    implementation(Libs.AndroidX.Room.runtime)
-    kapt(Libs.AndroidX.Room.compiler)
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
 }

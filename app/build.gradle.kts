@@ -1,28 +1,6 @@
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
+    id("rlad.android.application")
     id("dagger.hilt.android.plugin")
-}
-
-android {
-    configureKotlinAndroid()
-    configureCompose()
-
-    defaultConfig {
-        targetSdk = 33
-        applicationId = "com.rlad"
-        versionCode = 1
-        versionName = "1.0.0"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
 }
 
 dependencies {
@@ -37,40 +15,40 @@ dependencies {
     testImplementation(projects.libs.testutils)
     androidTestImplementation(projects.libs.testutils)
 
-    implementation(Libs.Kotlin.stdlib)
+    implementation(libs.kotlin.stdlib)
 
-    implementation(Libs.Hilt.hilt)
-    implementation(Libs.Hilt.navigation)
-    kapt(Libs.Hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
-    implementation(Libs.Coroutines.core)
-    implementation(Libs.Coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
-    implementation(Libs.AndroidX.Paging.paging)
-    implementation(Libs.AndroidX.Paging.compose)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 
-    implementation(Libs.AndroidX.navigation)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation(Libs.AndroidX.Activity.activity)
-    implementation(Libs.AndroidX.Activity.compose)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.activity.compose)
 
-    implementation(Libs.AndroidX.Compose.ui)
-    implementation(Libs.AndroidX.Compose.tooling)
-    implementation(Libs.AndroidX.Compose.foundation)
-    implementation(Libs.AndroidX.Compose.material)
-    implementation(Libs.AndroidX.Compose.materialIcons)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material.icons)
 
-    implementation(Libs.AndroidX.Lifecycle.ViewModel.viewmodel)
-    implementation(Libs.AndroidX.Lifecycle.ViewModel.compose)
-    implementation(Libs.AndroidX.Lifecycle.runtime)
+    implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    implementation(Libs.Accompanist.systemuicontroller)
-    implementation(Libs.Accompanist.swiperefresh)
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.swiperefresh)
 
-    implementation(Libs.Coil.compose)
-    implementation(Libs.Coil.gif)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
 
-    implementation(Libs.Google.material)
+    implementation(libs.android.material)
 
-    implementation(Libs.lottie)
+    implementation(libs.lottie)
 }

@@ -4,9 +4,9 @@ plugins {
 }
 
 dependencies {
-    api(Libs.Coroutines.Test.test)
-    api(Libs.Test.junit)
-    api(Libs.Test.mockk)
-    api(Libs.AndroidX.Test.runner)
-    api(Libs.AndroidX.Test.core)
+    api(libs.test.coroutines)
+    api(libs.test.junit)
+    api(libs.test.mockk)
+    api(libs.test.androidx.runner)
+    api(libs.test.androidx.core)
 }

@@ -1,11 +1,13 @@
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
+import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
-fun CommonExtension<*, *, *, *>.configureKotlinAndroid() {
+internal fun CommonExtension<*, *, *, *>.configureKotlinAndroid() {
     compileSdk = 33
-    buildToolsVersion = "33.0.0"
 
     defaultConfig {
         minSdk = 26
@@ -43,12 +45,16 @@ private fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.()
     (this as ExtensionAware).extensions.configure("kotlinOptions", block)
 }
 
-fun CommonExtension<*, *, *, *>.configureCompose() {
-    buildFeatures {
-        compose = true
-    }
+internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, *>) {
+    val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = Libs.AndroidX.Compose.compilerVersion
+    with(commonExtension) {
+        buildFeatures {
+            compose = true
+        }
+
+        composeOptions {
+            kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().requiredVersion
+        }
     }
 }
