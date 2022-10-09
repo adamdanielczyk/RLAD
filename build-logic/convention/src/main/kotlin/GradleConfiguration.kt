@@ -54,7 +54,7 @@ internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, 
         }
 
         composeOptions {
-            kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().requiredVersion
+            kotlinCompilerExtensionVersion = libs.findVersion("androidxComposeCompiler").get().requiredVersion
         }
     }
 }
