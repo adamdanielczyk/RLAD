@@ -1,6 +1,5 @@
 plugins {
     id("rlad.android.library")
-    id("dagger.hilt.android.plugin")
 }
 
 dependencies {
