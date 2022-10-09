@@ -1,6 +1,5 @@
 plugins {
     id("rlad.android.application")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -33,9 +32,6 @@ dependencies {
     androidTestImplementation(projects.libs.testutils)
 
     implementation(libs.kotlin.stdlib)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
