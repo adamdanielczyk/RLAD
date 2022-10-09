@@ -1,19 +1,11 @@
 plugins {
     id("rlad.android.library")
-    kotlin("kapt")
+    id("rlad.android.room")
+    id("rlad.android.retrofit")
 }
 
 android {
     defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "room.incremental" to "true"
-                )
-            }
-        }
-
         val giphyApiKey = project.property("GIPHY_API_KEY")
         buildConfigField("String", "GIPHY_API_KEY", "\"$giphyApiKey\"")
     }
@@ -25,14 +17,4 @@ dependencies {
 
     testImplementation(projects.libs.testutils)
     androidTestImplementation(projects.libs.testutils)
-
-    implementation(libs.androidx.room)
-    implementation(libs.androidx.room.paging)
-    implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
-
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converterMoshi)
-    implementation(libs.moshi)
-    kapt(libs.moshi.kotlinCodegen)
 }
