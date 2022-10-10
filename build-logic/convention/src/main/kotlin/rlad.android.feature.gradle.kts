@@ -1,12 +1,12 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    id("rlad.android.library.compose")
     id("rlad.android.hilt")
 }
 
 android {
     configureKotlinAndroid()
-    configureCompose(this)
 }
 
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -25,12 +25,6 @@ dependencies {
 
     implementation(libs.findLibrary("androidx.activity").get())
     implementation(libs.findLibrary("androidx.activity.compose").get())
-
-    implementation(libs.findLibrary("androidx.compose.ui").get())
-    implementation(libs.findLibrary("androidx.compose.ui.tooling").get())
-    implementation(libs.findLibrary("androidx.compose.foundation").get())
-    implementation(libs.findLibrary("androidx.compose.material").get())
-    implementation(libs.findLibrary("androidx.compose.material.icons").get())
 
     implementation(libs.findLibrary("androidx.lifecycle.runtime").get())
     implementation(libs.findLibrary("androidx.lifecycle.viewmodel").get())
