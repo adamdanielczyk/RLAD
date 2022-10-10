@@ -8,3 +8,7 @@ android {
     configureKotlinAndroid()
     configureCompose(this)
 }
+
+dependencies {
+    shared()
+}
