@@ -17,7 +17,6 @@ retrofit = "2.9.0"
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
-android-material = { module = "com.google.android.material:material", version = "1.6.1" }
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidxCompose" }

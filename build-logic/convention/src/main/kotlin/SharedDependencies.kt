@@ -37,8 +37,6 @@ internal fun Project.shared() {
         add("implementation", libs.findLibrary("coil.compose").get())
         add("implementation", libs.findLibrary("coil.gif").get())
 
-        add("implementation", libs.findLibrary("android.material").get())
-
         add("implementation", libs.findLibrary("lottie").get())
     }
 }
