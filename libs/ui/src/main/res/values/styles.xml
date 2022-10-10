@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Rlad" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/gray_800</item>
-        <item name="colorPrimaryDark">@color/gray_900</item>
-        <item name="colorSecondary">@color/yellow_400</item>
-    </style>
+    <style name="Theme.Rlad" parent="android:Theme.Material.Light.NoActionBar" />
 
 </resources>
