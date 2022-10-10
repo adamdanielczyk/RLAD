@@ -1,3 +1,10 @@
 plugins {
-    id("rlad.android.feature")
+    id("rlad.android.library")
+    id("rlad.android.library.compose")
+}
+
+dependencies {
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+    implementation(libs.android.material)
 }

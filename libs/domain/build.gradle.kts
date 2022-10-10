@@ -1,3 +1,4 @@
 plugins {
-    id("rlad.android.feature")
+    id("rlad.android.library")
+    id("rlad.android.library.compose")
 }
