@@ -1,7 +1,6 @@
 package com.rlad.infrastructure.giphy.repository
 
 import android.content.Context
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -39,7 +38,6 @@ internal class GiphyRepository @Inject constructor(
     }.map { gifDataEntity -> gifDataEntity.toUiModel() }
 
     override fun getAllItems(): Flow<PagingData<ItemUiModel>> {
-        @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,

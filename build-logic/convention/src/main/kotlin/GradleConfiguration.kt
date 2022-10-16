@@ -28,6 +28,7 @@ internal fun CommonExtension<*, *, *, *>.configureKotlinAndroid() {
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-opt-in=kotlinx.coroutines.FlowPreview",
             "-opt-in=kotlin.Experimental",
+            "-opt-in=androidx.paging.ExperimentalPagingApi",
         )
     }
 
@@ -49,6 +50,14 @@ internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, 
     val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
     with(commonExtension) {
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+                "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+            )
+        }
+
         buildFeatures {
             compose = true
         }

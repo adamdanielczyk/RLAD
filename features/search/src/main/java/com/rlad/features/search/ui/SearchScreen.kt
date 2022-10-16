@@ -1,7 +1,6 @@
 package com.rlad.features.search.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
@@ -21,7 +20,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -46,7 +44,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -89,7 +86,6 @@ internal fun SearchScreen(openDetails: (String) -> Unit) {
     SearchScreenContent(viewModel, openDetails)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SearchScreenContent(
     viewModel: SearchViewModel,
@@ -222,7 +218,6 @@ private fun SheetItem(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun SearchBar(
     onQueryTextChanged: (String) -> Unit,
@@ -284,7 +279,6 @@ private fun EmptyState() {
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SwipeRefreshWithGrid(
     viewModel: SearchViewModel,
@@ -351,7 +345,6 @@ private fun SwipeRefreshWithGrid(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ItemCard(item: ItemUiModel, openDetails: (String) -> Unit) {
     Card(
