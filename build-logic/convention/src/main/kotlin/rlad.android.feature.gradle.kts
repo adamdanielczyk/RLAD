@@ -10,11 +10,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":libs:domain"))
-    implementation(project(":libs:ui"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
 
-    testImplementation(project(":libs:testutils"))
-    androidTestImplementation(project(":libs:testutils"))
+    testImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:testing"))
 
     shared()
 }

@@ -8,8 +8,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.rlad.domain.navigation.Navigator
-import com.rlad.ui.RladTheme
+import com.rlad.core.domain.navigation.Navigator
+import com.rlad.core.ui.RladTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
