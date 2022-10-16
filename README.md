@@ -38,17 +38,17 @@ RLAD is available on [Google Play](https://play.google.com/store/apps/details?id
 
 ## Modularization
 
-![dependency-graph](docs/dependency-graph.svg)
+![dependency-graph](docs/dependency-graph.png)
 
-App is split into feature and library modules. Feature modules correspond to the UI features that
-are visible to the user. Library modules are building blocks used by feature modules.
+App is split into feature and core modules. Feature modules correspond to the UI features that
+are visible to the user. Core modules are building blocks used by feature modules.
 
 Feature modules:
 
 * Search
 * Details
 
-Library modules:
+Core modules:
 
 * Domain: UI models, use cases, navigator, etc
 * Infrastructure: usage of external APIs
