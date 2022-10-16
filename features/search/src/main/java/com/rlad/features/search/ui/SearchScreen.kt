@@ -49,7 +49,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -68,7 +67,6 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.domain.model.DataSourceUiModel
 import com.rlad.domain.model.ItemUiModel
 import com.rlad.features.search.R
-import com.rlad.ui.defaultImageModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
@@ -363,7 +361,7 @@ private fun ItemCard(item: ItemUiModel, openDetails: (String) -> Unit) {
     ) {
         Column {
             AsyncImage(
-                model = defaultImageModel(context = LocalContext.current, imageUrl = item.imageUrl),
+                model = item.imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
