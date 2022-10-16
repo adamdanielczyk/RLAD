@@ -17,8 +17,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "rlad"
 include(":app")
-includeAll(directory = "features")
-includeAll(directory = "libs")
+includeAll(directory = "feature")
+includeAll(directory = "core")
 
 fun includeAll(directory: String, moduleName: String = directory) {
     file(directory).listFiles()!!.forEach { file ->

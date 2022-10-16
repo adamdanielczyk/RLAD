@@ -22,14 +22,14 @@ android {
 }
 
 dependencies {
-    implementation(projects.libs.domain)
-    implementation(projects.libs.infrastructure.common)
-    implementation(projects.libs.infrastructure.rickandmorty)
-    implementation(projects.libs.infrastructure.giphy)
-    implementation(projects.libs.ui)
-    implementation(projects.features.search)
-    implementation(projects.features.details)
+    implementation(projects.core.domain)
+    implementation(projects.core.infrastructure.common)
+    implementation(projects.core.infrastructure.rickandmorty)
+    implementation(projects.core.infrastructure.giphy)
+    implementation(projects.core.ui)
+    implementation(projects.feature.search)
+    implementation(projects.feature.details)
 
-    testImplementation(projects.libs.testutils)
-    androidTestImplementation(projects.libs.testutils)
+    testImplementation(projects.core.testing)
+    androidTestImplementation(projects.core.testing)
 }
