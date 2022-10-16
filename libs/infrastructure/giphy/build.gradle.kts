@@ -7,6 +7,10 @@ plugins {
 android {
     namespace = "com.rlad.infrastructure.giphy"
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         val giphyApiKey = project.property("GIPHY_API_KEY")
         buildConfigField("String", "GIPHY_API_KEY", "\"$giphyApiKey\"")
