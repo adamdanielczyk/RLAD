@@ -2,6 +2,10 @@ plugins {
     id("rlad.android.library")
 }
 
+android {
+    namespace = "com.rlad.testutils"
+}
+
 dependencies {
     api(libs.test.coroutines)
     api(libs.test.junit)
