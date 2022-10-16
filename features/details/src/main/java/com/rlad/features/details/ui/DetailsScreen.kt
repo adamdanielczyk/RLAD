@@ -30,14 +30,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.domain.model.ItemUiModel
-import com.rlad.ui.defaultImageModel
 
 @Composable
 internal fun DetailsScreen() {
@@ -103,7 +101,7 @@ private fun ImageWithGradient(imageUrl: String) {
 
     Box {
         AsyncImage(
-            model = defaultImageModel(context = LocalContext.current, imageUrl = imageUrl),
+            model = imageUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
