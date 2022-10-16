@@ -4,6 +4,10 @@ plugins {
     id("rlad.android.retrofit")
 }
 
+android {
+    namespace = "com.rlad.infrastructure.rickandmorty"
+}
+
 dependencies {
     implementation(projects.libs.domain)
     implementation(projects.libs.infrastructure.common)

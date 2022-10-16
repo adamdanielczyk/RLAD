@@ -3,6 +3,8 @@ plugins {
 }
 
 android {
+    namespace = "com.rlad"
+
     defaultConfig {
         targetSdk = 33
         applicationId = "com.rlad"

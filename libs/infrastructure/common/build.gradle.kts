@@ -3,6 +3,10 @@ plugins {
     id("rlad.android.room")
 }
 
+android {
+    namespace = "com.rlad.infrastructure.common"
+}
+
 dependencies {
     implementation(projects.libs.domain)
 
