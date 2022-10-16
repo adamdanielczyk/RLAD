@@ -1,6 +1,5 @@
 package com.rlad.infrastructure.giphy.paging
 
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
@@ -16,7 +15,6 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-@OptIn(ExperimentalPagingApi::class)
 internal class GiphyTrendingRemoteMediator @Inject constructor(
     private val localDataSource: GiphyLocalDataSource,
     private val remoteDataSource: GiphyRemoteDataSource,

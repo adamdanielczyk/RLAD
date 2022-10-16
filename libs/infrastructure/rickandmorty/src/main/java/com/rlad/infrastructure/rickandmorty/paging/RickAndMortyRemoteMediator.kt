@@ -1,6 +1,5 @@
 package com.rlad.infrastructure.rickandmorty.paging
 
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
@@ -14,7 +13,6 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-@OptIn(ExperimentalPagingApi::class)
 internal class RickAndMortyRemoteMediator @Inject constructor(
     private val localDataSource: RickAndMortyLocalDataSource,
     private val remoteDataSource: RickAndMortyRemoteDataSource,
