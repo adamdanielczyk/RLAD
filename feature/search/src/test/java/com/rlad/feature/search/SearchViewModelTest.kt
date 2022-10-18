@@ -14,7 +14,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -70,15 +69,12 @@ class SearchViewModelTest {
 
     @Test
     fun allItemsDisplayedByDefault() = runTest {
-        advanceUntilIdle()
         assertEquals(items, viewModel.getCurrentItems())
     }
 
     @Test
     fun onQueryTextChanged_emitItemsAfterDebounce() = runTest {
         viewModel.onQueryTextChanged("name1")
-
-        runCurrent()
 
         assertEquals(items, viewModel.getCurrentItems())
 
@@ -113,8 +109,6 @@ class SearchViewModelTest {
         viewModel.onDataSourceClicked(DataSourceUiModel(
             name = "name", pickerText = "picker text", isSelected = true
         ))
-
-        advanceUntilIdle()
 
         coVerify {
             appSettingsRepository.saveSelectedDataSourceName(dataSourceName = "name")
