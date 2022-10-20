@@ -1,6 +1,7 @@
 package com.rlad.core.infrastructure.rickandmorty.di
 
-import com.rlad.core.infrastructure.rickandmorty.repository.RickAndMortyRepository
+import com.rlad.core.infrastructure.common.repository.CommonRepository
+import com.rlad.core.infrastructure.rickandmorty.model.RickAndMortyDataSourceConfiguration
 import dagger.hilt.DefineComponent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -24,5 +25,6 @@ internal interface RickAndMortyComponent {
 @InstallIn(RickAndMortyComponent::class)
 @EntryPoint
 internal interface RickAndMortyEntryPoint {
-    fun rickAndMortyRepository(): RickAndMortyRepository
+    fun dataSourceConfiguration(): RickAndMortyDataSourceConfiguration
+    fun commonRepository(): CommonRepository
 }

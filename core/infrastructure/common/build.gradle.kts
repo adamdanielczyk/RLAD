@@ -1,6 +1,7 @@
 plugins {
     id("rlad.android.library")
     id("rlad.android.room")
+    id("rlad.android.retrofit")
 }
 
 android {

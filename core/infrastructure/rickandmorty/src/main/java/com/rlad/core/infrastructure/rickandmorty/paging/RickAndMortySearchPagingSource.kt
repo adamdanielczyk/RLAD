@@ -2,15 +2,24 @@ package com.rlad.core.infrastructure.rickandmorty.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import com.rlad.core.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
+import com.rlad.core.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource.Companion.INITIAL_PAGING_KEY
 import com.rlad.core.infrastructure.rickandmorty.remote.ServerCharacter
-import com.rlad.core.infrastructure.rickandmorty.repository.RickAndMortyRepository.Companion.INITIAL_PAGING_KEY
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.HttpURLConnection
+import javax.inject.Inject
+
+internal class RickAndMortySearchPagingSourceFactory @Inject constructor(
+    private val searchPagingSourceFactory: RickAndMortySearchPagingSource.Factory,
+) : CommonSearchPagingSourceFactory<ServerCharacter> {
+
+    override fun create(query: String): PagingSource<Int, ServerCharacter> = searchPagingSourceFactory.create(query)
+}
 
 internal class RickAndMortySearchPagingSource @AssistedInject constructor(
     private val remoteDataSource: RickAndMortyRemoteDataSource,

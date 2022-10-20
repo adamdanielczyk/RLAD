@@ -5,15 +5,7 @@ import com.rlad.core.domain.model.ItemUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-fun createItemsRepository(
-    dataSourceName: String,
-    pickerText: String,
-    items: List<ItemUiModel> = emptyList(),
-): ItemsRepository = object : ItemsRepository {
-    override fun getDataSourceName(): String = dataSourceName
-
-    override fun getDataSourcePickerText(): String = pickerText
-
+fun createCommonRepository(items: List<ItemUiModel> = emptyList()): CommonRepository = object : CommonRepository {
     override fun getItemById(id: String): Flow<ItemUiModel> =
         flowOf(items.first { it.id == id })
 

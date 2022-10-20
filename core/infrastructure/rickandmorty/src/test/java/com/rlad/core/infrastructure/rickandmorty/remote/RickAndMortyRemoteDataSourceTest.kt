@@ -57,7 +57,7 @@ class RickAndMortyRemoteDataSourceTest {
     fun getCharacter_itemWithMatchingIdIsReturned() = runTest {
         assertEquals(
             characters[1],
-            remoteDataSource.getCharacter(id = 2)
+            remoteDataSource.getItem(id = "2")
         )
     }
 
