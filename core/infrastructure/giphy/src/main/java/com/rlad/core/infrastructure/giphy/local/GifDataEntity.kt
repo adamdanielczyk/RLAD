@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.rlad.core.infrastructure.giphy.remote.ServerGifData
 
 @Entity(
     tableName = "gif_data",
@@ -20,14 +19,4 @@ internal data class GifDataEntity(
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "import_datetime") val importDatetime: String,
     @ColumnInfo(name = "trending_datetime") val trendingDatetime: String,
-) {
-
-    constructor(serverGifData: ServerGifData) : this(
-        giphyId = serverGifData.id,
-        title = serverGifData.title,
-        imageUrl = serverGifData.images.fixedHeight.url,
-        username = serverGifData.username,
-        importDatetime = serverGifData.importDatetime,
-        trendingDatetime = serverGifData.trendingDatetime,
-    )
-}
+)

@@ -1,6 +1,7 @@
 package com.rlad.core.infrastructure.giphy.di
 
-import com.rlad.core.infrastructure.giphy.repository.GiphyRepository
+import com.rlad.core.infrastructure.common.repository.CommonRepository
+import com.rlad.core.infrastructure.giphy.model.GiphyDataSourceConfiguration
 import dagger.hilt.DefineComponent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -24,5 +25,6 @@ internal interface GiphyComponent {
 @InstallIn(GiphyComponent::class)
 @EntryPoint
 internal interface GiphyEntryPoint {
-    fun giphyRepository(): GiphyRepository
+    fun dataSourceConfiguration(): GiphyDataSourceConfiguration
+    fun commonRepository(): CommonRepository
 }

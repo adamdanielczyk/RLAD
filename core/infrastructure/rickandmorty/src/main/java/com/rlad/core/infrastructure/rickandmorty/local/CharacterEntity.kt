@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.rlad.core.infrastructure.rickandmorty.remote.ServerCharacter
 
 @Entity(tableName = "character")
 internal data class CharacterEntity(
@@ -19,22 +18,6 @@ internal data class CharacterEntity(
     @ColumnInfo(name = "created") val created: String,
 ) {
 
-    constructor(serverCharacter: ServerCharacter) : this(
-        id = serverCharacter.id,
-        name = serverCharacter.name,
-        status = Status.fromServerStatus(
-            serverCharacter.status
-        ),
-        species = serverCharacter.species,
-        type = serverCharacter.type,
-        gender = Gender.fromServerStatus(
-            serverCharacter.gender
-        ),
-        location = Location(serverCharacter.location),
-        imageUrl = serverCharacter.imageUrl,
-        created = serverCharacter.created
-    )
-
     enum class Status(val id: Int) {
         ALIVE(1),
         DEAD(2),
@@ -42,13 +25,6 @@ internal data class CharacterEntity(
 
         companion object {
             fun fromId(id: Int): Status = values().first { it.id == id }
-
-            fun fromServerStatus(serverStatus: ServerCharacter.Status): Status =
-                when (serverStatus) {
-                    ServerCharacter.Status.ALIVE -> ALIVE
-                    ServerCharacter.Status.DEAD -> DEAD
-                    ServerCharacter.Status.UNKNOWN -> UNKNOWN
-                }
         }
     }
 
@@ -60,23 +36,10 @@ internal data class CharacterEntity(
 
         companion object {
             fun fromId(id: Int): Gender = values().first { it.id == id }
-
-            fun fromServerStatus(serverGender: ServerCharacter.Gender): Gender =
-                when (serverGender) {
-                    ServerCharacter.Gender.FEMALE -> FEMALE
-                    ServerCharacter.Gender.MALE -> MALE
-                    ServerCharacter.Gender.GENDERLESS -> GENDERLESS
-                    ServerCharacter.Gender.UNKNOWN -> UNKNOWN
-                }
         }
     }
 
     data class Location(
         @ColumnInfo(name = "name") val name: String,
-    ) {
-
-        constructor(serverLocation: ServerCharacter.Location) : this(
-            name = serverLocation.name
-        )
-    }
+    )
 }
