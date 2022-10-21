@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.flatMapConcat
 import javax.inject.Inject
 
 internal class GetItemByIdUseCaseImpl @Inject constructor(
-    private val getSelectedItemsRepositoryUseCase: GetSelectedItemsRepositoryUseCase,
+    private val getCommonRepositoryUseCase: GetCommonRepositoryUseCase,
 ) : GetItemByIdUseCase {
 
     override operator fun invoke(id: String): Flow<ItemUiModel> =
-        getSelectedItemsRepositoryUseCase().flatMapConcat { itemsRepository -> itemsRepository.getItemById(id) }
+        getCommonRepositoryUseCase().flatMapConcat { commonRepository -> commonRepository.getItemById(id) }
 }

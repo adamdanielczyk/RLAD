@@ -1,20 +1,23 @@
 package com.rlad.core.infrastructure.giphy.local
 
 import androidx.paging.PagingSource
+import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-internal class GiphyLocalDataSource @Inject constructor(private val gifDataDao: GifDataDao) {
+internal class GiphyLocalDataSource @Inject constructor(
+    private val gifDataDao: GifDataDao,
+) : CommonLocalDataSource<GifDataEntity> {
 
-    fun getAllGifData(): PagingSource<Int, GifDataEntity> = gifDataDao.getAll()
-
-    fun getGifDataById(giphyId: String): Flow<GifDataEntity?> = gifDataDao.getById(giphyId)
-
-    suspend fun insertGifsData(gifData: List<GifDataEntity>) {
-        gifDataDao.insert(gifData)
+    override suspend fun insert(data: List<GifDataEntity>) {
+        gifDataDao.insert(data)
     }
 
-    suspend fun clearGifsData() {
+    override suspend fun clear() {
         gifDataDao.clearTable()
     }
+
+    override fun getAll(): PagingSource<Int, GifDataEntity> = gifDataDao.getAll()
+
+    override fun getById(id: String): Flow<GifDataEntity?> = gifDataDao.getById(id)
 }
