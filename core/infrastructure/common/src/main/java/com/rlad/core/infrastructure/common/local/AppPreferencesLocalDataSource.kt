@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class AppPreferencesLocalDataSource @Inject constructor(
+internal class AppPreferencesLocalDataSource @Inject constructor(
     private val preferencesDao: AppPreferencesDao,
 ) {
 

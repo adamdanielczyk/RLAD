@@ -1,8 +1,8 @@
 package com.rlad.core.infrastructure.common.usecase
 
 import com.rlad.core.domain.model.DataSourceUiModel
-import com.rlad.core.infrastructure.common.repository.ItemsRepository
-import com.rlad.core.infrastructure.common.repository.createItemsRepository
+import com.rlad.core.infrastructure.common.model.DataSource
+import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -12,26 +12,29 @@ import org.junit.Test
 
 class GetAvailableDataSourcesUseCaseImplTest {
 
-    private val repositories: List<ItemsRepository> = listOf(
-        createItemsRepository(dataSourceName = "name1", pickerText = "picker1"),
-        createItemsRepository(dataSourceName = "name2", pickerText = "picker2"),
-    )
-
     @Test
     fun repositoriesAreMappedToUiModelsAndSelectedRepositoryIsMarked() = runTest {
         val useCase = GetAvailableDataSourcesUseCaseImpl(
-            getAllItemsRepositoriesUseCase = object : GetAllItemsRepositoriesUseCase {
-                override fun invoke(): List<ItemsRepository> = repositories
+            getAllDataSourcesUseCase = object : GetAllDataSourcesUseCase {
+                override fun invoke(): List<DataSource> = DataSource.values().toList()
             },
-            getSelectedItemsRepositoryUseCase = object : GetSelectedItemsRepositoryUseCase {
-                override fun invoke(): Flow<ItemsRepository> = flowOf(repositories[1])
-            }
+            getSelectedDataSourceUseCase = object : GetSelectedDataSourceUseCase {
+                override fun invoke(): Flow<DataSource> = flowOf(DataSource.RICKANDMORTY)
+            },
+            dataSourceConfigurations = mapOf(
+                DataSource.GIPHY to object : DataSourceConfiguration {
+                    override fun getDataSourcePickerText(): String = "picker1"
+                },
+                DataSource.RICKANDMORTY to object : DataSourceConfiguration {
+                    override fun getDataSourcePickerText(): String = "picker2"
+                },
+            )
         )
 
         assertEquals(
             listOf(
-                DataSourceUiModel(name = "name1", pickerText = "picker1", isSelected = false),
-                DataSourceUiModel(name = "name2", pickerText = "picker2", isSelected = true),
+                DataSourceUiModel(name = DataSource.GIPHY.dataSourceName, pickerText = "picker1", isSelected = false),
+                DataSourceUiModel(name = DataSource.RICKANDMORTY.dataSourceName, pickerText = "picker2", isSelected = true),
             ),
             useCase().first()
         )

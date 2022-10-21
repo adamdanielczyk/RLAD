@@ -25,14 +25,14 @@ class RickAndMortyLocalDataSourceTest {
         ).build()
 
         localDataSource = RickAndMortyLocalDataSource(database.characterDao())
-        localDataSource.insertCharacters(characters)
+        localDataSource.insert(characters)
     }
 
     @Test
     fun getCharacterById_loadCharacterFromDb() = runTest {
         assertEquals(
             characters.first(),
-            localDataSource.getCharacterById(id = 1).first()
+            localDataSource.getById(id = "1").first()
         )
     }
 
@@ -40,7 +40,7 @@ class RickAndMortyLocalDataSourceTest {
     fun getCharacterById_returnNullIfDoesNotExist() = runTest {
         assertEquals(
             null,
-            localDataSource.getCharacterById(id = 10).first()
+            localDataSource.getById(id = "10").first()
         )
     }
 

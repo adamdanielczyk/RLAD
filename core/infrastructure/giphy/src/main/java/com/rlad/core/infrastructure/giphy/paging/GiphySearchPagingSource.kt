@@ -2,15 +2,22 @@ package com.rlad.core.infrastructure.giphy.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import com.rlad.core.infrastructure.giphy.remote.GiphyRemoteDataSource
 import com.rlad.core.infrastructure.giphy.remote.ServerGifData
-import com.rlad.core.infrastructure.giphy.repository.GiphyRepository.Companion.INITIAL_PAGING_OFFSET
-import com.rlad.core.infrastructure.giphy.repository.GiphyRepository.Companion.PAGE_SIZE
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
+
+internal class GiphySearchPagingSourceFactory @Inject constructor(
+    private val searchPagingSourceFactory: GiphySearchPagingSource.Factory,
+) : CommonSearchPagingSourceFactory<ServerGifData> {
+
+    override fun create(query: String): PagingSource<Int, ServerGifData> = searchPagingSourceFactory.create(query)
+}
 
 internal class GiphySearchPagingSource @AssistedInject constructor(
     private val remoteDataSource: GiphyRemoteDataSource,
@@ -24,8 +31,8 @@ internal class GiphySearchPagingSource @AssistedInject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ServerGifData> = try {
         val searchedGifs = remoteDataSource.searchGifs(
-            offset = if (params is LoadParams.Append) params.key else INITIAL_PAGING_OFFSET,
-            limit = PAGE_SIZE,
+            offset = if (params is LoadParams.Append) params.key else remoteDataSource.getInitialPagingOffset(),
+            limit = remoteDataSource.getPageSize(),
             query = query,
         )
 
@@ -42,5 +49,5 @@ internal class GiphySearchPagingSource @AssistedInject constructor(
         LoadResult.Error(exception)
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ServerGifData>): Int = INITIAL_PAGING_OFFSET
+    override fun getRefreshKey(state: PagingState<Int, ServerGifData>): Int = remoteDataSource.getInitialPagingOffset()
 }

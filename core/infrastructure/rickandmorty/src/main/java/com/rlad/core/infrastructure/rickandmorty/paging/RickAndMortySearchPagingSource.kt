@@ -2,15 +2,23 @@ package com.rlad.core.infrastructure.rickandmorty.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import com.rlad.core.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
 import com.rlad.core.infrastructure.rickandmorty.remote.ServerCharacter
-import com.rlad.core.infrastructure.rickandmorty.repository.RickAndMortyRepository.Companion.INITIAL_PAGING_KEY
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.HttpURLConnection
+import javax.inject.Inject
+
+internal class RickAndMortySearchPagingSourceFactory @Inject constructor(
+    private val searchPagingSourceFactory: RickAndMortySearchPagingSource.Factory,
+) : CommonSearchPagingSourceFactory<ServerCharacter> {
+
+    override fun create(query: String): PagingSource<Int, ServerCharacter> = searchPagingSourceFactory.create(query)
+}
 
 internal class RickAndMortySearchPagingSource @AssistedInject constructor(
     private val remoteDataSource: RickAndMortyRemoteDataSource,
@@ -23,7 +31,7 @@ internal class RickAndMortySearchPagingSource @AssistedInject constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ServerCharacter> = try {
-        val nextKey = if (params is LoadParams.Append) params.key else INITIAL_PAGING_KEY
+        val nextKey = if (params is LoadParams.Append) params.key else remoteDataSource.getInitialPagingOffset()
         val characters = remoteDataSource.getCharacters(
             page = nextKey,
             name = query
@@ -48,5 +56,5 @@ internal class RickAndMortySearchPagingSource @AssistedInject constructor(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ServerCharacter>): Int = INITIAL_PAGING_KEY
+    override fun getRefreshKey(state: PagingState<Int, ServerCharacter>): Int = remoteDataSource.getInitialPagingOffset()
 }
