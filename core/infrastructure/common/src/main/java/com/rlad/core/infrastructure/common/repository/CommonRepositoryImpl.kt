@@ -20,10 +20,10 @@ interface CommonRepository {
     fun getSearchItems(query: String): Flow<PagingData<ItemUiModel>>
 }
 
-class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, MainRemoteData : Any> @Inject constructor(
+class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData : Any> @Inject constructor(
     private val localDataSource: CommonLocalDataSource<LocalModel>,
-    private val remoteDataSource: CommonRemoteDataSource<MainRemoteData, RemoteModel>,
-    private val remoteMediator: CommonRemoteMediator<LocalModel, RemoteModel, MainRemoteData>,
+    private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
+    private val remoteMediator: CommonRemoteMediator<LocalModel, RemoteModel, RootRemoteData>,
     private val searchPagingSourceFactory: CommonSearchPagingSourceFactory<RemoteModel>,
     private val modelMapper: ModelMapper<LocalModel, RemoteModel>,
 ) : CommonRepository {

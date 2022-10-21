@@ -11,9 +11,9 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, MainRemoteData : Any> @Inject constructor(
+class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData : Any> @Inject constructor(
     private val localDataSource: CommonLocalDataSource<LocalModel>,
-    private val remoteDataSource: CommonRemoteDataSource<MainRemoteData, RemoteModel>,
+    private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
     private val modelMapper: ModelMapper<LocalModel, RemoteModel>,
     private val pagingDataRepository: PagingDataRepository,
 ) : RemoteMediator<Int, LocalModel>() {
