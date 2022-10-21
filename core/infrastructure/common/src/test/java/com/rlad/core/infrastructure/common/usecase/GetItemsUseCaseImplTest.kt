@@ -1,8 +1,8 @@
 package com.rlad.core.infrastructure.common.usecase
 
 import com.rlad.core.domain.model.ItemUiModel
-import com.rlad.core.infrastructure.common.repository.ItemsRepository
-import com.rlad.core.infrastructure.common.repository.createItemsRepository
+import com.rlad.core.infrastructure.common.repository.CommonRepository
+import com.rlad.core.infrastructure.common.repository.createCommonRepository
 import com.rlad.core.testing.paging.collectData
 import com.rlad.core.testing.rule.TestDispatcherRule
 import kotlinx.coroutines.flow.Flow
@@ -34,15 +34,11 @@ class GetItemsUseCaseImplTest {
         )
     )
 
-    private val itemsRepository = createItemsRepository(
-        dataSourceName = "name1",
-        pickerText = "picker1",
-        items = items,
-    )
+    private val commonRepository = createCommonRepository(items)
 
     private val useCase = GetItemsUseCaseImpl(
-        getSelectedItemsRepositoryUseCase = object : GetSelectedItemsRepositoryUseCase {
-            override fun invoke(): Flow<ItemsRepository> = flowOf(itemsRepository)
+        getCommonRepositoryUseCase = object : GetCommonRepositoryUseCase {
+            override fun invoke(): Flow<CommonRepository> = flowOf(commonRepository)
         }
     )
 

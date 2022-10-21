@@ -8,14 +8,18 @@ import com.rlad.core.domain.usecase.GetItemByIdUseCase
 import com.rlad.core.domain.usecase.GetItemsUseCase
 import com.rlad.core.infrastructure.common.local.AppPreferencesDao
 import com.rlad.core.infrastructure.common.local.CommonDatabase
+import com.rlad.core.infrastructure.common.paging.PagingDataRepository
+import com.rlad.core.infrastructure.common.paging.PagingDataRepositoryImpl
 import com.rlad.core.infrastructure.common.repository.AppSettingsRepositoryImpl
-import com.rlad.core.infrastructure.common.usecase.GetAllItemsRepositoriesUseCase
-import com.rlad.core.infrastructure.common.usecase.GetAllItemsRepositoriesUseCaseImpl
+import com.rlad.core.infrastructure.common.usecase.GetAllDataSourcesUseCase
+import com.rlad.core.infrastructure.common.usecase.GetAllDataSourcesUseCaseImpl
 import com.rlad.core.infrastructure.common.usecase.GetAvailableDataSourcesUseCaseImpl
+import com.rlad.core.infrastructure.common.usecase.GetCommonRepositoryUseCase
+import com.rlad.core.infrastructure.common.usecase.GetCommonRepositoryUseCaseImpl
 import com.rlad.core.infrastructure.common.usecase.GetItemByIdUseCaseImpl
 import com.rlad.core.infrastructure.common.usecase.GetItemsUseCaseImpl
-import com.rlad.core.infrastructure.common.usecase.GetSelectedItemsRepositoryUseCase
-import com.rlad.core.infrastructure.common.usecase.GetSelectedItemsRepositoryUseCaseImpl
+import com.rlad.core.infrastructure.common.usecase.GetSelectedDataSourceUseCase
+import com.rlad.core.infrastructure.common.usecase.GetSelectedDataSourceUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -58,9 +62,15 @@ internal class CommonModule {
         fun bindGetItemsUseCase(impl: GetItemsUseCaseImpl): GetItemsUseCase
 
         @Binds
-        fun bindGetSelectedItemsRepositoryUseCase(impl: GetSelectedItemsRepositoryUseCaseImpl): GetSelectedItemsRepositoryUseCase
+        fun bindGetCommonRepositoryUseCase(impl: GetCommonRepositoryUseCaseImpl): GetCommonRepositoryUseCase
 
         @Binds
-        fun bindGetAllItemsRepositoriesUseCase(impl: GetAllItemsRepositoriesUseCaseImpl): GetAllItemsRepositoriesUseCase
+        fun bindGetSelectedDataSourceUseCase(impl: GetSelectedDataSourceUseCaseImpl): GetSelectedDataSourceUseCase
+
+        @Binds
+        fun bindGetAllDataSourcesUseCase(impl: GetAllDataSourcesUseCaseImpl): GetAllDataSourcesUseCase
+
+        @Binds
+        fun bindPagingDataRepository(impl: PagingDataRepositoryImpl): PagingDataRepository
     }
 }

@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.flatMapConcat
 import javax.inject.Inject
 
 internal class GetItemsUseCaseImpl @Inject constructor(
-    private val getSelectedItemsRepositoryUseCase: GetSelectedItemsRepositoryUseCase,
+    private val getCommonRepositoryUseCase: GetCommonRepositoryUseCase,
 ) : GetItemsUseCase {
 
     override operator fun invoke(query: String?): Flow<PagingData<ItemUiModel>> =
-        getSelectedItemsRepositoryUseCase().flatMapConcat { itemsRepository ->
+        getCommonRepositoryUseCase().flatMapConcat { commonRepository ->
             if (query != null) {
-                itemsRepository.getSearchItems(query)
+                commonRepository.getSearchItems(query)
             } else {
-                itemsRepository.getAllItems()
+                commonRepository.getAllItems()
             }
         }
 }
