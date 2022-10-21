@@ -1,7 +1,19 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "androidx.compose.compiler:compiler"
+      ],
+      "matchPackagePatterns": [
+        "^org\\.jetbrains\\.kotlin[.:]"
+      ],
+      "groupName": "Kotlin / Compose Compiler"
+    }
+  ],
   "extends": [
-    "config:base",
-    "schedule:daily"
+    "config:base"
   ]
 }
