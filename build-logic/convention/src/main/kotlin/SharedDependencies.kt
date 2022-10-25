@@ -21,6 +21,7 @@ internal fun Project.shared() {
         add("implementation", libs.findLibrary("androidx.activity").get())
         add("implementation", libs.findLibrary("androidx.activity.compose").get())
 
+        add("implementation", platform(libs.findLibrary("androidx.compose.bom").get()))
         add("implementation", libs.findLibrary("androidx.compose.ui").get())
         add("implementation", libs.findLibrary("androidx.compose.ui.tooling").get())
         add("implementation", libs.findLibrary("androidx.compose.foundation").get())
