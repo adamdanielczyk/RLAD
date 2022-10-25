@@ -18,29 +18,28 @@ internal class PagingDataRepositoryImpl @Inject constructor(
     private val getSelectedDataSourceUseCase: GetSelectedDataSourceUseCase,
 ) : PagingDataRepository {
 
-    override suspend fun getLastSyncedTimestamp(): Long? {
-        val scopedKey = getScopedKey(key = LAST_SYNCED_TIMESTAMP_KEY)
-        return appPreferencesLocalDataSource.get(scopedKey).firstOrNull()?.toLong()
-    }
+    override suspend fun getLastSyncedTimestamp(): Long? = get(LAST_SYNCED_TIMESTAMP_KEY)?.toLong()
 
     override suspend fun saveCurrentSyncTimestamp(timestamp: Long) {
-        val scopedKey = getScopedKey(key = LAST_SYNCED_TIMESTAMP_KEY)
-        appPreferencesLocalDataSource.save(
-            key = scopedKey,
-            value = timestamp.toString(),
-        )
+        save(key = LAST_SYNCED_TIMESTAMP_KEY, value = timestamp.toString())
     }
 
-    override suspend fun getNextOffsetToLoad(): Int? {
-        val scopedKey = getScopedKey(key = NEXT_OFFSET_TO_LOAD)
-        return appPreferencesLocalDataSource.get(scopedKey).firstOrNull()?.toInt()
-    }
+    override suspend fun getNextOffsetToLoad(): Int? = get(NEXT_OFFSET_TO_LOAD)?.toInt()
 
     override suspend fun saveNextOffsetToLoad(offset: Int) {
-        val scopedKey = getScopedKey(key = NEXT_OFFSET_TO_LOAD)
+        save(key = NEXT_OFFSET_TO_LOAD, value = offset.toString())
+    }
+
+    private suspend fun get(key: String): String? {
+        val scopedKey = getScopedKey(key)
+        return appPreferencesLocalDataSource.get(scopedKey).firstOrNull()
+    }
+
+    private suspend fun save(key: String, value: String) {
+        val scopedKey = getScopedKey(key)
         appPreferencesLocalDataSource.save(
             key = scopedKey,
-            value = offset.toString(),
+            value = value,
         )
     }
 
