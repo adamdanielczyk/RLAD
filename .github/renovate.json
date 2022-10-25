@@ -1,7 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "prHourlyLimit": 0,
-  "prConcurrentLimit": 0,
   "packageRules": [
     {
       "matchPackageNames": [
@@ -14,6 +12,10 @@
     }
   ],
   "extends": [
-    "config:base"
+    "config:base",
+    ":automergeAll",
+    ":automergeBranch",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone"
   ]
 }
