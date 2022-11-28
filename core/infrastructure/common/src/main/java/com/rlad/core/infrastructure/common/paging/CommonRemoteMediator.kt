@@ -1,21 +1,24 @@
 package com.rlad.core.infrastructure.common.paging
 
+import android.content.Context
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
+import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.HttpException
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData : Any> @Inject constructor(
     private val localDataSource: CommonLocalDataSource<LocalModel>,
     private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
     private val modelMapper: ModelMapper<LocalModel, RemoteModel>,
     private val pagingDataRepository: PagingDataRepository,
+    @ApplicationContext private val context: Context,
 ) : RemoteMediator<Int, LocalModel>() {
 
     override suspend fun initialize(): InitializeAction = if (shouldClearCache()) {
@@ -62,6 +65,7 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     private suspend fun clearCachedDataOnRefresh() {
         saveNextOffsetToLoad(offset = remoteDataSource.getInitialPagingOffset())
         localDataSource.clear()
+        context.cacheDir.deleteRecursively()
     }
 
     private suspend fun insertData(remoteData: List<RemoteModel>) {
@@ -72,7 +76,7 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     private suspend fun shouldClearCache(): Boolean {
         val lastSyncedTimestamp = getLastSyncedTimestamp() ?: return false
         val millisSinceLastSync = System.currentTimeMillis() - lastSyncedTimestamp
-        val minutesSinceLastSync = TimeUnit.MILLISECONDS.toMinutes(millisSinceLastSync)
+        val minutesSinceLastSync = millisSinceLastSync.milliseconds.inWholeMinutes
         return minutesSinceLastSync > CACHE_TIMEOUT_IN_MINUTES
     }
 
