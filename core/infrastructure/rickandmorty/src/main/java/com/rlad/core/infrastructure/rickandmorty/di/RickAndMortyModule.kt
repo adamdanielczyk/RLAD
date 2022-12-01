@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
+import com.rlad.core.infrastructure.common.model.DataSource
 import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
+import com.rlad.core.infrastructure.common.model.DataSourceKey
 import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import com.rlad.core.infrastructure.common.repository.CommonRepository
@@ -25,62 +27,67 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoMap
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Qualifier
+import javax.inject.Singleton
 
-@InstallIn(RickAndMortyComponent::class)
-@Module(includes = [RickAndMortyModule.Bindings::class])
-internal object RickAndMortyModule {
+@InstallIn(SingletonComponent::class)
+@Module
+internal interface RickAndMortyModule {
 
-    @Provides
-    @RickAndMortyScope
-    fun rickAndMortyDatabase(@ApplicationContext context: Context): RickAndMortyDatabase {
-        return Room.databaseBuilder(
+    @Qualifier
+    annotation class RickAndMortyRetrofit
+
+    companion object {
+
+        @Provides
+        @Singleton
+        fun rickAndMortyDatabase(@ApplicationContext context: Context): RickAndMortyDatabase = Room.databaseBuilder(
             context,
             RickAndMortyDatabase::class.java,
             "rickandmorty_database"
         ).fallbackToDestructiveMigration().build()
-    }
 
-    @Provides
-    @RickAndMortyScope
-    fun characterDao(rickAndMortyDatabase: RickAndMortyDatabase): CharacterDao =
-        rickAndMortyDatabase.characterDao()
+        @Provides
+        fun characterDao(rickAndMortyDatabase: RickAndMortyDatabase): CharacterDao =
+            rickAndMortyDatabase.characterDao()
 
-    @Provides
-    @RickAndMortyScope
-    fun retrofit(): Retrofit {
-        return Retrofit.Builder()
+        @Provides
+        @Singleton
+        @RickAndMortyRetrofit
+        fun retrofit(): Retrofit = Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
+
+        @Provides
+        @Singleton
+        fun rickAndMortyApi(@RickAndMortyRetrofit retrofit: Retrofit): RickAndMortyApi =
+            retrofit.create(RickAndMortyApi::class.java)
     }
 
-    @Provides
-    @RickAndMortyScope
-    fun rickAndMortyApi(retrofit: Retrofit): RickAndMortyApi =
-        retrofit.create(RickAndMortyApi::class.java)
+    @Binds
+    fun RickAndMortyLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<CharacterEntity>
 
-    @InstallIn(RickAndMortyComponent::class)
-    @Module
-    interface Bindings {
+    @Binds
+    fun RickAndMortyRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerGetCharacters, ServerCharacter>
 
-        @Binds
-        fun bindCommonLocalDataSource(impl: RickAndMortyLocalDataSource): CommonLocalDataSource<CharacterEntity>
+    @Binds
+    fun RickAndMortyModelMapper.bindModelMapper(): ModelMapper<CharacterEntity, ServerCharacter>
 
-        @Binds
-        fun bindCommonRemoteDataSource(impl: RickAndMortyRemoteDataSource): CommonRemoteDataSource<ServerGetCharacters, ServerCharacter>
+    @Binds
+    fun RickAndMortySearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerCharacter>
 
-        @Binds
-        fun bindModelMapper(impl: RickAndMortyModelMapper): ModelMapper<CharacterEntity, ServerCharacter>
+    @Binds
+    @IntoMap
+    @DataSourceKey(DataSource.RICKANDMORTY)
+    fun CommonRepositoryImpl<CharacterEntity, ServerCharacter, ServerGetCharacters>.bindCommonRepository(): CommonRepository
 
-        @Binds
-        fun bindCommonSearchPagingSourceFactory(impl: RickAndMortySearchPagingSourceFactory): CommonSearchPagingSourceFactory<ServerCharacter>
-
-        @Binds
-        fun bindCommonRepository(impl: CommonRepositoryImpl<CharacterEntity, ServerCharacter, ServerGetCharacters>): CommonRepository
-
-        @Binds
-        fun bindDataSourceConfiguration(impl: RickAndMortyDataSourceConfiguration): DataSourceConfiguration
-    }
+    @Binds
+    @IntoMap
+    @DataSourceKey(DataSource.RICKANDMORTY)
+    fun RickAndMortyDataSourceConfiguration.bindDataSourceConfiguration(): DataSourceConfiguration
 }
