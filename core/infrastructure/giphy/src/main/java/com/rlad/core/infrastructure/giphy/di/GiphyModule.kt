@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
+import com.rlad.core.infrastructure.common.model.DataSource
 import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
+import com.rlad.core.infrastructure.common.model.DataSourceKey
 import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import com.rlad.core.infrastructure.common.repository.CommonRepository
@@ -25,62 +27,67 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoMap
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Qualifier
+import javax.inject.Singleton
 
-@InstallIn(GiphyComponent::class)
-@Module(includes = [GiphyModule.Bindings::class])
-internal object GiphyModule {
+@InstallIn(SingletonComponent::class)
+@Module
+internal interface GiphyModule {
 
-    @Provides
-    @GiphyScope
-    fun giphyDatabase(@ApplicationContext context: Context): GiphyDatabase {
-        return Room.databaseBuilder(
+    @Qualifier
+    annotation class GiphyRetrofit
+
+    companion object {
+
+        @Provides
+        @Singleton
+        fun giphyDatabase(@ApplicationContext context: Context): GiphyDatabase = Room.databaseBuilder(
             context,
             GiphyDatabase::class.java,
             "giphy_database"
         ).fallbackToDestructiveMigration().build()
-    }
 
-    @Provides
-    @GiphyScope
-    fun gifDataDao(giphyDatabase: GiphyDatabase): GifDataDao =
-        giphyDatabase.gifDataDao()
+        @Provides
+        fun gifDataDao(giphyDatabase: GiphyDatabase): GifDataDao =
+            giphyDatabase.gifDataDao()
 
-    @Provides
-    @GiphyScope
-    fun giphyApi(retrofit: Retrofit): GiphyApi =
-        retrofit.create(GiphyApi::class.java)
-
-    @Provides
-    @GiphyScope
-    fun retrofit(): Retrofit {
-        return Retrofit.Builder()
+        @Provides
+        @Singleton
+        @GiphyRetrofit
+        fun retrofit(): Retrofit = Retrofit.Builder()
             .baseUrl("https://api.giphy.com")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
+
+        @Provides
+        @Singleton
+        fun giphyApi(@GiphyRetrofit retrofit: Retrofit): GiphyApi =
+            retrofit.create(GiphyApi::class.java)
     }
 
-    @InstallIn(GiphyComponent::class)
-    @Module
-    interface Bindings {
+    @Binds
+    fun GiphyLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<GifDataEntity>
 
-        @Binds
-        fun bindCommonLocalDataSource(impl: GiphyLocalDataSource): CommonLocalDataSource<GifDataEntity>
+    @Binds
+    fun GiphyRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerGifs, ServerGifData>
 
-        @Binds
-        fun bindCommonRemoteDataSource(impl: GiphyRemoteDataSource): CommonRemoteDataSource<ServerGifs, ServerGifData>
+    @Binds
+    fun GiphyModelMapper.bindModelMapper(): ModelMapper<GifDataEntity, ServerGifData>
 
-        @Binds
-        fun bindModelMapper(impl: GiphyModelMapper): ModelMapper<GifDataEntity, ServerGifData>
+    @Binds
+    fun GiphySearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerGifData>
 
-        @Binds
-        fun bindCommonSearchPagingSourceFactory(impl: GiphySearchPagingSourceFactory): CommonSearchPagingSourceFactory<ServerGifData>
+    @Binds
+    @IntoMap
+    @DataSourceKey(DataSource.GIPHY)
+    fun CommonRepositoryImpl<GifDataEntity, ServerGifData, ServerGifs>.bindCommonRepository(): CommonRepository
 
-        @Binds
-        fun bindCommonRepository(impl: CommonRepositoryImpl<GifDataEntity, ServerGifData, ServerGifs>): CommonRepository
-
-        @Binds
-        fun bindDataSourceConfiguration(impl: GiphyDataSourceConfiguration): DataSourceConfiguration
-    }
+    @Binds
+    @IntoMap
+    @DataSourceKey(DataSource.GIPHY)
+    fun GiphyDataSourceConfiguration.bindDataSourceConfiguration(): DataSourceConfiguration
 }

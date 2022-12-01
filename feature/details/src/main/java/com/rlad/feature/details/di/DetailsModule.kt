@@ -14,9 +14,9 @@ import dagger.multibindings.IntoSet
 internal interface DetailsModule {
 
     @Binds
-    fun bindDetailsNavigator(impl: DetailsNavigatorImpl): DetailsNavigator
+    fun DetailsNavigatorImpl.bindDetailsNavigator(): DetailsNavigator
 
     @Binds
     @IntoSet
-    fun bindNavigator(impl: DetailsNavigatorImpl): Navigator
+    fun DetailsNavigatorImpl.bindNavigator(): Navigator
 }
