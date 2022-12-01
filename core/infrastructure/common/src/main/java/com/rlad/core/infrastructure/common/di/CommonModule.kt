@@ -1,6 +1,6 @@
 package com.rlad.core.infrastructure.common.di
 
-import android.content.Context
+import android.app.Application
 import androidx.room.Room
 import com.rlad.core.domain.repository.AppSettingsRepository
 import com.rlad.core.domain.usecase.GetAvailableDataSourcesUseCase
@@ -24,7 +24,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -36,9 +35,9 @@ internal interface CommonModule {
 
         @Provides
         @Singleton
-        fun commonDatabase(@ApplicationContext context: Context): CommonDatabase {
+        fun commonDatabase(application: Application): CommonDatabase {
             return Room.databaseBuilder(
-                context,
+                application,
                 CommonDatabase::class.java,
                 "common_database"
             ).fallbackToDestructiveMigration().build()
