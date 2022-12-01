@@ -1,16 +1,15 @@
 package com.rlad.core.infrastructure.rickandmorty.mapper
 
-import android.content.Context
+import android.app.Application
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.rickandmorty.R
 import com.rlad.core.infrastructure.rickandmorty.local.CharacterEntity
 import com.rlad.core.infrastructure.rickandmorty.remote.ServerCharacter
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 internal class RickAndMortyModelMapper @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val application: Application,
 ) : ModelMapper<CharacterEntity, ServerCharacter> {
 
     override fun toLocalModel(remote: ServerCharacter): CharacterEntity = CharacterEntity(
@@ -43,23 +42,23 @@ internal class RickAndMortyModelMapper @Inject constructor(
             local.location.name,
         ),
         detailsKeyValues = listOf(
-            context.getString(R.string.details_status) to when (local.status) {
-                CharacterEntity.Status.ALIVE -> context.getString(R.string.details_status_alive)
-                CharacterEntity.Status.DEAD -> context.getString(R.string.details_status_dead)
-                CharacterEntity.Status.UNKNOWN -> context.getString(R.string.details_status_unknown)
+            application.getString(R.string.details_status) to when (local.status) {
+                CharacterEntity.Status.ALIVE -> application.getString(R.string.details_status_alive)
+                CharacterEntity.Status.DEAD -> application.getString(R.string.details_status_dead)
+                CharacterEntity.Status.UNKNOWN -> application.getString(R.string.details_status_unknown)
             },
-            context.getString(R.string.details_species) to local.species,
-            context.getString(R.string.details_gender) to when (local.gender) {
-                CharacterEntity.Gender.FEMALE -> context.getString(R.string.details_gender_female)
-                CharacterEntity.Gender.MALE -> context.getString(R.string.details_gender_male)
-                CharacterEntity.Gender.GENDERLESS -> context.getString(R.string.details_gender_genderless)
-                CharacterEntity.Gender.UNKNOWN -> context.getString(R.string.details_gender_unknown)
+            application.getString(R.string.details_species) to local.species,
+            application.getString(R.string.details_gender) to when (local.gender) {
+                CharacterEntity.Gender.FEMALE -> application.getString(R.string.details_gender_female)
+                CharacterEntity.Gender.MALE -> application.getString(R.string.details_gender_male)
+                CharacterEntity.Gender.GENDERLESS -> application.getString(R.string.details_gender_genderless)
+                CharacterEntity.Gender.UNKNOWN -> application.getString(R.string.details_gender_unknown)
             },
-            context.getString(R.string.details_location) to local.location.name,
-            context.getString(R.string.details_created) to local.created,
+            application.getString(R.string.details_location) to local.location.name,
+            application.getString(R.string.details_created) to local.created,
         ) + listOfNotNull(
             if (!local.type.isNullOrBlank()) {
-                context.getString(R.string.details_type) to local.type
+                application.getString(R.string.details_type) to local.type
             } else null
         ),
     )
