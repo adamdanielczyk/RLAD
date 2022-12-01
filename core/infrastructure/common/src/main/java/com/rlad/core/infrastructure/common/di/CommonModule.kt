@@ -29,48 +29,46 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
-@Module(includes = [CommonModule.Bindings::class])
-internal class CommonModule {
+@Module
+internal interface CommonModule {
 
-    @Provides
-    @Singleton
-    fun commonDatabase(@ApplicationContext context: Context): CommonDatabase {
-        return Room.databaseBuilder(
-            context,
-            CommonDatabase::class.java,
-            "common_database"
-        ).fallbackToDestructiveMigration().build()
+    companion object {
+
+        @Provides
+        @Singleton
+        fun commonDatabase(@ApplicationContext context: Context): CommonDatabase {
+            return Room.databaseBuilder(
+                context,
+                CommonDatabase::class.java,
+                "common_database"
+            ).fallbackToDestructiveMigration().build()
+        }
+
+        @Provides
+        fun appPreferencesDao(commonDatabase: CommonDatabase): AppPreferencesDao = commonDatabase.appPreferencesDao()
     }
 
-    @Provides
-    fun appPreferencesDao(commonDatabase: CommonDatabase): AppPreferencesDao = commonDatabase.appPreferencesDao()
+    @Binds
+    fun AppSettingsRepositoryImpl.bindAppSettingsRepository(): AppSettingsRepository
 
-    @InstallIn(SingletonComponent::class)
-    @Module
-    interface Bindings {
+    @Binds
+    fun GetAvailableDataSourcesUseCaseImpl.bindGetAvailableDataSourcesUseCase(): GetAvailableDataSourcesUseCase
 
-        @Binds
-        fun bindAppSettingsRepository(impl: AppSettingsRepositoryImpl): AppSettingsRepository
+    @Binds
+    fun GetItemByIdUseCaseImpl.bindGetItemByIdUseCase(): GetItemByIdUseCase
 
-        @Binds
-        fun bindGetAvailableDataSourcesUseCase(impl: GetAvailableDataSourcesUseCaseImpl): GetAvailableDataSourcesUseCase
+    @Binds
+    fun GetItemsUseCaseImpl.bindGetItemsUseCase(): GetItemsUseCase
 
-        @Binds
-        fun bindGetItemByIdUseCase(impl: GetItemByIdUseCaseImpl): GetItemByIdUseCase
+    @Binds
+    fun GetCommonRepositoryUseCaseImpl.bindGetCommonRepositoryUseCase(): GetCommonRepositoryUseCase
 
-        @Binds
-        fun bindGetItemsUseCase(impl: GetItemsUseCaseImpl): GetItemsUseCase
+    @Binds
+    fun GetSelectedDataSourceUseCaseImpl.bindGetSelectedDataSourceUseCase(): GetSelectedDataSourceUseCase
 
-        @Binds
-        fun bindGetCommonRepositoryUseCase(impl: GetCommonRepositoryUseCaseImpl): GetCommonRepositoryUseCase
+    @Binds
+    fun GetAllDataSourcesUseCaseImpl.bindGetAllDataSourcesUseCase(): GetAllDataSourcesUseCase
 
-        @Binds
-        fun bindGetSelectedDataSourceUseCase(impl: GetSelectedDataSourceUseCaseImpl): GetSelectedDataSourceUseCase
-
-        @Binds
-        fun bindGetAllDataSourcesUseCase(impl: GetAllDataSourcesUseCaseImpl): GetAllDataSourcesUseCase
-
-        @Binds
-        fun bindPagingDataRepository(impl: PagingDataRepositoryImpl): PagingDataRepository
-    }
+    @Binds
+    fun PagingDataRepositoryImpl.bindPagingDataRepository(): PagingDataRepository
 }
