@@ -1,6 +1,6 @@
 package com.rlad.core.infrastructure.giphy.di
 
-import android.content.Context
+import android.app.Application
 import androidx.room.Room
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
@@ -26,7 +26,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import retrofit2.Retrofit
@@ -45,8 +44,8 @@ internal interface GiphyModule {
 
         @Provides
         @Singleton
-        fun giphyDatabase(@ApplicationContext context: Context): GiphyDatabase = Room.databaseBuilder(
-            context,
+        fun giphyDatabase(application: Application): GiphyDatabase = Room.databaseBuilder(
+            application,
             GiphyDatabase::class.java,
             "giphy_database"
         ).fallbackToDestructiveMigration().build()

@@ -1,13 +1,12 @@
 package com.rlad.core.infrastructure.common.paging
 
-import android.content.Context
+import android.app.Application
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
-import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -18,7 +17,7 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
     private val modelMapper: ModelMapper<LocalModel, RemoteModel>,
     private val pagingDataRepository: PagingDataRepository,
-    @ApplicationContext private val context: Context,
+    private val application: Application,
 ) : RemoteMediator<Int, LocalModel>() {
 
     override suspend fun initialize(): InitializeAction = if (shouldClearCache()) {
@@ -65,7 +64,7 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     private suspend fun clearCachedDataOnRefresh() {
         saveNextOffsetToLoad(offset = remoteDataSource.getInitialPagingOffset())
         localDataSource.clear()
-        context.cacheDir.deleteRecursively()
+        application.cacheDir.deleteRecursively()
     }
 
     private suspend fun insertData(remoteData: List<RemoteModel>) {
