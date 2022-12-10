@@ -24,7 +24,7 @@ jobs:
         with:
           arguments: test --stacktrace
 
-  connectedAndroidTest:
+  pixelDebugAndroidTest:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,10 +34,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: reactivecircus/android-emulator-runner@v2
+      - uses: android-actions/setup-android@v2
+
+      - uses: gradle/gradle-build-action@v2
         with:
-          api-level: 29
-          script: ./gradlew connectedAndroidTest
+          arguments: pixelDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
   assembleDebug:
     runs-on: ubuntu-latest
@@ -88,7 +89,7 @@ jobs:
 
   bundleRelease:
     if: github.ref == 'refs/heads/master'
-    needs: [ test, connectedAndroidTest, assembleDebug, assembleRelease ]
+    needs: [ test, pixelDebugAndroidTest, assembleDebug, assembleRelease ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
