@@ -17,7 +17,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
-androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2022.12.00" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2023.01.00" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
