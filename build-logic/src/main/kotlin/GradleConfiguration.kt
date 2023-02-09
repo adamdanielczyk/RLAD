@@ -1,8 +1,10 @@
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.ManagedVirtualDevice
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.the
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
@@ -46,6 +48,18 @@ internal fun Project.configureKotlinAndroid() {
                     "META-INF/LICENSE.md",
                     "META-INF/LICENSE-notice.md",
                 )
+            }
+        }
+
+        testOptions {
+            managedDevices {
+                devices {
+                    create("pixel", ManagedVirtualDevice::class.java) {
+                        device = "Pixel"
+                        apiLevel = 30
+                        systemImageSource = "aosp-atd"
+                    }
+                }
             }
         }
     }
