@@ -40,7 +40,7 @@ coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
-lottie = { module = "com.airbnb.android:lottie-compose", version = "5.2.0" }
+lottie = { module = "com.airbnb.android:lottie-compose", version = "6.0.0" }
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlinCodegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
