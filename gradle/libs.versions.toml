@@ -2,7 +2,7 @@
 accompanist = "0.28.0"
 androidGradlePlugin = "7.4.1"
 androidxActivity = "1.6.1"
-androidxComposeCompiler = "1.4.2"
+androidxComposeCompiler = "1.4.3"
 androidxLifecycle = "2.5.1"
 androidxRoom = "2.5.0"
 coil = "2.2.2"
