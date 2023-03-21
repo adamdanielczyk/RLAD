@@ -16,5 +16,5 @@ dependencies {
     testImplementation(project(":core:testing"))
     androidTestImplementation(project(":core:testing"))
 
-    shared()
+    shared(libs())
 }

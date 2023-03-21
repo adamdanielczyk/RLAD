@@ -10,5 +10,5 @@ android {
 }
 
 dependencies {
-    shared()
+    shared(libs())
 }
