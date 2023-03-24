@@ -20,7 +20,9 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - run: ./gradlew test
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test
 
   connectedAndroidTest:
     runs-on: macos-latest
@@ -47,7 +49,9 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - run: ./gradlew assembleDebug
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: assembleDebug
 
       - uses: actions/upload-artifact@v3
         with:
@@ -64,7 +68,9 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - run: ./gradlew assembleRelease
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: assembleRelease
 
       - uses: r0adkll/sign-android-release@v1
         id: sign_app
@@ -98,7 +104,9 @@ jobs:
           versionCode: ${{github.run_number}}
           versionName: '1.0.${{github.run_number}}'
 
-      - run: ./gradlew bundleRelease
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: bundleRelease
 
       - uses: r0adkll/sign-android-release@v1
         id: sign_app
