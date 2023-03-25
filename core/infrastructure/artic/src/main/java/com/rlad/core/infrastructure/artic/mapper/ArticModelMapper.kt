@@ -3,16 +3,16 @@ package com.rlad.core.infrastructure.artic.mapper
 import android.app.Application
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.infrastructure.artic.R
-import com.rlad.core.infrastructure.artic.local.ArtworkDataEntity
-import com.rlad.core.infrastructure.artic.remote.ServerArtworkData
+import com.rlad.core.infrastructure.artic.local.ArtworkEntity
+import com.rlad.core.infrastructure.artic.remote.ServerArtwork
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import javax.inject.Inject
 
 internal class ArticModelMapper @Inject constructor(
     private val application: Application,
-) : ModelMapper<ArtworkDataEntity, ServerArtworkData> {
+) : ModelMapper<ArtworkEntity, ServerArtwork> {
 
-    override fun toLocalModel(remote: ServerArtworkData): ArtworkDataEntity = ArtworkDataEntity(
+    override fun toLocalModel(remote: ServerArtwork): ArtworkEntity = ArtworkEntity(
         articId = remote.id,
         title = remote.title,
         imageId = remote.imageId,
@@ -24,7 +24,7 @@ internal class ArticModelMapper @Inject constructor(
         dateDisplay = remote.dateDisplay,
     )
 
-    override fun toUiModel(local: ArtworkDataEntity): ItemUiModel = ItemUiModel(
+    override fun toUiModel(local: ArtworkEntity): ItemUiModel = ItemUiModel(
         id = local.articId.toString(),
         imageUrl = "https://artic.edu/iiif/2/${local.imageId}/full/400,/0/default.jpg",
         name = local.title,

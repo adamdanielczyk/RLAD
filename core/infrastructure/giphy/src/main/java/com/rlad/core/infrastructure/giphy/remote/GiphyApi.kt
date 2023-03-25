@@ -11,7 +11,7 @@ internal interface GiphyApi {
         @Query("api_key") apiKey: String,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
-    ): ServerGifs
+    ): ServerGifsRoot
 
     @GET("/v1/gifs/search")
     suspend fun searchGifs(
@@ -19,11 +19,11 @@ internal interface GiphyApi {
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
         @Query("q") query: String,
-    ): ServerGifs
+    ): ServerGifsRoot
 
     @GET("/v1/gifs/{gif_id}")
     suspend fun getGif(
         @Path("gif_id") gifId: String,
         @Query("api_key") apiKey: String,
-    ): ServerGif
+    ): ServerGifRoot
 }

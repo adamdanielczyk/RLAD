@@ -5,18 +5,18 @@ import javax.inject.Inject
 
 internal class ArticRemoteDataSource @Inject constructor(
     private val articApi: ArticApi,
-) : CommonRemoteDataSource<ServerArtworks, ServerArtworkData> {
+) : CommonRemoteDataSource<ServerArtworksRoot, ServerArtwork> {
 
-    override suspend fun getRootData(offset: Int): ServerArtworks = articApi.artworks(
+    override suspend fun getRootData(offset: Int): ServerArtworksRoot = articApi.artworks(
         from = offset,
         size = getPageSize(),
     )
 
-    override fun getItems(rootData: ServerArtworks): List<ServerArtworkData> = rootData.data
+    override fun getItems(rootData: ServerArtworksRoot): List<ServerArtwork> = rootData.data
 
-    override suspend fun getItem(id: String): ServerArtworkData = articApi.artwork(id).data
+    override suspend fun getItem(id: String): ServerArtwork = articApi.artwork(id).data
 
-    override fun getNextPagingOffset(rootData: ServerArtworks, currentlyLoadedOffset: Int): Int {
+    override fun getNextPagingOffset(rootData: ServerArtworksRoot, currentlyLoadedOffset: Int): Int {
         val pagination = rootData.pagination
         return pagination.offset + pagination.limit
     }
@@ -29,5 +29,5 @@ internal class ArticRemoteDataSource @Inject constructor(
         query: String,
         from: Int,
         size: Int,
-    ): ServerArtworks = articApi.search(query, from, size)
+    ): ServerArtworksRoot = articApi.search(query, from, size)
 }

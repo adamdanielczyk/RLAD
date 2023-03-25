@@ -11,8 +11,8 @@ import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactor
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import com.rlad.core.infrastructure.common.repository.CommonRepository
 import com.rlad.core.infrastructure.common.repository.CommonRepositoryImpl
-import com.rlad.core.infrastructure.giphy.local.GifDataDao
-import com.rlad.core.infrastructure.giphy.local.GifDataEntity
+import com.rlad.core.infrastructure.giphy.local.GifDao
+import com.rlad.core.infrastructure.giphy.local.GifEntity
 import com.rlad.core.infrastructure.giphy.local.GiphyDatabase
 import com.rlad.core.infrastructure.giphy.local.GiphyLocalDataSource
 import com.rlad.core.infrastructure.giphy.mapper.GiphyModelMapper
@@ -20,8 +20,8 @@ import com.rlad.core.infrastructure.giphy.model.GiphyDataSourceConfiguration
 import com.rlad.core.infrastructure.giphy.paging.GiphySearchPagingSourceFactory
 import com.rlad.core.infrastructure.giphy.remote.GiphyApi
 import com.rlad.core.infrastructure.giphy.remote.GiphyRemoteDataSource
-import com.rlad.core.infrastructure.giphy.remote.ServerGifData
-import com.rlad.core.infrastructure.giphy.remote.ServerGifs
+import com.rlad.core.infrastructure.giphy.remote.ServerGif
+import com.rlad.core.infrastructure.giphy.remote.ServerGifsRoot
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -44,15 +44,14 @@ internal interface GiphyModule {
 
         @Provides
         @Singleton
-        fun giphyDatabase(application: Application): GiphyDatabase = Room.databaseBuilder(
+        fun database(application: Application): GiphyDatabase = Room.databaseBuilder(
             application,
             GiphyDatabase::class.java,
             "giphy_database"
         ).fallbackToDestructiveMigration().build()
 
         @Provides
-        fun gifDataDao(giphyDatabase: GiphyDatabase): GifDataDao =
-            giphyDatabase.gifDataDao()
+        fun dao(database: GiphyDatabase): GifDao = database.gifDao()
 
         @Provides
         @Singleton
@@ -64,26 +63,25 @@ internal interface GiphyModule {
 
         @Provides
         @Singleton
-        fun giphyApi(@GiphyRetrofit retrofit: Retrofit): GiphyApi =
-            retrofit.create(GiphyApi::class.java)
+        fun api(@GiphyRetrofit retrofit: Retrofit): GiphyApi = retrofit.create(GiphyApi::class.java)
     }
 
     @Binds
-    fun GiphyLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<GifDataEntity>
+    fun GiphyLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<GifEntity>
 
     @Binds
-    fun GiphyRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerGifs, ServerGifData>
+    fun GiphyRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerGifsRoot, ServerGif>
 
     @Binds
-    fun GiphyModelMapper.bindModelMapper(): ModelMapper<GifDataEntity, ServerGifData>
+    fun GiphyModelMapper.bindModelMapper(): ModelMapper<GifEntity, ServerGif>
 
     @Binds
-    fun GiphySearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerGifData>
+    fun GiphySearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerGif>
 
     @Binds
     @IntoMap
     @DataSourceKey(DataSource.GIPHY)
-    fun CommonRepositoryImpl<GifDataEntity, ServerGifData, ServerGifs>.bindCommonRepository(): CommonRepository
+    fun CommonRepositoryImpl<GifEntity, ServerGif, ServerGifsRoot>.bindCommonRepository(): CommonRepository
 
     @Binds
     @IntoMap

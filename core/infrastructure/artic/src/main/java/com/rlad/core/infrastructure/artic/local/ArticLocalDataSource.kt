@@ -6,18 +6,18 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class ArticLocalDataSource @Inject constructor(
-    private val artworkDataDao: ArtworkDataDao,
-) : CommonLocalDataSource<ArtworkDataEntity> {
+    private val artworkDao: ArtworkDao,
+) : CommonLocalDataSource<ArtworkEntity> {
 
-    override suspend fun insert(data: List<ArtworkDataEntity>) {
-        artworkDataDao.insert(data)
+    override suspend fun insert(data: List<ArtworkEntity>) {
+        artworkDao.insert(data)
     }
 
     override suspend fun clear() {
-        artworkDataDao.clearTable()
+        artworkDao.clearTable()
     }
 
-    override fun getAll(): PagingSource<Int, ArtworkDataEntity> = artworkDataDao.getAll()
+    override fun getAll(): PagingSource<Int, ArtworkEntity> = artworkDao.getAll()
 
-    override fun getById(id: String): Flow<ArtworkDataEntity?> = artworkDataDao.getById(id.toInt())
+    override fun getById(id: String): Flow<ArtworkEntity?> = artworkDao.getById(id.toInt())
 }

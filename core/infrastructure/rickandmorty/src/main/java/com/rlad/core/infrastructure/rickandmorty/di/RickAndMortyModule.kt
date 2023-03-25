@@ -44,15 +44,14 @@ internal interface RickAndMortyModule {
 
         @Provides
         @Singleton
-        fun rickAndMortyDatabase(application: Application): RickAndMortyDatabase = Room.databaseBuilder(
+        fun database(application: Application): RickAndMortyDatabase = Room.databaseBuilder(
             application,
             RickAndMortyDatabase::class.java,
             "rickandmorty_database"
         ).fallbackToDestructiveMigration().build()
 
         @Provides
-        fun characterDao(rickAndMortyDatabase: RickAndMortyDatabase): CharacterDao =
-            rickAndMortyDatabase.characterDao()
+        fun dao(database: RickAndMortyDatabase): CharacterDao = database.characterDao()
 
         @Provides
         @Singleton
@@ -64,8 +63,7 @@ internal interface RickAndMortyModule {
 
         @Provides
         @Singleton
-        fun rickAndMortyApi(@RickAndMortyRetrofit retrofit: Retrofit): RickAndMortyApi =
-            retrofit.create(RickAndMortyApi::class.java)
+        fun api(@RickAndMortyRetrofit retrofit: Retrofit): RickAndMortyApi = retrofit.create(RickAndMortyApi::class.java)
     }
 
     @Binds

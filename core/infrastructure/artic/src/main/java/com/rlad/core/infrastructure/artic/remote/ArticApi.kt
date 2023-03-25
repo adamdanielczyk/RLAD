@@ -10,19 +10,19 @@ internal interface ArticApi {
     suspend fun artworks(
         @Query("from") from: Int,
         @Query("size") size: Int,
-    ): ServerArtworks
+    ): ServerArtworksRoot
 
     @GET("/api/v1/artworks/{id}?$FIELDS")
     suspend fun artwork(
         @Path("id") id: String,
-    ): ServerArtwork
+    ): ServerArtworkRoot
 
     @GET("/api/v1/artworks/search?$FIELDS&$ELASTICSEARCH_QUERY_ONLY_WITH_IMAGE_IDS")
     suspend fun search(
         @Query("q") query: String,
         @Query("from") from: Int,
         @Query("size") size: Int,
-    ): ServerArtworks
+    ): ServerArtworksRoot
 
     private companion object {
         const val FIELDS = "fields=id,title,image_id,artist_title,artist_display,department_title,place_of_origin,date_display,thumbnail"

@@ -4,15 +4,15 @@ import android.app.Application
 import androidx.room.Room
 import com.rlad.core.infrastructure.artic.local.ArticDatabase
 import com.rlad.core.infrastructure.artic.local.ArticLocalDataSource
-import com.rlad.core.infrastructure.artic.local.ArtworkDataDao
-import com.rlad.core.infrastructure.artic.local.ArtworkDataEntity
+import com.rlad.core.infrastructure.artic.local.ArtworkDao
+import com.rlad.core.infrastructure.artic.local.ArtworkEntity
 import com.rlad.core.infrastructure.artic.mapper.ArticModelMapper
 import com.rlad.core.infrastructure.artic.model.ArticDataSourceConfiguration
 import com.rlad.core.infrastructure.artic.paging.ArticSearchPagingSourceFactory
 import com.rlad.core.infrastructure.artic.remote.ArticApi
 import com.rlad.core.infrastructure.artic.remote.ArticRemoteDataSource
-import com.rlad.core.infrastructure.artic.remote.ServerArtworkData
-import com.rlad.core.infrastructure.artic.remote.ServerArtworks
+import com.rlad.core.infrastructure.artic.remote.ServerArtwork
+import com.rlad.core.infrastructure.artic.remote.ServerArtworksRoot
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.model.DataSource
@@ -44,15 +44,14 @@ internal interface ArticModule {
 
         @Provides
         @Singleton
-        fun articDatabase(application: Application): ArticDatabase = Room.databaseBuilder(
+        fun database(application: Application): ArticDatabase = Room.databaseBuilder(
             application,
             ArticDatabase::class.java,
             "artic_database"
         ).fallbackToDestructiveMigration().build()
 
         @Provides
-        fun artworkDataDao(articDatabase: ArticDatabase): ArtworkDataDao =
-            articDatabase.artworkDataDao()
+        fun dao(database: ArticDatabase): ArtworkDao = database.artworkDao()
 
         @Provides
         @Singleton
@@ -64,26 +63,25 @@ internal interface ArticModule {
 
         @Provides
         @Singleton
-        fun articApi(@ArticRetrofit retrofit: Retrofit): ArticApi =
-            retrofit.create(ArticApi::class.java)
+        fun api(@ArticRetrofit retrofit: Retrofit): ArticApi = retrofit.create(ArticApi::class.java)
     }
 
     @Binds
-    fun ArticLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<ArtworkDataEntity>
+    fun ArticLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<ArtworkEntity>
 
     @Binds
-    fun ArticRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerArtworks, ServerArtworkData>
+    fun ArticRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerArtworksRoot, ServerArtwork>
 
     @Binds
-    fun ArticModelMapper.bindModelMapper(): ModelMapper<ArtworkDataEntity, ServerArtworkData>
+    fun ArticModelMapper.bindModelMapper(): ModelMapper<ArtworkEntity, ServerArtwork>
 
     @Binds
-    fun ArticSearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerArtworkData>
+    fun ArticSearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerArtwork>
 
     @Binds
     @IntoMap
     @DataSourceKey(DataSource.ARTIC)
-    fun CommonRepositoryImpl<ArtworkDataEntity, ServerArtworkData, ServerArtworks>.bindCommonRepository(): CommonRepository
+    fun CommonRepositoryImpl<ArtworkEntity, ServerArtwork, ServerArtworksRoot>.bindCommonRepository(): CommonRepository
 
     @Binds
     @IntoMap

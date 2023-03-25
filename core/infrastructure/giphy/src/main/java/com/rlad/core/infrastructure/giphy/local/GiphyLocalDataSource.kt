@@ -6,18 +6,18 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class GiphyLocalDataSource @Inject constructor(
-    private val gifDataDao: GifDataDao,
-) : CommonLocalDataSource<GifDataEntity> {
+    private val gifDao: GifDao,
+) : CommonLocalDataSource<GifEntity> {
 
-    override suspend fun insert(data: List<GifDataEntity>) {
-        gifDataDao.insert(data)
+    override suspend fun insert(data: List<GifEntity>) {
+        gifDao.insert(data)
     }
 
     override suspend fun clear() {
-        gifDataDao.clearTable()
+        gifDao.clearTable()
     }
 
-    override fun getAll(): PagingSource<Int, GifDataEntity> = gifDataDao.getAll()
+    override fun getAll(): PagingSource<Int, GifEntity> = gifDao.getAll()
 
-    override fun getById(id: String): Flow<GifDataEntity?> = gifDataDao.getById(id)
+    override fun getById(id: String): Flow<GifEntity?> = gifDao.getById(id)
 }

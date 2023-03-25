@@ -6,12 +6,12 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "artwork_data",
+    tableName = "artic_artwork",
     indices = [
         Index(value = ["artic_id"], unique = true)
     ],
 )
-internal data class ArtworkDataEntity(
+internal data class ArtworkEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "artic_id") val articId: Int,
     @ColumnInfo(name = "title") val title: String,

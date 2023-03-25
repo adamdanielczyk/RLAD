@@ -6,12 +6,12 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "gif_data",
+    tableName = "giphy_gif",
     indices = [
         Index(value = ["giphy_id"], unique = true)
     ],
 )
-internal data class GifDataEntity(
+internal data class GifEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "giphy_id") val giphyId: String,
     @ColumnInfo(name = "title") val title: String,

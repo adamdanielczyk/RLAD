@@ -8,22 +8,22 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-internal interface GifDataDao {
+internal interface GifDao {
 
     @Query(
         """
-        SELECT * FROM gif_data 
+        SELECT * FROM giphy_gif 
         ORDER BY id
         """
     )
-    fun getAll(): PagingSource<Int, GifDataEntity>
+    fun getAll(): PagingSource<Int, GifEntity>
 
-    @Query("SELECT * FROM gif_data WHERE giphy_id = :giphyId")
-    fun getById(giphyId: String): Flow<GifDataEntity?>
+    @Query("SELECT * FROM giphy_gif WHERE giphy_id = :giphyId")
+    fun getById(giphyId: String): Flow<GifEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(gifData: List<GifDataEntity>)
+    suspend fun insert(gifs: List<GifEntity>)
 
-    @Query("DELETE FROM gif_data")
+    @Query("DELETE FROM giphy_gif")
     suspend fun clearTable()
 }

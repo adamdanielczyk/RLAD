@@ -4,15 +4,15 @@ import android.app.Application
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.giphy.R
-import com.rlad.core.infrastructure.giphy.local.GifDataEntity
-import com.rlad.core.infrastructure.giphy.remote.ServerGifData
+import com.rlad.core.infrastructure.giphy.local.GifEntity
+import com.rlad.core.infrastructure.giphy.remote.ServerGif
 import javax.inject.Inject
 
 internal class GiphyModelMapper @Inject constructor(
     private val application: Application,
-) : ModelMapper<GifDataEntity, ServerGifData> {
+) : ModelMapper<GifEntity, ServerGif> {
 
-    override fun toLocalModel(remote: ServerGifData): GifDataEntity = GifDataEntity(
+    override fun toLocalModel(remote: ServerGif): GifEntity = GifEntity(
         giphyId = remote.id,
         title = remote.title,
         imageUrl = remote.images.fixedHeight.url,
@@ -21,7 +21,7 @@ internal class GiphyModelMapper @Inject constructor(
         trendingDatetime = remote.trendingDatetime,
     )
 
-    override fun toUiModel(local: GifDataEntity): ItemUiModel = ItemUiModel(
+    override fun toUiModel(local: GifEntity): ItemUiModel = ItemUiModel(
         id = local.giphyId,
         imageUrl = local.imageUrl,
         name = local.title,

@@ -12,18 +12,18 @@ internal interface CharacterDao {
 
     @Query(
         """
-        SELECT * FROM character 
+        SELECT * FROM rickandmorty_character 
         ORDER BY id
         """
     )
     fun getAll(): PagingSource<Int, CharacterEntity>
 
-    @Query("SELECT * FROM character WHERE id = :id")
+    @Query("SELECT * FROM rickandmorty_character WHERE id = :id")
     fun getById(id: Int): Flow<CharacterEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(characters: List<CharacterEntity>)
 
-    @Query("DELETE FROM character")
+    @Query("DELETE FROM rickandmorty_character")
     suspend fun clearTable()
 }

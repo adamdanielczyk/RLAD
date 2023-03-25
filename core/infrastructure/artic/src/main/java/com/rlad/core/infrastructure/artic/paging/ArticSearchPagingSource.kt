@@ -3,7 +3,7 @@ package com.rlad.core.infrastructure.artic.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.rlad.core.infrastructure.artic.remote.ArticRemoteDataSource
-import com.rlad.core.infrastructure.artic.remote.ServerArtworkData
+import com.rlad.core.infrastructure.artic.remote.ServerArtwork
 import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,22 +14,22 @@ import javax.inject.Inject
 
 internal class ArticSearchPagingSourceFactory @Inject constructor(
     private val searchPagingSourceFactory: ArticSearchPagingSource.Factory,
-) : CommonSearchPagingSourceFactory<ServerArtworkData> {
+) : CommonSearchPagingSourceFactory<ServerArtwork> {
 
-    override fun create(query: String): PagingSource<Int, ServerArtworkData> = searchPagingSourceFactory.create(query)
+    override fun create(query: String): PagingSource<Int, ServerArtwork> = searchPagingSourceFactory.create(query)
 }
 
 internal class ArticSearchPagingSource @AssistedInject constructor(
     private val remoteDataSource: ArticRemoteDataSource,
     @Assisted private val query: String,
-) : PagingSource<Int, ServerArtworkData>() {
+) : PagingSource<Int, ServerArtwork>() {
 
     @AssistedFactory
     interface Factory {
         fun create(query: String): ArticSearchPagingSource
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ServerArtworkData> = try {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ServerArtwork> = try {
         val searchedArtworks = remoteDataSource.searchArtworks(
             from = if (params is LoadParams.Append) params.key else remoteDataSource.getInitialPagingOffset(),
             size = remoteDataSource.getPageSize(),
@@ -49,5 +49,5 @@ internal class ArticSearchPagingSource @AssistedInject constructor(
         LoadResult.Error(exception)
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ServerArtworkData>): Int = remoteDataSource.getInitialPagingOffset()
+    override fun getRefreshKey(state: PagingState<Int, ServerArtwork>): Int = remoteDataSource.getInitialPagingOffset()
 }

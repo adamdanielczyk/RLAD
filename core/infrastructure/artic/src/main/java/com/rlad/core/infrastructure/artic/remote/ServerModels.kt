@@ -4,14 +4,14 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class ServerArtwork(
-    @Json(name = "data") val data: ServerArtworkData,
+internal data class ServerArtworkRoot(
+    @Json(name = "data") val data: ServerArtwork,
 )
 
 @JsonClass(generateAdapter = true)
-internal data class ServerArtworks(
+internal data class ServerArtworksRoot(
     @Json(name = "pagination") val pagination: ServerPagination,
-    @Json(name = "data") val data: List<ServerArtworkData>,
+    @Json(name = "data") val data: List<ServerArtwork>,
 ) {
 
     @JsonClass(generateAdapter = true)
@@ -22,7 +22,7 @@ internal data class ServerArtworks(
 }
 
 @JsonClass(generateAdapter = true)
-internal data class ServerArtworkData(
+internal data class ServerArtwork(
     @Json(name = "id") val id: Int,
     @Json(name = "title") val title: String,
     @Json(name = "image_id") val imageId: String,

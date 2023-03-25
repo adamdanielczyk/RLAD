@@ -4,10 +4,10 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [ArtworkDataEntity::class],
+    entities = [ArtworkEntity::class],
     version = 1
 )
 internal abstract class ArticDatabase : RoomDatabase() {
 
-    abstract fun artworkDataDao(): ArtworkDataDao
+    abstract fun artworkDao(): ArtworkDao
 }

@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2a67d8ce6abf51c7b2a6ba6c68e0f3a6",
+    "identityHash": "09d2ca97e674d7186b96660343263190",
     "entities": [
       {
-        "tableName": "character",
+        "tableName": "rickandmorty_character",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `status` INTEGER NOT NULL, `species` TEXT NOT NULL, `type` TEXT, `gender` INTEGER NOT NULL, `image` TEXT NOT NULL, `created` TEXT NOT NULL, `location_name` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -64,10 +64,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -76,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2a67d8ce6abf51c7b2a6ba6c68e0f3a6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '09d2ca97e674d7186b96660343263190')"
     ]
   }
 }

@@ -4,13 +4,13 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class ServerGif(
-    @Json(name = "data") val data: ServerGifData,
+internal data class ServerGifRoot(
+    @Json(name = "data") val data: ServerGif,
 )
 
 @JsonClass(generateAdapter = true)
-internal data class ServerGifs(
-    @Json(name = "data") val data: List<ServerGifData>,
+internal data class ServerGifsRoot(
+    @Json(name = "data") val data: List<ServerGif>,
     @Json(name = "pagination") val pagination: ServerPagination,
 )
 
@@ -21,7 +21,7 @@ internal data class ServerPagination(
 )
 
 @JsonClass(generateAdapter = true)
-internal data class ServerGifData(
+internal data class ServerGif(
     @Json(name = "id") val id: String,
     @Json(name = "url") val url: String,
     @Json(name = "slug") val slug: String,
@@ -35,19 +35,22 @@ internal data class ServerGifData(
     @Json(name = "import_datetime") val importDatetime: String,
     @Json(name = "trending_datetime") val trendingDatetime: String,
     @Json(name = "images") val images: Images,
-)
+) {
 
-@JsonClass(generateAdapter = true)
-internal data class Images(
-    @Json(name = "original") val original: Image,
-    @Json(name = "fixed_height") val fixedHeight: Image,
-    @Json(name = "fixed_width") val fixedWidth: Image,
-)
+    @JsonClass(generateAdapter = true)
+    data class Images(
+        @Json(name = "original") val original: Image,
+        @Json(name = "fixed_height") val fixedHeight: Image,
+        @Json(name = "fixed_width") val fixedWidth: Image,
+    ) {
 
-@JsonClass(generateAdapter = true)
-internal data class Image(
-    @Json(name = "height") val height: String,
-    @Json(name = "width") val width: String,
-    @Json(name = "size") val size: String,
-    @Json(name = "url") val url: String,
-)
+        @JsonClass(generateAdapter = true)
+        data class Image(
+            @Json(name = "height") val height: String,
+            @Json(name = "width") val width: String,
+            @Json(name = "size") val size: String,
+            @Json(name = "url") val url: String,
+        )
+    }
+}
+
