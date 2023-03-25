@@ -31,6 +31,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,8 +61,6 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.core.domain.model.DataSourceUiModel
 import com.rlad.core.domain.model.ItemUiModel
@@ -255,7 +256,7 @@ private fun ItemsContainer(
     }
 
     if (!isEmpty) {
-        SwipeRefreshWithGrid(viewModel, lazyPagingItems, gridState, openDetails)
+        PullRefreshWithGrid(viewModel, lazyPagingItems, gridState, openDetails)
     }
 }
 
@@ -280,7 +281,7 @@ private fun EmptyState() {
 }
 
 @Composable
-private fun SwipeRefreshWithGrid(
+private fun PullRefreshWithGrid(
     viewModel: SearchViewModel,
     lazyPagingItems: LazyPagingItems<ItemUiModel>,
     gridState: LazyGridState,
@@ -325,12 +326,13 @@ private fun SwipeRefreshWithGrid(
             }
     }
 
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(
-            isRefreshing = lazyPagingItems.loadState.mediator?.refresh is LoadState.Loading
-        ),
-        onRefresh = lazyPagingItems::refresh,
-        modifier = Modifier.fillMaxSize(),
+    val refreshing = remember { lazyPagingItems.loadState.mediator?.refresh is LoadState.Loading }
+    val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = lazyPagingItems::refresh)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(state = refreshState),
     ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 150.dp),
@@ -342,6 +344,13 @@ private fun SwipeRefreshWithGrid(
                 ItemCard(item, openDetails)
             }
         }
+
+        PullRefreshIndicator(
+            modifier = Modifier.align(Alignment.TopCenter),
+            refreshing = refreshing,
+            state = refreshState,
+            scale = true,
+        )
     }
 }
 

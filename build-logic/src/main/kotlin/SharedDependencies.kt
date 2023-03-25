@@ -28,7 +28,6 @@ internal fun DependencyHandlerScope.shared(libs: VersionCatalog) {
     add("implementation", libs.findLibrary("androidx.lifecycle.viewmodel.compose").get())
 
     add("implementation", libs.findLibrary("accompanist.systemuicontroller").get())
-    add("implementation", libs.findLibrary("accompanist.swiperefresh").get())
 
     add("implementation", libs.findLibrary("coil.compose").get())
     add("implementation", libs.findLibrary("coil.gif").get())

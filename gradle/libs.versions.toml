@@ -1,5 +1,4 @@
 [versions]
-accompanist = "0.30.0"
 androidGradlePlugin = "7.4.2"
 androidxActivity = "1.7.0"
 androidxComposeCompiler = "1.4.4"
@@ -13,8 +12,7 @@ moshi = "1.14.0"
 retrofit = "2.9.0"
 
 [libraries]
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version = "0.30.0" }
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2023.03.00" }
