@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="data_source_picker_artic">Art Institute of Chicago</string>
+    <string name="details_artist_display">Artist display</string>
+    <string name="details_department_title">Department title</string>
+    <string name="details_place_of_origin">Place of origin</string>
+    <string name="details_alt_text">Alt text</string>
+</resources>

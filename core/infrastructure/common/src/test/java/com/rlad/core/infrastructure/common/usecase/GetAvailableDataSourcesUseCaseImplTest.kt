@@ -15,26 +15,28 @@ class GetAvailableDataSourcesUseCaseImplTest {
     @Test
     fun repositoriesAreMappedToUiModelsAndSelectedRepositoryIsMarked() = runTest {
         val useCase = GetAvailableDataSourcesUseCaseImpl(
-            getAllDataSourcesUseCase = object : GetAllDataSourcesUseCase {
-                override fun invoke(): List<DataSource> = DataSource.values().toList()
-            },
+            getAllDataSourcesUseCase = GetAllDataSourcesUseCaseImpl(),
             getSelectedDataSourceUseCase = object : GetSelectedDataSourceUseCase {
                 override fun invoke(): Flow<DataSource> = flowOf(DataSource.RICKANDMORTY)
             },
             dataSourceConfigurations = mapOf(
-                DataSource.GIPHY to object : DataSourceConfiguration {
+                DataSource.ARTIC to object : DataSourceConfiguration {
                     override fun getDataSourcePickerText(): String = "picker1"
                 },
-                DataSource.RICKANDMORTY to object : DataSourceConfiguration {
+                DataSource.GIPHY to object : DataSourceConfiguration {
                     override fun getDataSourcePickerText(): String = "picker2"
+                },
+                DataSource.RICKANDMORTY to object : DataSourceConfiguration {
+                    override fun getDataSourcePickerText(): String = "picker3"
                 },
             )
         )
 
         assertEquals(
             listOf(
-                DataSourceUiModel(name = DataSource.GIPHY.dataSourceName, pickerText = "picker1", isSelected = false),
-                DataSourceUiModel(name = DataSource.RICKANDMORTY.dataSourceName, pickerText = "picker2", isSelected = true),
+                DataSourceUiModel(name = DataSource.ARTIC.dataSourceName, pickerText = "picker1", isSelected = false),
+                DataSourceUiModel(name = DataSource.GIPHY.dataSourceName, pickerText = "picker2", isSelected = false),
+                DataSourceUiModel(name = DataSource.RICKANDMORTY.dataSourceName, pickerText = "picker3", isSelected = true),
             ),
             useCase().first()
         )

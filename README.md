@@ -26,6 +26,7 @@ RLAD is available on [Google Play](https://play.google.com/store/apps/details?id
 
 ## APIs
 
+* [Art Institute of Chicago](https://api.artic.edu)
 * [Giphy](https://developers.giphy.com/docs/api/endpoint)
 * [Rick And Morty](https://rickandmortyapi.com/documentation)
 

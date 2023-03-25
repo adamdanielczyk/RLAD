@@ -15,9 +15,7 @@ class GetSelectedDataSourceUseCaseImplTest {
     private val appSettingsRepository: AppSettingsRepositoryImpl = mockk()
 
     private val useCase = GetSelectedDataSourceUseCaseImpl(
-        getAllDataSourcesUseCase = object : GetAllDataSourcesUseCase {
-            override fun invoke(): List<DataSource> = DataSource.values().toList()
-        },
+        getAllDataSourcesUseCase = GetAllDataSourcesUseCaseImpl(),
         appSettingsRepository = appSettingsRepository,
     )
 
@@ -34,13 +32,13 @@ class GetSelectedDataSourceUseCaseImplTest {
     }
 
     @Test
-    fun firstRepositoryIsReturnedIfNoSelectionWasMade() = runTest {
+    fun giphyRepositoryIsReturnedIfNoSelectionWasMade() = runTest {
         every {
             appSettingsRepository.getSelectedDataSource()
         } returns flowOf(null)
 
         assertEquals(
-            DataSource.values()[0],
+            DataSource.GIPHY,
             useCase().first()
         )
     }

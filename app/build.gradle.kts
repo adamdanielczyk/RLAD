@@ -26,6 +26,7 @@ dependencies {
     implementation(projects.core.infrastructure.common)
     implementation(projects.core.infrastructure.rickandmorty)
     implementation(projects.core.infrastructure.giphy)
+    implementation(projects.core.infrastructure.artic)
     implementation(projects.core.ui)
     implementation(projects.feature.search)
     implementation(projects.feature.details)

@@ -3,6 +3,7 @@ package com.rlad.core.infrastructure.common.model
 import dagger.MapKey
 
 enum class DataSource(val dataSourceName: String) {
+    ARTIC("ARTIC"),
     GIPHY("GIPHY"),
     RICKANDMORTY("RICK_AND_MORTY");
 
