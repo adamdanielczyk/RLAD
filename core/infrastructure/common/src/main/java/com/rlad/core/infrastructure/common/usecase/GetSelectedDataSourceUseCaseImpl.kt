@@ -19,6 +19,6 @@ internal class GetSelectedDataSourceUseCaseImpl @Inject constructor(
         val allDataSources = getAllDataSourcesUseCase()
         allDataSources.firstOrNull { dataSource ->
             dataSource == selectedDataSourceName
-        } ?: allDataSources.first()
+        } ?: DataSource.GIPHY
     }
 }
