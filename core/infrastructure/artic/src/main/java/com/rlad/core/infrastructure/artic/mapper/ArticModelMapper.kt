@@ -26,7 +26,7 @@ internal class ArticModelMapper @Inject constructor(
 
     override fun toUiModel(local: ArtworkEntity): ItemUiModel = ItemUiModel(
         id = local.articId.toString(),
-        imageUrl = "https://artic.edu/iiif/2/${local.imageId}/full/400,/0/default.jpg",
+        imageUrl = "https://artic.edu/iiif/2/${local.imageId}/full/200,/0/default.jpg",
         name = local.title,
         cardCaptions = listOfNotNull(
             local.artistDisplay,
