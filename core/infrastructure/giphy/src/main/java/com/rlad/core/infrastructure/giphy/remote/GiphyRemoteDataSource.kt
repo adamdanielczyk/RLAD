@@ -21,7 +21,7 @@ internal class GiphyRemoteDataSource @Inject constructor(
         apiKey = BuildConfig.GIPHY_API_KEY,
     ).data
 
-    override fun getNextPagingOffset(rootData: ServerGifsRoot, currentlyLoadedOffset: Int): Int {
+    override fun getNextPagingOffset(rootData: ServerGifsRoot, currentlyLoadedPage: Int): Int {
         val pagination = rootData.pagination
         return pagination.offset + pagination.count
     }
@@ -30,14 +30,10 @@ internal class GiphyRemoteDataSource @Inject constructor(
 
     override fun getPageSize(): Int = 80
 
-    suspend fun searchGifs(
-        query: String,
-        offset: Int,
-        limit: Int,
-    ): ServerGifsRoot = giphyApi.searchGifs(
+    override suspend fun search(query: String, offset: Int): ServerGifsRoot = giphyApi.searchGifs(
         apiKey = BuildConfig.GIPHY_API_KEY,
         offset = offset,
-        limit = limit,
+        limit = getPageSize(),
         query = query,
     )
 }

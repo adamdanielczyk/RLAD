@@ -53,7 +53,7 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
         saveNextOffsetToLoad(
             offset = remoteDataSource.getNextPagingOffset(
                 rootData = rootData,
-                currentlyLoadedOffset = nextOffsetToLoad
+                currentlyLoadedPage = nextOffsetToLoad
             )
         )
         saveCurrentSyncTimestamp()

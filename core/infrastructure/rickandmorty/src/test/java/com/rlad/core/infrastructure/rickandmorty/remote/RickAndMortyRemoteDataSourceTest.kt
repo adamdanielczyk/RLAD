@@ -40,16 +40,16 @@ class RickAndMortyRemoteDataSourceTest {
     @Test
     fun getCharacters_allApiItemsAreReturned() = runTest {
         assertEquals(
-            characters,
-            remoteDataSource.getCharacters(page = 0, name = null)
+            ServerGetCharacters(characters),
+            remoteDataSource.getRootData(offset = 0)
         )
     }
 
     @Test
     fun getCharacters_apiItemsAreFilteredByName() = runTest {
         assertEquals(
-            listOf(characters[1]),
-            remoteDataSource.getCharacters(page = 0, name = "Morty")
+            ServerGetCharacters(listOf(characters[1])),
+            remoteDataSource.search(offset = 0, query = "Morty")
         )
     }
 

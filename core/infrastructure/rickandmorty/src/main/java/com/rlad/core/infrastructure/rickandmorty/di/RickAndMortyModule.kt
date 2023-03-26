@@ -7,7 +7,6 @@ import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.model.DataSource
 import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
 import com.rlad.core.infrastructure.common.model.DataSourceKey
-import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import com.rlad.core.infrastructure.common.repository.CommonRepository
 import com.rlad.core.infrastructure.common.repository.CommonRepositoryImpl
@@ -17,7 +16,6 @@ import com.rlad.core.infrastructure.rickandmorty.local.RickAndMortyDatabase
 import com.rlad.core.infrastructure.rickandmorty.local.RickAndMortyLocalDataSource
 import com.rlad.core.infrastructure.rickandmorty.mapper.RickAndMortyModelMapper
 import com.rlad.core.infrastructure.rickandmorty.model.RickAndMortyDataSourceConfiguration
-import com.rlad.core.infrastructure.rickandmorty.paging.RickAndMortySearchPagingSourceFactory
 import com.rlad.core.infrastructure.rickandmorty.remote.RickAndMortyApi
 import com.rlad.core.infrastructure.rickandmorty.remote.RickAndMortyRemoteDataSource
 import com.rlad.core.infrastructure.rickandmorty.remote.ServerCharacter
@@ -74,9 +72,6 @@ internal interface RickAndMortyModule {
 
     @Binds
     fun RickAndMortyModelMapper.bindModelMapper(): ModelMapper<CharacterEntity, ServerCharacter>
-
-    @Binds
-    fun RickAndMortySearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerCharacter>
 
     @Binds
     @IntoMap

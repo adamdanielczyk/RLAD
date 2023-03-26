@@ -8,7 +8,7 @@ import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.paging.CommonRemoteMediator
-import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
+import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSource
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -24,7 +24,7 @@ class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     private val localDataSource: CommonLocalDataSource<LocalModel>,
     private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
     private val remoteMediator: CommonRemoteMediator<LocalModel, RemoteModel, RootRemoteData>,
-    private val searchPagingSourceFactory: CommonSearchPagingSourceFactory<RemoteModel>,
+    private val searchPagingSourceFactory: CommonSearchPagingSource.Factory<RemoteModel, RootRemoteData>,
     private val modelMapper: ModelMapper<LocalModel, RemoteModel>,
 ) : CommonRepository {
 

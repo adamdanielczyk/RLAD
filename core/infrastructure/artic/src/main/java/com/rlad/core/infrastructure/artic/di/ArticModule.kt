@@ -8,7 +8,6 @@ import com.rlad.core.infrastructure.artic.local.ArtworkDao
 import com.rlad.core.infrastructure.artic.local.ArtworkEntity
 import com.rlad.core.infrastructure.artic.mapper.ArticModelMapper
 import com.rlad.core.infrastructure.artic.model.ArticDataSourceConfiguration
-import com.rlad.core.infrastructure.artic.paging.ArticSearchPagingSourceFactory
 import com.rlad.core.infrastructure.artic.remote.ArticApi
 import com.rlad.core.infrastructure.artic.remote.ArticRemoteDataSource
 import com.rlad.core.infrastructure.artic.remote.ServerArtwork
@@ -18,7 +17,6 @@ import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.model.DataSource
 import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
 import com.rlad.core.infrastructure.common.model.DataSourceKey
-import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import com.rlad.core.infrastructure.common.repository.CommonRepository
 import com.rlad.core.infrastructure.common.repository.CommonRepositoryImpl
@@ -74,9 +72,6 @@ internal interface ArticModule {
 
     @Binds
     fun ArticModelMapper.bindModelMapper(): ModelMapper<ArtworkEntity, ServerArtwork>
-
-    @Binds
-    fun ArticSearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerArtwork>
 
     @Binds
     @IntoMap

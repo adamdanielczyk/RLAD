@@ -16,11 +16,14 @@ internal class RickAndMortyRemoteDataSource @Inject constructor(
 
     override suspend fun getItem(id: String): ServerCharacter = rickAndMortyApi.getCharacter(id.toInt())
 
-    override fun getNextPagingOffset(rootData: ServerGetCharacters, currentlyLoadedOffset: Int): Int = currentlyLoadedOffset + 1
+    override fun getNextPagingOffset(rootData: ServerGetCharacters, currentlyLoadedPage: Int): Int = currentlyLoadedPage + 1
 
     override fun getInitialPagingOffset(): Int = 1
 
     override fun getPageSize(): Int = 20
 
-    suspend fun getCharacters(page: Int, name: String?): List<ServerCharacter> = rickAndMortyApi.getCharacters(page, name).results
+    override suspend fun search(query: String, offset: Int): ServerGetCharacters = rickAndMortyApi.getCharacters(
+        name = query,
+        page = offset,
+    )
 }

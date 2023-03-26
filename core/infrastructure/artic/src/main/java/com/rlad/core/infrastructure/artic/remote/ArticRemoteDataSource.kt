@@ -16,7 +16,7 @@ internal class ArticRemoteDataSource @Inject constructor(
 
     override suspend fun getItem(id: String): ServerArtwork = articApi.artwork(id).data
 
-    override fun getNextPagingOffset(rootData: ServerArtworksRoot, currentlyLoadedOffset: Int): Int {
+    override fun getNextPagingOffset(rootData: ServerArtworksRoot, currentlyLoadedPage: Int): Int {
         val pagination = rootData.pagination
         return pagination.offset + pagination.limit
     }
@@ -25,9 +25,9 @@ internal class ArticRemoteDataSource @Inject constructor(
 
     override fun getPageSize(): Int = 80
 
-    suspend fun searchArtworks(
-        query: String,
-        from: Int,
-        size: Int,
-    ): ServerArtworksRoot = articApi.search(query, from, size)
+    override suspend fun search(query: String, offset: Int): ServerArtworksRoot = articApi.search(
+        query = query,
+        from = offset,
+        size = getPageSize()
+    )
 }

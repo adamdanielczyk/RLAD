@@ -7,7 +7,6 @@ import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.model.DataSource
 import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
 import com.rlad.core.infrastructure.common.model.DataSourceKey
-import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSourceFactory
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import com.rlad.core.infrastructure.common.repository.CommonRepository
 import com.rlad.core.infrastructure.common.repository.CommonRepositoryImpl
@@ -17,7 +16,6 @@ import com.rlad.core.infrastructure.giphy.local.GiphyDatabase
 import com.rlad.core.infrastructure.giphy.local.GiphyLocalDataSource
 import com.rlad.core.infrastructure.giphy.mapper.GiphyModelMapper
 import com.rlad.core.infrastructure.giphy.model.GiphyDataSourceConfiguration
-import com.rlad.core.infrastructure.giphy.paging.GiphySearchPagingSourceFactory
 import com.rlad.core.infrastructure.giphy.remote.GiphyApi
 import com.rlad.core.infrastructure.giphy.remote.GiphyRemoteDataSource
 import com.rlad.core.infrastructure.giphy.remote.ServerGif
@@ -74,9 +72,6 @@ internal interface GiphyModule {
 
     @Binds
     fun GiphyModelMapper.bindModelMapper(): ModelMapper<GifEntity, ServerGif>
-
-    @Binds
-    fun GiphySearchPagingSourceFactory.bindCommonSearchPagingSourceFactory(): CommonSearchPagingSourceFactory<ServerGif>
 
     @Binds
     @IntoMap
