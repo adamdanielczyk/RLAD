@@ -23,7 +23,7 @@ internal class ArticRemoteDataSource @Inject constructor(
 
     override fun getInitialPagingOffset(): Int = 0
 
-    override fun getPageSize(): Int = 80
+    override fun getPageSize(): Int = 40
 
     override suspend fun search(query: String, offset: Int): ServerArtworksRoot = articApi.search(
         query = query,

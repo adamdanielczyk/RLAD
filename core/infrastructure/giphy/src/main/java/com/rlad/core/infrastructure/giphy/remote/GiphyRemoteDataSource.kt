@@ -28,7 +28,7 @@ internal class GiphyRemoteDataSource @Inject constructor(
 
     override fun getInitialPagingOffset(): Int = 0
 
-    override fun getPageSize(): Int = 80
+    override fun getPageSize(): Int = 40
 
     override suspend fun search(query: String, offset: Int): ServerGifsRoot = giphyApi.searchGifs(
         apiKey = BuildConfig.GIPHY_API_KEY,
