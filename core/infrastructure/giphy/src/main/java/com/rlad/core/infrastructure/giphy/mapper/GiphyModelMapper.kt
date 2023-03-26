@@ -15,7 +15,7 @@ internal class GiphyModelMapper @Inject constructor(
     override fun toLocalModel(remote: ServerGif): GifEntity = GifEntity(
         giphyId = remote.id,
         title = remote.title,
-        imageUrl = remote.images.fixedHeight.url,
+        imageUrl = remote.images.fixedWidth.url,
         username = remote.username,
         importDatetime = remote.importDatetime,
         trendingDatetime = remote.trendingDatetime,
