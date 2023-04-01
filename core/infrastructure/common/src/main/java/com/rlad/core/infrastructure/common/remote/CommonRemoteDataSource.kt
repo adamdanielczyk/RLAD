@@ -7,6 +7,5 @@ interface CommonRemoteDataSource<RootRemoteData, RemoteModel> {
     suspend fun getItem(id: String): RemoteModel
     fun getNextPagingOffset(rootData: RootRemoteData, currentlyLoadedPage: Int): Int
     fun getInitialPagingOffset(): Int
-    fun getPageSize(): Int
     suspend fun search(query: String, offset: Int): RootRemoteData
 }

@@ -11,7 +11,7 @@ internal class GiphyRemoteDataSource @Inject constructor(
     override suspend fun getRootData(offset: Int): ServerGifsRoot = giphyApi.trendingGifs(
         apiKey = BuildConfig.GIPHY_API_KEY,
         offset = offset,
-        limit = getPageSize(),
+        limit = PAGE_SIZE,
     )
 
     override fun getItems(rootData: ServerGifsRoot): List<ServerGif> = rootData.data
@@ -28,12 +28,14 @@ internal class GiphyRemoteDataSource @Inject constructor(
 
     override fun getInitialPagingOffset(): Int = 0
 
-    override fun getPageSize(): Int = 40
-
     override suspend fun search(query: String, offset: Int): ServerGifsRoot = giphyApi.searchGifs(
         apiKey = BuildConfig.GIPHY_API_KEY,
         offset = offset,
-        limit = getPageSize(),
+        limit = PAGE_SIZE,
         query = query,
     )
+
+    private companion object {
+        const val PAGE_SIZE = 40
+    }
 }

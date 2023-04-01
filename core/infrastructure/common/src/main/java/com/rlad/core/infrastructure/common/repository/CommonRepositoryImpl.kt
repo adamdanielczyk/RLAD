@@ -38,7 +38,7 @@ class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     override fun getAllItems(): Flow<PagingData<ItemUiModel>> {
         return Pager(
             config = PagingConfig(
-                pageSize = remoteDataSource.getPageSize(),
+                pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
             remoteMediator = remoteMediator,
@@ -49,7 +49,7 @@ class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     override fun getSearchItems(query: String): Flow<PagingData<ItemUiModel>> {
         return Pager(
             config = PagingConfig(
-                pageSize = remoteDataSource.getPageSize(),
+                pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { searchPagingSourceFactory.create(query) }
@@ -58,5 +58,9 @@ class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData :
                 .map(modelMapper::toLocalModel)
                 .map(modelMapper::toUiModel)
         }
+    }
+
+    private companion object {
+        const val PAGE_SIZE = 40
     }
 }

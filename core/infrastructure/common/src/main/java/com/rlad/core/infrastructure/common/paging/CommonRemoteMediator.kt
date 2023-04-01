@@ -38,15 +38,31 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
             clearCachedDataOnRefresh()
         }
 
-        val nextOffsetToLoad = getNextOffsetToLoad()
-        val rootData = try {
-            remoteDataSource.getRootData(offset = nextOffsetToLoad)
-        } catch (exception: IOException) {
-            return MediatorResult.Error(exception)
-        } catch (exception: HttpException) {
-            return MediatorResult.Error(exception)
-        }
+        saveCurrentSyncTimestamp()
 
+        return try {
+            loadItems(
+                loadType = loadType,
+                totalItemsToLoad = if (loadType == LoadType.REFRESH) state.config.initialLoadSize else state.config.pageSize,
+                loadedItemsCount = 0,
+            )
+        } catch (exception: IOException) {
+            MediatorResult.Error(exception)
+        } catch (exception: HttpException) {
+            MediatorResult.Error(exception)
+        }
+    }
+
+    private suspend fun clearCachedDataOnRefresh() {
+        saveNextOffsetToLoad(offset = remoteDataSource.getInitialPagingOffset())
+        localDataSource.clear()
+        application.cacheDir.deleteRecursively()
+    }
+
+    private suspend fun loadItems(loadType: LoadType, totalItemsToLoad: Int, loadedItemsCount: Int): MediatorResult {
+        val nextOffsetToLoad = getNextOffsetToLoad()
+
+        val rootData = remoteDataSource.getRootData(offset = nextOffsetToLoad)
         val items = remoteDataSource.getItems(rootData)
 
         insertData(items)
@@ -56,15 +72,14 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
                 currentlyLoadedPage = nextOffsetToLoad
             )
         )
-        saveCurrentSyncTimestamp()
 
-        return MediatorResult.Success(endOfPaginationReached = items.isEmpty())
-    }
+        val totalLoadedItemsCount = loadedItemsCount + items.size
 
-    private suspend fun clearCachedDataOnRefresh() {
-        saveNextOffsetToLoad(offset = remoteDataSource.getInitialPagingOffset())
-        localDataSource.clear()
-        application.cacheDir.deleteRecursively()
+        return when {
+            items.isEmpty() -> MediatorResult.Success(endOfPaginationReached = true)
+            totalLoadedItemsCount >= totalItemsToLoad -> MediatorResult.Success(endOfPaginationReached = false)
+            else -> loadItems(loadType, totalItemsToLoad, totalLoadedItemsCount)
+        }
     }
 
     private suspend fun insertData(remoteData: List<RemoteModel>) {

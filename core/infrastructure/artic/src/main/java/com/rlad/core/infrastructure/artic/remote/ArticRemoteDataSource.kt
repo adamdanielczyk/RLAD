@@ -9,7 +9,7 @@ internal class ArticRemoteDataSource @Inject constructor(
 
     override suspend fun getRootData(offset: Int): ServerArtworksRoot = articApi.artworks(
         from = offset,
-        size = getPageSize(),
+        size = PAGE_SIZE,
     )
 
     override fun getItems(rootData: ServerArtworksRoot): List<ServerArtwork> = rootData.data
@@ -23,11 +23,13 @@ internal class ArticRemoteDataSource @Inject constructor(
 
     override fun getInitialPagingOffset(): Int = 0
 
-    override fun getPageSize(): Int = 40
-
     override suspend fun search(query: String, offset: Int): ServerArtworksRoot = articApi.search(
         query = query,
         from = offset,
-        size = getPageSize()
+        size = PAGE_SIZE,
     )
+
+    private companion object {
+        const val PAGE_SIZE = 40
+    }
 }
