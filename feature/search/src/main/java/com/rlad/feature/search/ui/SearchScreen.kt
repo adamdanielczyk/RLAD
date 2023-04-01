@@ -1,6 +1,7 @@
 package com.rlad.feature.search.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -333,20 +335,33 @@ private fun PullRefreshWithGrid(
         modifier = Modifier
             .fillMaxSize()
             .pullRefresh(state = refreshState),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 150.dp),
-            contentPadding = PaddingValues(8.dp),
-            state = gridState,
-        ) {
-            items(lazyPagingItems.itemCount) { index ->
-                val item = lazyPagingItems[index] ?: return@items
-                ItemCard(item, openDetails)
+        Crossfade(targetState = lazyPagingItems.loadState.refresh is LoadState.Loading) { loadingTargetState ->
+            if (loadingTargetState) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(color = MaterialTheme.colors.onSurface)
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 150.dp),
+                    contentPadding = PaddingValues(8.dp),
+                    state = gridState,
+                ) {
+                    items(lazyPagingItems.itemCount) { index ->
+                        val item = lazyPagingItems[index] ?: return@items
+                        ItemCard(item, openDetails)
+                    }
+                }
             }
         }
 
         PullRefreshIndicator(
-            modifier = Modifier.align(Alignment.TopCenter),
             refreshing = refreshing,
             state = refreshState,
             scale = true,
