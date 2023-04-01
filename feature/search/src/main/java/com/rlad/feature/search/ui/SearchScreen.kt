@@ -353,7 +353,10 @@ private fun PullRefreshWithGrid(
                     contentPadding = PaddingValues(8.dp),
                     state = gridState,
                 ) {
-                    items(lazyPagingItems.itemCount) { index ->
+                    items(
+                        count = lazyPagingItems.itemCount,
+                        key = { index -> lazyPagingItems.peek(index)?.id.orEmpty() },
+                    ) { index ->
                         val item = lazyPagingItems[index] ?: return@items
                         ItemCard(item, openDetails)
                     }
