@@ -61,6 +61,6 @@ class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     }
 
     private companion object {
-        const val PAGE_SIZE = 40
+        const val PAGE_SIZE = 20
     }
 }

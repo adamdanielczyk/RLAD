@@ -8,10 +8,10 @@ internal class GiphyRemoteDataSource @Inject constructor(
     private val giphyApi: GiphyApi,
 ) : CommonRemoteDataSource<ServerGifsRoot, ServerGif> {
 
-    override suspend fun getRootData(offset: Int): ServerGifsRoot = giphyApi.trendingGifs(
+    override suspend fun getRootData(offset: Int, pageSize: Int): ServerGifsRoot = giphyApi.trendingGifs(
         apiKey = BuildConfig.GIPHY_API_KEY,
         offset = offset,
-        limit = PAGE_SIZE,
+        limit = pageSize,
     )
 
     override fun getItems(rootData: ServerGifsRoot): List<ServerGif> = rootData.data
@@ -28,14 +28,10 @@ internal class GiphyRemoteDataSource @Inject constructor(
 
     override fun getInitialPagingOffset(): Int = 0
 
-    override suspend fun search(query: String, offset: Int): ServerGifsRoot = giphyApi.searchGifs(
+    override suspend fun search(query: String, offset: Int, pageSize: Int): ServerGifsRoot = giphyApi.searchGifs(
         apiKey = BuildConfig.GIPHY_API_KEY,
         offset = offset,
-        limit = PAGE_SIZE,
+        limit = pageSize,
         query = query,
     )
-
-    private companion object {
-        const val PAGE_SIZE = 40
-    }
 }

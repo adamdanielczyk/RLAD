@@ -41,9 +41,10 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
         saveCurrentSyncTimestamp()
 
         return try {
+            val config = state.config
             loadItems(
                 loadType = loadType,
-                totalItemsToLoad = if (loadType == LoadType.REFRESH) state.config.initialLoadSize else state.config.pageSize,
+                totalItemsToLoad = if (loadType == LoadType.REFRESH) config.initialLoadSize else config.pageSize,
                 loadedItemsCount = 0,
             )
         } catch (exception: IOException) {
@@ -62,7 +63,7 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
     private suspend fun loadItems(loadType: LoadType, totalItemsToLoad: Int, loadedItemsCount: Int): MediatorResult {
         val nextOffsetToLoad = getNextOffsetToLoad()
 
-        val rootData = remoteDataSource.getRootData(offset = nextOffsetToLoad)
+        val rootData = remoteDataSource.getRootData(offset = nextOffsetToLoad, pageSize = totalItemsToLoad - loadedItemsCount)
         val items = remoteDataSource.getItems(rootData)
 
         insertData(items)
@@ -78,7 +79,7 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
         return when {
             items.isEmpty() -> MediatorResult.Success(endOfPaginationReached = true)
             totalLoadedItemsCount >= totalItemsToLoad -> MediatorResult.Success(endOfPaginationReached = false)
-            else -> loadItems(loadType, totalItemsToLoad, totalLoadedItemsCount)
+            else -> loadItems(loadType = loadType, totalItemsToLoad = totalItemsToLoad, loadedItemsCount = totalLoadedItemsCount)
         }
     }
 

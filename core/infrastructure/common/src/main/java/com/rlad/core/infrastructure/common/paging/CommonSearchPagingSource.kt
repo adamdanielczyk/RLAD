@@ -25,6 +25,7 @@ class CommonSearchPagingSource<RemoteModel : Any, RootRemoteData : Any> @Assiste
         val rootSearchData = remoteDataSource.search(
             query = query,
             offset = nextKey,
+            pageSize = params.loadSize,
         )
 
         val searchData = remoteDataSource.getItems(rootSearchData)

@@ -7,7 +7,7 @@ internal class RickAndMortyRemoteDataSource @Inject constructor(
     private val rickAndMortyApi: RickAndMortyApi,
 ) : CommonRemoteDataSource<ServerGetCharacters, ServerCharacter> {
 
-    override suspend fun getRootData(offset: Int): ServerGetCharacters = rickAndMortyApi.getCharacters(
+    override suspend fun getRootData(offset: Int, pageSize: Int): ServerGetCharacters = rickAndMortyApi.getCharacters(
         page = offset,
         name = null,
     )
@@ -20,7 +20,7 @@ internal class RickAndMortyRemoteDataSource @Inject constructor(
 
     override fun getInitialPagingOffset(): Int = 1
 
-    override suspend fun search(query: String, offset: Int): ServerGetCharacters = rickAndMortyApi.getCharacters(
+    override suspend fun search(query: String, offset: Int, pageSize: Int): ServerGetCharacters = rickAndMortyApi.getCharacters(
         name = query,
         page = offset,
     )
