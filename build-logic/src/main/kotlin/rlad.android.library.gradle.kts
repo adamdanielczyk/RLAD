@@ -9,14 +9,14 @@ android {
 }
 
 dependencies {
-    implementation(libs().findLibrary("kotlin.stdlib").get())
+    implementation(libs.kotlin.stdlib)
 
-    implementation(libs().findLibrary("kotlinx.coroutines.core").get())
-    implementation(libs().findLibrary("kotlinx.coroutines.android").get())
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
-    implementation(libs().findLibrary("androidx.paging.runtime").get())
+    implementation(libs.androidx.paging.runtime)
 
-    implementation(libs().findLibrary("androidx.hilt.navigation.compose").get())
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation(libs().findLibrary("androidx.lifecycle.viewmodel").get())
+    implementation(libs.androidx.lifecycle.viewmodel)
 }

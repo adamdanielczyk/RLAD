@@ -18,8 +18,8 @@ android {
 }
 
 dependencies {
-    implementation(libs().findLibrary("androidx.room").get())
-    implementation(libs().findLibrary("androidx.room.paging").get())
-    implementation(libs().findLibrary("androidx.room.runtime").get())
-    kapt(libs().findLibrary("androidx.room.compiler").get())
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
 }

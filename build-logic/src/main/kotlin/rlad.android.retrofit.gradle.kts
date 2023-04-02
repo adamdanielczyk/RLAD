@@ -5,8 +5,8 @@ plugins {
 }
 
 dependencies {
-    implementation(libs().findLibrary("retrofit").get())
-    implementation(libs().findLibrary("retrofit.converterMoshi").get())
-    implementation(libs().findLibrary("moshi").get())
-    kapt(libs().findLibrary("moshi.kotlinCodegen").get())
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converterMoshi)
+    implementation(libs.moshi)
+    kapt(libs.moshi.kotlinCodegen)
 }
