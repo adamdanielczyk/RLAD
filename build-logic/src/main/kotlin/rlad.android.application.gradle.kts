@@ -6,7 +6,7 @@ plugins {
 
 android {
     configureKotlinAndroid()
-    configureCompose(this)
+    configureCompose()
 }
 
 dependencies {
