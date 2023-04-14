@@ -13,8 +13,5 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
 
-    testImplementation(project(":core:testing"))
-    androidTestImplementation(project(":core:testing"))
-
     shared()
 }

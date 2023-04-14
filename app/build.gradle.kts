@@ -30,7 +30,4 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.feature.search)
     implementation(projects.feature.details)
-
-    testImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.testing)
 }

@@ -11,7 +11,4 @@ android {
 dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.infrastructure.common)
-
-    testImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.testing)
 }

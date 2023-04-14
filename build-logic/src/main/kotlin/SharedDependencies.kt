@@ -34,5 +34,8 @@ internal fun Project.shared() {
         add("implementation", libs.coil.gif)
 
         add("implementation", libs.lottie)
+
+        add("testImplementation", project(":core:testing"))
+        add("androidTestImplementation", project(":core:testing"))
     }
 }
