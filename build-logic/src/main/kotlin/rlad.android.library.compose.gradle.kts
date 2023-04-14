@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    configureCompose(this)
+    configureCompose()
 }
 
 dependencies {

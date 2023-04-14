@@ -4,52 +4,55 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.the
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 internal val Project.libs
     get() = the<LibrariesForLibs>()
 
-internal fun CommonExtension<*, *, *, *>.configureKotlinAndroid() {
-    compileSdk = 33
+internal fun Project.configureKotlinAndroid() {
+    val javaVersion = JavaVersion.VERSION_17
 
-    defaultConfig {
-        minSdk = 26
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+    kotlin {
+        jvmToolchain(javaVersion.majorVersion.toInt())
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
+    android {
+        compileSdk = 33
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        defaultConfig {
+            minSdk = 26
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            testInstrumentationRunnerArguments["clearPackageData"] = "true"
+        }
 
-        freeCompilerArgs = freeCompilerArgs + listOf(
-            "-opt-in=kotlin.RequiresOptIn",
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-opt-in=kotlinx.coroutines.FlowPreview",
-            "-opt-in=androidx.paging.ExperimentalPagingApi",
-        )
-    }
+        compileOptions {
+            sourceCompatibility = javaVersion
+            targetCompatibility = javaVersion
+        }
 
-    packagingOptions {
-        resources {
-            excludes += listOf(
-                "META-INF/LICENSE.md",
-                "META-INF/LICENSE-notice.md",
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-opt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlinx.coroutines.FlowPreview",
+                "-opt-in=androidx.paging.ExperimentalPagingApi",
             )
+        }
+
+        packaging {
+            resources {
+                excludes += listOf(
+                    "META-INF/LICENSE.md",
+                    "META-INF/LICENSE-notice.md",
+                )
+            }
         }
     }
 }
 
-private fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("kotlinOptions", block)
-}
-
-internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, *>) {
-    with(commonExtension) {
+internal fun Project.configureCompose() {
+    android {
         kotlinOptions {
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
@@ -66,4 +69,16 @@ internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, 
             kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
         }
     }
+}
+
+private fun Project.android(action: CommonExtension<*, *, *, *>.() -> Unit) {
+    (this as ExtensionAware).extensions.configure("android", action)
+}
+
+private fun Project.kotlin(action: KotlinAndroidProjectExtension.() -> Unit) {
+    (this as ExtensionAware).extensions.configure("kotlin", action)
+}
+
+private fun CommonExtension<*, *, *, *>.kotlinOptions(action: KotlinJvmOptions.() -> Unit) {
+    (this as ExtensionAware).extensions.configure("kotlinOptions", action)
 }
