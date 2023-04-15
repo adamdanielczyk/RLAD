@@ -38,7 +38,10 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: pixelDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          arguments: |
+            :core:infrastructure:rickandmorty:pixelDebugAndroidTest 
+            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+            --stacktrace
 
   assembleDebug:
     runs-on: ubuntu-latest
