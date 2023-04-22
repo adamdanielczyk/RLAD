@@ -242,30 +242,28 @@ private fun ItemsContainer(
     val items = viewModel.itemsPagingData.collectAsState().value ?: return
     val lazyPagingItems = items.collectAsLazyPagingItems()
 
-    val isEmpty by remember(lazyPagingItems) {
+    val isListEmpty by remember(lazyPagingItems) {
         derivedStateOf {
             val append = lazyPagingItems.loadState.append
             append is LoadState.NotLoading && append.endOfPaginationReached && lazyPagingItems.itemCount == 0
         }
     }
 
-    AnimatedVisibility(
-        visible = isEmpty,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        EmptyState()
-    }
-
-    if (!isEmpty) {
-        PullRefreshWithGrid(viewModel, lazyPagingItems, gridState, openDetails)
+    Crossfade(targetState = isListEmpty) { isListEmptyTargetState ->
+        if (isListEmptyTargetState) {
+            EmptyState()
+        } else {
+            PullRefreshWithGrid(viewModel, lazyPagingItems, gridState, openDetails)
+        }
     }
 }
 
 @Composable
 private fun EmptyState() {
     Column(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.search_empty))
