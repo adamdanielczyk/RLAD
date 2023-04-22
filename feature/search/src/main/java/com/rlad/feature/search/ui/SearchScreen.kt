@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -326,7 +327,7 @@ private fun PullRefreshWithGrid(
             }
     }
 
-    val refreshing = remember { lazyPagingItems.loadState.mediator?.refresh is LoadState.Loading }
+    val refreshing = remember { lazyPagingItems.loadState.refresh is LoadState.Loading }
     val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = lazyPagingItems::refresh)
 
     Box(
@@ -335,28 +336,28 @@ private fun PullRefreshWithGrid(
             .pullRefresh(state = refreshState),
         contentAlignment = Alignment.TopCenter,
     ) {
-        Crossfade(targetState = lazyPagingItems.loadState.refresh is LoadState.Loading) { loadingTargetState ->
-            if (loadingTargetState) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator(color = MaterialTheme.colors.onSurface)
-                }
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(minSize = 150.dp),
-                    contentPadding = PaddingValues(8.dp),
-                    state = gridState,
-                ) {
-                    items(
-                        count = lazyPagingItems.itemCount,
-                        key = { index -> lazyPagingItems.peek(index)?.id.orEmpty() },
-                    ) { index ->
-                        val item = lazyPagingItems[index] ?: return@items
-                        ItemCard(item, openDetails)
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 150.dp),
+            contentPadding = PaddingValues(8.dp),
+            state = gridState,
+        ) {
+            items(
+                count = lazyPagingItems.itemCount,
+                key = { index -> lazyPagingItems.peek(index)?.id.orEmpty() },
+            ) { index ->
+                val item = lazyPagingItems[index] ?: return@items
+                ItemCard(item, openDetails)
+            }
+
+            if (lazyPagingItems.loadState.append is LoadState.Loading) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(color = MaterialTheme.colors.onSurface)
                     }
                 }
             }
