@@ -327,7 +327,7 @@ private fun PullRefreshWithGrid(
             }
     }
 
-    val refreshing = remember { lazyPagingItems.loadState.refresh is LoadState.Loading }
+    val refreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
     val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = lazyPagingItems::refresh)
 
     Box(
@@ -349,7 +349,7 @@ private fun PullRefreshWithGrid(
                 ItemCard(item, openDetails)
             }
 
-            if (lazyPagingItems.loadState.append is LoadState.Loading) {
+            if (!refreshing && lazyPagingItems.loadState.append is LoadState.Loading) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Box(
                         modifier = Modifier
