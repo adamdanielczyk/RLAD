@@ -22,7 +22,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: test
+          arguments: test --stacktrace
 
   connectedAndroidTest:
     runs-on: macos-latest
@@ -51,7 +51,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: assembleDebug
+          arguments: assembleDebug --stacktrace
 
       - uses: actions/upload-artifact@v3
         with:
@@ -70,7 +70,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: assembleRelease
+          arguments: assembleRelease --stacktrace
 
       - uses: r0adkll/sign-android-release@v1
         id: sign_app
@@ -106,7 +106,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: bundleRelease
+          arguments: bundleRelease --stacktrace
 
       - uses: r0adkll/sign-android-release@v1
         id: sign_app
