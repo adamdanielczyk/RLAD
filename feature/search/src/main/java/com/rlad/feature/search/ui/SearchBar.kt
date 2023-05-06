@@ -51,7 +51,7 @@ internal fun SearchBar(
     onQueryChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit = {},
     onClearQueryClicked: () -> Unit,
-    onBack: () -> Unit,
+    onBackClicked: () -> Unit,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     var focused by rememberSaveable { mutableStateOf(false) }
@@ -71,7 +71,7 @@ internal fun SearchBar(
                     focusManager.clearFocus()
                     keyboardController?.hide()
                     query = ""
-                    onBack()
+                    onBackClicked()
                 }
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)

@@ -76,7 +76,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun SearchScreen(openDetails: (String) -> Unit) {
+internal fun SearchScreen(onItemCardClicked: (String) -> Unit) {
     val viewModel = hiltViewModel<SearchViewModel>()
 
     val systemUiController = rememberSystemUiController()
@@ -88,13 +88,13 @@ internal fun SearchScreen(openDetails: (String) -> Unit) {
         )
     }
 
-    SearchScreenContent(viewModel, openDetails)
+    SearchScreenContent(viewModel, onItemCardClicked)
 }
 
 @Composable
 private fun SearchScreenContent(
     viewModel: SearchViewModel,
-    openDetails: (String) -> Unit,
+    onItemCardClicked: (String) -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -163,7 +163,7 @@ private fun SearchScreenContent(
                 ) {
                     ItemsContainer(
                         viewModel = viewModel,
-                        openDetails = openDetails,
+                        onItemCardClicked = onItemCardClicked,
                         gridState = gridState,
                     )
                 }
@@ -192,7 +192,7 @@ private fun SheetContent(
             SheetItem(
                 text = uiDataSource.pickerText,
                 isSelected = uiDataSource.isSelected,
-                onClicked = { onDataSourceClicked(uiDataSource) },
+                onSheetItemClicked = { onDataSourceClicked(uiDataSource) },
             )
         }
     }
@@ -202,11 +202,11 @@ private fun SheetContent(
 private fun SheetItem(
     text: String,
     isSelected: Boolean,
-    onClicked: () -> Unit,
+    onSheetItemClicked: () -> Unit,
 ) {
     Row(
         modifier = Modifier
-            .clickable(onClick = onClicked)
+            .clickable(onClick = onSheetItemClicked)
             .padding(horizontal = 24.dp, vertical = 16.dp)
             .fillMaxWidth(),
     ) {
@@ -229,16 +229,16 @@ private fun SearchBar(
     onClearSearchClicked: () -> Unit,
 ) {
     SearchBar(
-        onQueryChanged = { newQuery -> onQueryTextChanged(newQuery) },
-        onClearQueryClicked = { onClearSearchClicked() },
-        onBack = { onClearSearchClicked() },
+        onQueryChanged = onQueryTextChanged,
+        onClearQueryClicked = onClearSearchClicked,
+        onBackClicked = onClearSearchClicked,
     )
 }
 
 @Composable
 private fun ItemsContainer(
     viewModel: SearchViewModel,
-    openDetails: (String) -> Unit,
+    onItemCardClicked: (String) -> Unit,
     gridState: LazyGridState,
 ) {
     val items = viewModel.itemsPagingData.collectAsState().value ?: return
@@ -255,7 +255,7 @@ private fun ItemsContainer(
         if (isListEmptyTargetState) {
             EmptyState()
         } else {
-            PullRefreshWithGrid(viewModel, lazyPagingItems, gridState, openDetails)
+            PullRefreshWithGrid(viewModel, lazyPagingItems, gridState, onItemCardClicked)
         }
     }
 }
@@ -287,7 +287,7 @@ private fun PullRefreshWithGrid(
     viewModel: SearchViewModel,
     lazyPagingItems: LazyPagingItems<ItemUiModel>,
     gridState: LazyGridState,
-    openDetails: (String) -> Unit,
+    onItemCardClicked: (String) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.scrollToTop.collectLatest {
@@ -347,7 +347,7 @@ private fun PullRefreshWithGrid(
                 key = lazyPagingItems.itemKey { it.id },
             ) { index ->
                 val item = lazyPagingItems[index] ?: return@items
-                ItemCard(item, openDetails)
+                ItemCard(item, onItemCardClicked)
             }
 
             if (!refreshing && lazyPagingItems.loadState.append is LoadState.Loading) {
@@ -373,9 +373,9 @@ private fun PullRefreshWithGrid(
 }
 
 @Composable
-private fun ItemCard(item: ItemUiModel, openDetails: (String) -> Unit) {
+private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
     Card(
-        onClick = { openDetails(item.id) },
+        onClick = { onItemCardClicked(item.id) },
         elevation = 3.dp,
         modifier = Modifier.padding(8.dp),
     ) {

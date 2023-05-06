@@ -59,14 +59,14 @@ internal fun DetailsScreen() {
     }
 
     DetailsScreenContent(
-        shareItemClicked = { viewModel.onShareItemClicked(context, item) },
+        onShareItemClicked = { viewModel.onShareItemClicked(context, item) },
         item = item,
     )
 }
 
 @Composable
 private fun DetailsScreenContent(
-    shareItemClicked: () -> Unit,
+    onShareItemClicked: () -> Unit,
     item: ItemUiModel,
 ) {
     Scaffold(
@@ -86,7 +86,7 @@ private fun DetailsScreenContent(
                 },
                 actions = {
                     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                        IconButton(onClick = shareItemClicked) {
+                        IconButton(onClick = onShareItemClicked) {
                             Icon(
                                 imageVector = Icons.Default.Share,
                                 contentDescription = null,
