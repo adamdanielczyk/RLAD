@@ -1,9 +1,3 @@
-# Remove when Retrofit uses OkHttp 5 which contains these rules (if ever?)
--dontwarn okhttp3.internal.platform.**
--dontwarn org.conscrypt.**
--dontwarn org.bouncycastle.**
--dontwarn org.openjsse.**
-
 # Remove when Retrofit is released with updated proguard rules
 # https://github.com/square/retrofit/pull/3579
 # https://github.com/square/retrofit/pull/3598
