@@ -9,16 +9,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,15 +35,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter.State
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.core.domain.model.ItemUiModel
 
 @Composable
 internal fun DetailsScreen() {
+    val context = LocalContext.current
+
     val viewModel = hiltViewModel<DetailsViewModel>()
     val item = viewModel.item.collectAsState(initial = null).value ?: return
 
@@ -52,11 +58,17 @@ internal fun DetailsScreen() {
         )
     }
 
-    DetailsScreenContent(item)
+    DetailsScreenContent(
+        shareItemClicked = { viewModel.onShareItemClicked(context, item) },
+        item = item,
+    )
 }
 
 @Composable
-private fun DetailsScreenContent(item: ItemUiModel) {
+private fun DetailsScreenContent(
+    shareItemClicked: () -> Unit,
+    item: ItemUiModel,
+) {
     Scaffold(
         topBar = {
             val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -72,12 +84,23 @@ private fun DetailsScreenContent(item: ItemUiModel) {
                         )
                     }
                 },
+                actions = {
+                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
+                        IconButton(onClick = shareItemClicked) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                }
             )
         },
     ) { contentPadding ->
-        Column(modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(contentPadding)
         ) {
             ImageWithGradient(item.imageUrl)
 
@@ -112,10 +135,8 @@ private fun ImageWithGradient(imageUrl: String) {
         AsyncImage(
             model = imageUrl,
             contentDescription = null,
-            onState = { state ->
-                if (state is State.Success) {
-                    imageSize = state.painter.intrinsicSize
-                }
+            onSuccess = { state ->
+                imageSize = state.painter.intrinsicSize
             },
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
@@ -125,9 +146,11 @@ private fun ImageWithGradient(imageUrl: String) {
                     imageHeightY = coordinates.size.height.toFloat()
                 },
         )
-        Box(modifier = Modifier
-            .matchParentSize()
-            .background(gradient))
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(gradient)
+        )
     }
 }
 
