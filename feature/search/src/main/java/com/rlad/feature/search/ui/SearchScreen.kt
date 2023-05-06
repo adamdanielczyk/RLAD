@@ -59,6 +59,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -343,7 +344,7 @@ private fun PullRefreshWithGrid(
         ) {
             items(
                 count = lazyPagingItems.itemCount,
-                key = { index -> lazyPagingItems.peek(index)?.id.orEmpty() },
+                key = lazyPagingItems.itemKey { it.id },
             ) { index ->
                 val item = lazyPagingItems[index] ?: return@items
                 ItemCard(item, openDetails)
