@@ -4,9 +4,17 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
@@ -16,7 +24,6 @@ import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
@@ -39,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.core.domain.model.ItemUiModel
 
@@ -53,7 +61,7 @@ internal fun DetailsScreen() {
     val surfaceColor = MaterialTheme.colors.primarySurface
 
     SideEffect {
-        systemUiController.setSystemBarsColor(
+        systemUiController.setStatusBarColor(
             color = surfaceColor,
         )
     }
@@ -73,6 +81,8 @@ private fun DetailsScreenContent(
         topBar = {
             val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
             TopAppBar(
+                modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)),
+                contentPadding = WindowInsets.statusBars.asPaddingValues(),
                 title = {
                     Text(item.name)
                 },
@@ -100,6 +110,7 @@ private fun DetailsScreenContent(
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
+                .navigationBarsPadding()
                 .padding(contentPadding)
         ) {
             ImageWithGradient(item.imageUrl)

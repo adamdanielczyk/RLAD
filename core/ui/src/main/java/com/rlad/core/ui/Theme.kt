@@ -5,7 +5,6 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import java.util.Random
 
 private val DarkThemeColors = darkColors(
     primary = Color.Black,
@@ -20,8 +19,11 @@ private val LightThemeColors = lightColors(
 )
 
 @Composable
-fun RladTheme(content: @Composable () -> Unit) {
-    val colors = if (Random().nextBoolean()) {
+fun RladTheme(
+    useDarkTheme: Boolean,
+    content: @Composable () -> Unit,
+) {
+    val colors = if (useDarkTheme) {
         DarkThemeColors
     } else {
         LightThemeColors

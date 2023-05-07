@@ -48,6 +48,7 @@ import com.rlad.feature.search.R
  */
 @Composable
 internal fun SearchBar(
+    modifier: Modifier,
     onQueryChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit = {},
     onClearQueryClicked: () -> Unit,
@@ -60,7 +61,7 @@ internal fun SearchBar(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
 

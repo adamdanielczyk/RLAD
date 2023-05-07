@@ -7,15 +7,24 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.add
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -83,7 +92,7 @@ internal fun SearchScreen(onItemCardClicked: (String) -> Unit) {
     val surfaceColor = MaterialTheme.colors.surface
 
     SideEffect {
-        systemUiController.setSystemBarsColor(
+        systemUiController.setStatusBarColor(
             color = surfaceColor,
         )
     }
@@ -132,7 +141,9 @@ private fun SearchScreenContent(
     ) {
         Scaffold(
             floatingActionButton = {
-                Column {
+                Column(
+                    modifier = Modifier.systemBarsPadding()
+                ) {
                     AnimatedVisibility(
                         visible = isScrollToTopButtonVisible,
                         enter = fadeIn(),
@@ -154,6 +165,9 @@ private fun SearchScreenContent(
                 modifier = Modifier.padding(contentPadding)
             ) {
                 SearchBar(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)),
                     onQueryTextChanged = viewModel::onQueryTextChanged,
                     onClearSearchClicked = viewModel::onClearSearchClicked,
                 )
@@ -177,7 +191,11 @@ private fun SheetContent(
     availableDataSources: List<DataSourceUiModel>,
     onDataSourceClicked: (DataSourceUiModel) -> Unit,
 ) {
-    Column(modifier = Modifier.padding(vertical = 24.dp)) {
+    Column(
+        modifier = Modifier
+            .navigationBarsPadding()
+            .padding(vertical = 24.dp),
+    ) {
         Text(
             text = stringResource(R.string.data_source_picker_title),
             modifier = Modifier.padding(
@@ -225,10 +243,12 @@ private fun SheetItem(
 
 @Composable
 private fun SearchBar(
+    modifier: Modifier,
     onQueryTextChanged: (String) -> Unit,
     onClearSearchClicked: () -> Unit,
 ) {
     SearchBar(
+        modifier = modifier,
         onQueryChanged = onQueryTextChanged,
         onClearQueryClicked = onClearSearchClicked,
         onBackClicked = onClearSearchClicked,
@@ -339,7 +359,10 @@ private fun PullRefreshWithGrid(
     ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 150.dp),
-            contentPadding = PaddingValues(8.dp),
+            contentPadding = WindowInsets
+                .navigationBars
+                .add(WindowInsets(left = 8.dp, top = 8.dp, right = 8.dp, bottom = 8.dp))
+                .asPaddingValues(),
             state = gridState,
         ) {
             items(
