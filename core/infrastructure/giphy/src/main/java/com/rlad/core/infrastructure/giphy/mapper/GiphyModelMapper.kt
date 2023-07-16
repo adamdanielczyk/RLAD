@@ -25,9 +25,7 @@ internal class GiphyModelMapper @Inject constructor(
         id = local.giphyId,
         imageUrl = local.imageUrl,
         name = local.title,
-        cardCaptions = listOf(
-            local.username,
-        ),
+        cardCaption = local.username,
         detailsKeyValues = listOf(
             application.getString(R.string.details_username) to local.username,
             application.getString(R.string.details_import_date) to local.importDatetime,

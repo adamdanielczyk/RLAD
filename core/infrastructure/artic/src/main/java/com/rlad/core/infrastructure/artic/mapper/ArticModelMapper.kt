@@ -28,10 +28,7 @@ internal class ArticModelMapper @Inject constructor(
         id = local.articId.toString(),
         imageUrl = "https://artic.edu/iiif/2/${local.imageId}/full/200,/0/default.jpg",
         name = local.title,
-        cardCaptions = listOfNotNull(
-            local.artistDisplay,
-            local.dateDisplay,
-        ),
+        cardCaption = local.artistDisplay ?: local.dateDisplay,
         detailsKeyValues = listOfNotNull(
             local.artistDisplay?.let { application.getString(R.string.details_artist_display) to it },
             local.placeOfOrigin?.let { application.getString(R.string.details_place_of_origin) to it },

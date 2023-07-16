@@ -63,7 +63,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -137,12 +139,12 @@ private fun SearchScreenContent(
                     hideBottomSheet()
                 },
             )
-        }
+        },
     ) {
         Scaffold(
             floatingActionButton = {
                 Column(
-                    modifier = Modifier.systemBarsPadding()
+                    modifier = Modifier.systemBarsPadding(),
                 ) {
                     AnimatedVisibility(
                         visible = isScrollToTopButtonVisible,
@@ -159,10 +161,10 @@ private fun SearchScreenContent(
                         Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
                     }
                 }
-            }
+            },
         ) { contentPadding ->
             Column(
-                modifier = Modifier.padding(contentPadding)
+                modifier = Modifier.padding(contentPadding),
             ) {
                 SearchBar(
                     modifier = Modifier
@@ -415,17 +417,19 @@ private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.subtitle2,
+                    letterSpacing = 0.8.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
 
-                item.cardCaptions.forEach { caption ->
-                    if (caption.isEmpty()) return@forEach
-                    Text(
-                        text = caption,
-                        style = MaterialTheme.typography.caption,
-                        modifier = Modifier.padding(top = 8.dp),
-                    )
-                }
+                Text(
+                    text = item.cardCaption?.replace("\n", " ").orEmpty(),
+                    style = MaterialTheme.typography.caption,
+                    modifier = Modifier.padding(top = 8.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }

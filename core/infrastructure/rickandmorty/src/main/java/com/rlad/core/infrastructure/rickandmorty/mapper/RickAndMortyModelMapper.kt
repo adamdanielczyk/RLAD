@@ -37,10 +37,7 @@ internal class RickAndMortyModelMapper @Inject constructor(
         id = local.id.toString(),
         imageUrl = local.imageUrl,
         name = local.name,
-        cardCaptions = listOf(
-            local.species,
-            local.location.name,
-        ),
+        cardCaption = local.species,
         detailsKeyValues = listOf(
             application.getString(R.string.details_status) to when (local.status) {
                 CharacterEntity.Status.ALIVE -> application.getString(R.string.details_status_alive)

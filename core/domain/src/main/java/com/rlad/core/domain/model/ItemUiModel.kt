@@ -4,6 +4,6 @@ data class ItemUiModel(
     val id: String,
     val imageUrl: String,
     val name: String,
-    val cardCaptions: List<String>,
+    val cardCaption: String?,
     val detailsKeyValues: List<Pair<String, String>>,
 )

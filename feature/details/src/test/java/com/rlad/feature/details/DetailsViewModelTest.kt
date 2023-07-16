@@ -24,7 +24,7 @@ class DetailsViewModelTest {
             id = "1",
             imageUrl = "url 1",
             name = "Name",
-            cardCaptions = listOf("test1"),
+            cardCaption = "test1",
             detailsKeyValues = listOf("test2" to "test3"),
         )
         coEvery { getItemByIdUseCase(id = "1") } returns flowOf(item)
