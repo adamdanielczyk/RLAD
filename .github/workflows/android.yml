@@ -55,8 +55,8 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: rlad-debug-apk
+          path: app/build/outputs/apk/debug/*debug*.apk
 
   assembleRelease:
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: app-release
+          name: rlad-release-apk
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
   bundleRelease:
@@ -119,7 +119,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: app-bundle-release
+          name: rlad-release-bundle
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
       - uses: r0adkll/upload-google-play@v1
