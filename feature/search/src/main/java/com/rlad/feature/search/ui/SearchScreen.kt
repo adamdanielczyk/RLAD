@@ -417,8 +417,8 @@ private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.subtitle2,
-                    letterSpacing = 0.8.sp,
+                    style = MaterialTheme.typography.h6,
+                    fontSize = 16.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
