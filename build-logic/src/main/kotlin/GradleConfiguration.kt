@@ -71,7 +71,7 @@ internal fun Project.configureCompose() {
     }
 }
 
-private fun Project.android(action: CommonExtension<*, *, *, *>.() -> Unit) {
+private fun Project.android(action: CommonExtension<*, *, *, *, *>.() -> Unit) {
     (this as ExtensionAware).extensions.configure("android", action)
 }
 
@@ -79,6 +79,6 @@ private fun Project.kotlin(action: KotlinAndroidProjectExtension.() -> Unit) {
     (this as ExtensionAware).extensions.configure("kotlin", action)
 }
 
-private fun CommonExtension<*, *, *, *>.kotlinOptions(action: KotlinJvmOptions.() -> Unit) {
+private fun CommonExtension<*, *, *, *, *>.kotlinOptions(action: KotlinJvmOptions.() -> Unit) {
     (this as ExtensionAware).extensions.configure("kotlinOptions", action)
 }
