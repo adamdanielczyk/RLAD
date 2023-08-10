@@ -3,8 +3,6 @@ import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.shared() {
     dependencies {
-        add("implementation", libs.kotlin.stdlib)
-
         add("implementation", libs.kotlinx.coroutines.core)
         add("implementation", libs.kotlinx.coroutines.android)
 
