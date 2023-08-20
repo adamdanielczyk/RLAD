@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 dependencies {
@@ -9,5 +9,5 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converterMoshi)
     implementation(libs.moshi)
-    kapt(libs.moshi.kotlinCodegen)
+    ksp(libs.moshi.kotlinCodegen)
 }
