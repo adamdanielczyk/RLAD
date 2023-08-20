@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -105,6 +106,7 @@ class SearchViewModelTest {
     }
 
     @Test
+    @Ignore("Enable when mockk issue is fixed: https://github.com/mockk/mockk/issues/957")
     fun onDataSourceClicked_saveSelectedDataSourceAndDisplayAllItems() = runTest {
         viewModel.onDataSourceClicked(DataSourceUiModel(
             name = "name", pickerText = "picker text", isSelected = true
