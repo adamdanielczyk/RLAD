@@ -2,13 +2,14 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "matchPackageNames": [
-        "androidx.compose.compiler:compiler"
+      "matchPackagePrefixes": [
+        "com.google.devtools.ksp",
+        "androidx.compose.compiler"
       ],
       "matchPackagePatterns": [
         "^org\\.jetbrains\\.kotlin[.:]"
       ],
-      "groupName": "Kotlin / Compose Compiler"
+      "groupName": "Kotlin & Compose Compiler"
     }
   ],
   "extends": [
