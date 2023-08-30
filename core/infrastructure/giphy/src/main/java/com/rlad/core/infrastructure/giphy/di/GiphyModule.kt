@@ -65,21 +65,21 @@ internal interface GiphyModule {
     }
 
     @Binds
-    fun GiphyLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<GifEntity>
+    fun bindCommonLocalDataSource(impl: GiphyLocalDataSource): CommonLocalDataSource<GifEntity>
 
     @Binds
-    fun GiphyRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerGifsRoot, ServerGif>
+    fun bindCommonRemoteDataSource(impl: GiphyRemoteDataSource): CommonRemoteDataSource<ServerGifsRoot, ServerGif>
 
     @Binds
-    fun GiphyModelMapper.bindModelMapper(): ModelMapper<GifEntity, ServerGif>
-
-    @Binds
-    @IntoMap
-    @DataSourceKey(DataSource.GIPHY)
-    fun CommonRepositoryImpl<GifEntity, ServerGif, ServerGifsRoot>.bindCommonRepository(): CommonRepository
+    fun bindModelMapper(impl: GiphyModelMapper): ModelMapper<GifEntity, ServerGif>
 
     @Binds
     @IntoMap
     @DataSourceKey(DataSource.GIPHY)
-    fun GiphyDataSourceConfiguration.bindDataSourceConfiguration(): DataSourceConfiguration
+    fun bindCommonRepository(impl: CommonRepositoryImpl<GifEntity, ServerGif, ServerGifsRoot>): CommonRepository
+
+    @Binds
+    @IntoMap
+    @DataSourceKey(DataSource.GIPHY)
+    fun bindDataSourceConfiguration(impl: GiphyDataSourceConfiguration): DataSourceConfiguration
 }

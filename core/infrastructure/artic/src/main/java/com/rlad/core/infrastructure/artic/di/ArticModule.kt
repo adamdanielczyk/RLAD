@@ -65,21 +65,21 @@ internal interface ArticModule {
     }
 
     @Binds
-    fun ArticLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<ArtworkEntity>
+    fun bindCommonLocalDataSource(impl: ArticLocalDataSource): CommonLocalDataSource<ArtworkEntity>
 
     @Binds
-    fun ArticRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerArtworksRoot, ServerArtwork>
+    fun bindCommonRemoteDataSource(impl: ArticRemoteDataSource): CommonRemoteDataSource<ServerArtworksRoot, ServerArtwork>
 
     @Binds
-    fun ArticModelMapper.bindModelMapper(): ModelMapper<ArtworkEntity, ServerArtwork>
-
-    @Binds
-    @IntoMap
-    @DataSourceKey(DataSource.ARTIC)
-    fun CommonRepositoryImpl<ArtworkEntity, ServerArtwork, ServerArtworksRoot>.bindCommonRepository(): CommonRepository
+    fun bindModelMapper(impl: ArticModelMapper): ModelMapper<ArtworkEntity, ServerArtwork>
 
     @Binds
     @IntoMap
     @DataSourceKey(DataSource.ARTIC)
-    fun ArticDataSourceConfiguration.bindDataSourceConfiguration(): DataSourceConfiguration
+    fun bindCommonRepository(impl: CommonRepositoryImpl<ArtworkEntity, ServerArtwork, ServerArtworksRoot>): CommonRepository
+
+    @Binds
+    @IntoMap
+    @DataSourceKey(DataSource.ARTIC)
+    fun bindDataSourceConfiguration(impl: ArticDataSourceConfiguration): DataSourceConfiguration
 }

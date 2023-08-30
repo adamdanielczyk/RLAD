@@ -48,26 +48,26 @@ internal interface CommonModule {
     }
 
     @Binds
-    fun AppSettingsRepositoryImpl.bindAppSettingsRepository(): AppSettingsRepository
+    fun bindAppSettingsRepository(impl: AppSettingsRepositoryImpl): AppSettingsRepository
 
     @Binds
-    fun GetAvailableDataSourcesUseCaseImpl.bindGetAvailableDataSourcesUseCase(): GetAvailableDataSourcesUseCase
+    fun bindGetAvailableDataSourcesUseCase(impl: GetAvailableDataSourcesUseCaseImpl): GetAvailableDataSourcesUseCase
 
     @Binds
-    fun GetItemByIdUseCaseImpl.bindGetItemByIdUseCase(): GetItemByIdUseCase
+    fun bindGetItemByIdUseCase(impl: GetItemByIdUseCaseImpl): GetItemByIdUseCase
 
     @Binds
-    fun GetItemsUseCaseImpl.bindGetItemsUseCase(): GetItemsUseCase
+    fun bindGetItemsUseCase(impl: GetItemsUseCaseImpl): GetItemsUseCase
 
     @Binds
-    fun GetCommonRepositoryUseCaseImpl.bindGetCommonRepositoryUseCase(): GetCommonRepositoryUseCase
+    fun bindGetCommonRepositoryUseCase(impl: GetCommonRepositoryUseCaseImpl): GetCommonRepositoryUseCase
 
     @Binds
-    fun GetSelectedDataSourceUseCaseImpl.bindGetSelectedDataSourceUseCase(): GetSelectedDataSourceUseCase
+    fun bindGetSelectedDataSourceUseCase(impl: GetSelectedDataSourceUseCaseImpl): GetSelectedDataSourceUseCase
 
     @Binds
-    fun GetAllDataSourcesUseCaseImpl.bindGetAllDataSourcesUseCase(): GetAllDataSourcesUseCase
+    fun bindGetAllDataSourcesUseCase(impl: GetAllDataSourcesUseCaseImpl): GetAllDataSourcesUseCase
 
     @Binds
-    fun PagingDataRepositoryImpl.bindPagingDataRepository(): PagingDataRepository
+    fun bindPagingDataRepository(impl: PagingDataRepositoryImpl): PagingDataRepository
 }

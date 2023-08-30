@@ -65,21 +65,21 @@ internal interface RickAndMortyModule {
     }
 
     @Binds
-    fun RickAndMortyLocalDataSource.bindCommonLocalDataSource(): CommonLocalDataSource<CharacterEntity>
+    fun bindCommonLocalDataSource(impl: RickAndMortyLocalDataSource): CommonLocalDataSource<CharacterEntity>
 
     @Binds
-    fun RickAndMortyRemoteDataSource.bindCommonRemoteDataSource(): CommonRemoteDataSource<ServerGetCharacters, ServerCharacter>
+    fun bindCommonRemoteDataSource(impl: RickAndMortyRemoteDataSource): CommonRemoteDataSource<ServerGetCharacters, ServerCharacter>
 
     @Binds
-    fun RickAndMortyModelMapper.bindModelMapper(): ModelMapper<CharacterEntity, ServerCharacter>
-
-    @Binds
-    @IntoMap
-    @DataSourceKey(DataSource.RICKANDMORTY)
-    fun CommonRepositoryImpl<CharacterEntity, ServerCharacter, ServerGetCharacters>.bindCommonRepository(): CommonRepository
+    fun bindModelMapper(impl: RickAndMortyModelMapper): ModelMapper<CharacterEntity, ServerCharacter>
 
     @Binds
     @IntoMap
     @DataSourceKey(DataSource.RICKANDMORTY)
-    fun RickAndMortyDataSourceConfiguration.bindDataSourceConfiguration(): DataSourceConfiguration
+    fun bindCommonRepository(impl: CommonRepositoryImpl<CharacterEntity, ServerCharacter, ServerGetCharacters>): CommonRepository
+
+    @Binds
+    @IntoMap
+    @DataSourceKey(DataSource.RICKANDMORTY)
+    fun bindDataSourceConfiguration(impl: RickAndMortyDataSourceConfiguration): DataSourceConfiguration
 }

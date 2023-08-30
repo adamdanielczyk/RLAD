@@ -1,9 +1,9 @@
 plugins {
-    kotlin("kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 dependencies {
     add("implementation", libs.hilt.android)
-    add("kapt", libs.hilt.compiler)
+    add("ksp", libs.hilt.compiler)
 }
