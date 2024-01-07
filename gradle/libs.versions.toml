@@ -51,7 +51,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-converterMoshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 
 test-junit = { module = "junit:junit", version = "4.13.2" }
-test-mockk = { module = "io.mockk:mockk", version = "1.13.8" }
+test-mockk = { module = "io.mockk:mockk", version = "1.13.9" }
 test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 test-androidx-runner = { module = "androidx.test:runner", version = "1.5.2" }
 test-androidx-core = { module = "androidx.test:core", version = "1.5.0" }
