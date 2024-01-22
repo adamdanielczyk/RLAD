@@ -78,19 +78,19 @@ jobs:
         with:
           arguments: assembleRelease --stacktrace
 
-      - uses: r0adkll/sign-android-release@v1
+      - uses: ilharp/sign-android-release@v1.0.4
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.RELEASE_SIGNING_KEY }}
-          alias: ${{ secrets.RELEASE_ALIAS }}
+          releaseDir: app/build/outputs/apk/release
+          signingKey: ${{ secrets.RELEASE_SIGNING_KEY }}
+          keyAlias: ${{ secrets.RELEASE_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: rlad-release-apk
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          path: ${{steps.sign_app.outputs.signedFile}}
 
   bundleRelease:
     if: github.ref == 'refs/heads/master'
@@ -114,24 +114,22 @@ jobs:
         with:
           arguments: bundleRelease --stacktrace
 
-      - uses: r0adkll/sign-android-release@v1
+      - uses: ilharp/sign-android-release@v1.0.4
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.RELEASE_SIGNING_KEY }}
-          alias: ${{ secrets.RELEASE_ALIAS }}
+          releaseDir: app/build/outputs/bundle/release
+          signingKey: ${{ secrets.RELEASE_SIGNING_KEY }}
+          keyAlias: ${{ secrets.RELEASE_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: rlad-release-bundle
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          path: ${{steps.sign_app.outputs.signedFile}}
 
-      - uses: r0adkll/upload-google-play@v1
+      - uses: r0adkll/upload-google-play@v1.1.2
         with:
           serviceAccountJsonPlainText: ${{ secrets.RELEASE_SERVICE_ACCOUNT_JSON }}
           packageName: com.rlad
-          track: production
-          status: completed
-          releaseFiles: ${{steps.sign_app.outputs.signedReleaseFile}}
+          releaseFiles: ${{steps.sign_app.outputs.signedFile}}
