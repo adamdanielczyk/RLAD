@@ -20,7 +20,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: gradle/gradle-build-action@v2.12.0
+      - uses: gradle/gradle-build-action@v3.0.0
         with:
           arguments: test --stacktrace
 
@@ -55,7 +55,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: gradle/gradle-build-action@v2.12.0
+      - uses: gradle/gradle-build-action@v3.0.0
         with:
           arguments: assembleDebug --stacktrace
 
@@ -74,7 +74,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: gradle/gradle-build-action@v2.12.0
+      - uses: gradle/gradle-build-action@v3.0.0
         with:
           arguments: assembleRelease --stacktrace
 
@@ -110,7 +110,7 @@ jobs:
           versionCode: ${{github.run_number}}
           versionName: '1.0.${{github.run_number}}'
 
-      - uses: gradle/gradle-build-action@v2.12.0
+      - uses: gradle/gradle-build-action@v3.0.0
         with:
           arguments: bundleRelease --stacktrace
 
