@@ -4,35 +4,25 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.primarySurface
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,7 +36,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.core.domain.model.ItemUiModel
 
@@ -58,7 +47,7 @@ internal fun DetailsScreen() {
     val item = viewModel.item.collectAsState(initial = null).value ?: return
 
     val systemUiController = rememberSystemUiController()
-    val surfaceColor = MaterialTheme.colors.primarySurface
+    val surfaceColor = MaterialTheme.colorScheme.surface
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -81,8 +70,6 @@ private fun DetailsScreenContent(
         topBar = {
             val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
             TopAppBar(
-                modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)),
-                contentPadding = WindowInsets.statusBars.asPaddingValues(),
                 title = {
                     Text(item.name)
                 },
@@ -95,23 +82,20 @@ private fun DetailsScreenContent(
                     }
                 },
                 actions = {
-                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                        IconButton(onClick = onShareItemClicked) {
-                            Icon(
-                                imageVector = Icons.Default.Share,
-                                contentDescription = null,
-                            )
-                        }
+                    IconButton(onClick = onShareItemClicked) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = null,
+                        )
                     }
-                }
+                },
             )
         },
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .navigationBarsPadding()
-                .padding(contentPadding)
+                .padding(contentPadding),
         ) {
             ImageWithGradient(item.imageUrl)
 
@@ -126,13 +110,13 @@ private fun DetailsScreenContent(
 
 @Composable
 private fun ImageWithGradient(imageUrl: String) {
-    var imageHeightY by remember { mutableStateOf(0f) }
+    var imageHeightY by remember { mutableFloatStateOf(0f) }
     var imageSize by remember { mutableStateOf(Size.Zero) }
 
     val gradient = Brush.verticalGradient(
         colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.5f)),
         startY = imageHeightY / 3,
-        endY = imageHeightY
+        endY = imageHeightY,
     )
 
     // calculate aspect ratio manually due to this issue https://issuetracker.google.com/issues/186012457
@@ -160,7 +144,7 @@ private fun ImageWithGradient(imageUrl: String) {
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(gradient)
+                .background(gradient),
         )
     }
 }
@@ -171,11 +155,11 @@ private fun DetailsText(title: String, text: String) {
     Text(
         text = title,
         modifier = Modifier.padding(bottom = 4.dp),
-        style = MaterialTheme.typography.h6,
+        style = MaterialTheme.typography.titleLarge,
     )
     Text(
         text = text,
         modifier = Modifier.padding(bottom = 8.dp),
-        style = MaterialTheme.typography.body2,
+        style = MaterialTheme.typography.bodyMedium,
     )
 }

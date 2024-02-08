@@ -26,7 +26,6 @@ internal fun Project.shared() {
         add("implementation", libs.androidx.lifecycle.viewmodel)
         add("implementation", libs.androidx.lifecycle.viewmodel.compose)
 
-        add("implementation", libs.accompanist.insetsUi)
         add("implementation", libs.accompanist.systemuicontroller)
 
         add("implementation", libs.coil.compose)

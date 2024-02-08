@@ -30,36 +30,36 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -84,14 +84,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun SearchScreen(onItemCardClicked: (String) -> Unit) {
     val viewModel = hiltViewModel<SearchViewModel>()
 
     val systemUiController = rememberSystemUiController()
-    val surfaceColor = MaterialTheme.colors.surface
+    val surfaceColor = MaterialTheme.colorScheme.surface
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -107,20 +106,7 @@ private fun SearchScreenContent(
     viewModel: SearchViewModel,
     onItemCardClicked: (String) -> Unit,
 ) {
-    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val coroutineScope = rememberCoroutineScope()
-
-    fun showBottomSheet() {
-        coroutineScope.launch {
-            bottomSheetState.show()
-        }
-    }
-
-    fun hideBottomSheet() {
-        coroutineScope.launch {
-            bottomSheetState.hide()
-        }
-    }
+    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     val gridState = rememberLazyGridState()
     val isScrollToTopButtonVisible by remember {
@@ -129,61 +115,67 @@ private fun SearchScreenContent(
         }
     }
 
-    ModalBottomSheetLayout(
-        sheetState = bottomSheetState,
-        sheetContent = {
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
+            SearchBar(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)),
+                onQueryTextChanged = viewModel::onQueryTextChanged,
+                onClearSearchClicked = viewModel::onClearSearchClicked,
+            )
+        },
+        floatingActionButton = {
+            Column(
+                modifier = Modifier.systemBarsPadding(),
+            ) {
+                AnimatedVisibility(
+                    visible = isScrollToTopButtonVisible,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                    modifier = Modifier.padding(bottom = 8.dp),
+                ) {
+                    FloatingActionButton(onClick = viewModel::onScrollToTopClicked) {
+                        Icon(imageVector = Icons.Default.ArrowUpward, contentDescription = null)
+                    }
+                }
+
+                FloatingActionButton(
+                    onClick = { openBottomSheet = true },
+                ) {
+                    Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
+                }
+            }
+        },
+    ) { contentPadding ->
+        Box(
+            modifier = Modifier
+                .padding(contentPadding)
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            ItemsContainer(
+                viewModel = viewModel,
+                onItemCardClicked = onItemCardClicked,
+                gridState = gridState,
+            )
+        }
+    }
+
+    if (openBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { openBottomSheet = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            windowInsets = WindowInsets(0, 0, 0, 0),
+        ) {
             SheetContent(
                 availableDataSources = viewModel.getAvailableDataSourcesUseCase().collectAsState(initial = emptyList()).value,
                 onDataSourceClicked = { dataSource ->
                     viewModel.onDataSourceClicked(dataSource)
-                    hideBottomSheet()
+                    openBottomSheet = false
                 },
             )
-        },
-    ) {
-        Scaffold(
-            floatingActionButton = {
-                Column(
-                    modifier = Modifier.systemBarsPadding(),
-                ) {
-                    AnimatedVisibility(
-                        visible = isScrollToTopButtonVisible,
-                        enter = fadeIn(),
-                        exit = fadeOut(),
-                        modifier = Modifier.padding(bottom = 8.dp),
-                    ) {
-                        FloatingActionButton(onClick = viewModel::onScrollToTopClicked) {
-                            Icon(imageVector = Icons.Default.ArrowUpward, contentDescription = null)
-                        }
-                    }
-
-                    FloatingActionButton(onClick = ::showBottomSheet) {
-                        Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
-                    }
-                }
-            },
-        ) { contentPadding ->
-            Column(
-                modifier = Modifier.padding(contentPadding),
-            ) {
-                SearchBar(
-                    modifier = Modifier
-                        .statusBarsPadding()
-                        .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)),
-                    onQueryTextChanged = viewModel::onQueryTextChanged,
-                    onClearSearchClicked = viewModel::onClearSearchClicked,
-                )
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.TopCenter,
-                ) {
-                    ItemsContainer(
-                        viewModel = viewModel,
-                        onItemCardClicked = onItemCardClicked,
-                        gridState = gridState,
-                    )
-                }
-            }
         }
     }
 }
@@ -196,7 +188,7 @@ private fun SheetContent(
     Column(
         modifier = Modifier
             .navigationBarsPadding()
-            .padding(vertical = 24.dp),
+            .padding(vertical = 16.dp),
     ) {
         Text(
             text = stringResource(R.string.data_source_picker_title),
@@ -205,7 +197,7 @@ private fun SheetContent(
                 end = 24.dp,
                 bottom = 16.dp,
             ),
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleLarge,
         )
 
         availableDataSources.forEach { uiDataSource ->
@@ -238,7 +230,7 @@ private fun SheetItem(
         }
         Text(
             text = text,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 }
@@ -298,7 +290,7 @@ private fun EmptyState() {
         )
         Text(
             text = stringResource(R.string.search_no_results),
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(top = 8.dp),
         )
     }
@@ -320,11 +312,11 @@ private fun PullRefreshWithGrid(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var previousIndex by remember {
-        mutableStateOf(gridState.firstVisibleItemIndex)
+        mutableIntStateOf(gridState.firstVisibleItemIndex)
     }
 
     var previousScrollOffset by remember {
-        mutableStateOf(gridState.firstVisibleItemScrollOffset)
+        mutableIntStateOf(gridState.firstVisibleItemScrollOffset)
     }
 
     LaunchedEffect(gridState) {
@@ -350,13 +342,25 @@ private fun PullRefreshWithGrid(
             }
     }
 
-    val refreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
-    val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = lazyPagingItems::refresh)
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    if (pullToRefreshState.isRefreshing) {
+        lazyPagingItems.refresh()
+    }
+
+    LaunchedEffect(lazyPagingItems.loadState) {
+        when (lazyPagingItems.loadState.refresh) {
+            is LoadState.Loading -> Unit
+            is LoadState.Error, is LoadState.NotLoading -> {
+                pullToRefreshState.endRefresh()
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .pullRefresh(state = refreshState),
+            .nestedScroll(pullToRefreshState.nestedScrollConnection),
         contentAlignment = Alignment.TopCenter,
     ) {
         LazyVerticalGrid(
@@ -375,6 +379,7 @@ private fun PullRefreshWithGrid(
                 ItemCard(item, onItemCardClicked)
             }
 
+            val refreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
             if (!refreshing && lazyPagingItems.loadState.append is LoadState.Loading) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Box(
@@ -383,16 +388,14 @@ private fun PullRefreshWithGrid(
                             .padding(8.dp),
                         contentAlignment = Alignment.Center,
                     ) {
-                        CircularProgressIndicator(color = MaterialTheme.colors.onSurface)
+                        CircularProgressIndicator()
                     }
                 }
             }
         }
 
-        PullRefreshIndicator(
-            refreshing = refreshing,
-            state = refreshState,
-            scale = true,
+        PullToRefreshContainer(
+            state = pullToRefreshState,
         )
     }
 }
@@ -401,7 +404,6 @@ private fun PullRefreshWithGrid(
 private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
     Card(
         onClick = { onItemCardClicked(item.id) },
-        elevation = 3.dp,
         modifier = Modifier.padding(8.dp),
     ) {
         Column {
@@ -417,7 +419,7 @@ private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.titleLarge,
                     fontSize = 16.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -425,7 +427,7 @@ private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
 
                 Text(
                     text = item.cardCaption?.replace("\n", " ").orEmpty(),
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(top = 8.dp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

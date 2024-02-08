@@ -1,6 +1,7 @@
 package com.rlad.feature.search.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,18 +13,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,10 +59,11 @@ internal fun SearchBar(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         AnimatedVisibility(visible = focused) {
             IconButton(
                 modifier = Modifier.padding(start = 2.dp),
@@ -73,7 +72,7 @@ internal fun SearchBar(
                     keyboardController?.hide()
                     query = ""
                     onBackClicked()
-                }
+                },
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
@@ -94,7 +93,7 @@ internal fun SearchBar(
                 onClearQueryClicked()
             },
             focused,
-            Modifier.weight(1f)
+            Modifier.weight(1f),
         )
     }
 }
@@ -119,48 +118,49 @@ private fun SearchTextField(
                         top = 8.dp,
                         bottom = 8.dp,
                         start = if (focused) 0.dp else 16.dp,
-                        end = 16.dp
-                    )
+                        end = 16.dp,
+                    ),
             ),
         shape = CircleShape,
-        elevation = 3.dp,
+        color = MaterialTheme.colorScheme.surfaceVariant,
     ) {
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Box(
-                contentAlignment = Alignment.CenterStart,
-                modifier = modifier
-            ) {
-                val isQueryEmpty = query.isEmpty()
-                if (isQueryEmpty) {
-                    SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
-                }
+        Box(
+            contentAlignment = Alignment.CenterStart,
+            modifier = modifier,
+        ) {
+            val isQueryEmpty = query.isEmpty()
+            if (isQueryEmpty) {
+                SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
+            }
 
-                val focusManager = LocalFocusManager.current
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    BasicTextField(
-                        value = query,
-                        onValueChange = onQueryChanged,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                            .onFocusChanged {
-                                onSearchFocusChanged(it.isFocused)
-                            }
-                            .focusRequester(focusRequester)
-                            .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Search
-                        ),
-                        keyboardActions = KeyboardActions { focusManager.clearFocus() },
-                        textStyle = TextStyle(MaterialTheme.colors.onSurface),
-                        cursorBrush = SolidColor(MaterialTheme.colors.onSurface),
-                    )
-
-                    if (!isQueryEmpty) {
-                        IconButton(onClick = onClearQueryClicked) {
-                            Icon(imageVector = Icons.Default.Cancel, contentDescription = null)
+            val focusManager = LocalFocusManager.current
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                BasicTextField(
+                    value = query,
+                    onValueChange = onQueryChanged,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .onFocusChanged {
+                            onSearchFocusChanged(it.isFocused)
                         }
+                        .focusRequester(focusRequester)
+                        .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                    ),
+                    keyboardActions = KeyboardActions { focusManager.clearFocus() },
+                    textStyle = TextStyle(MaterialTheme.colorScheme.onSurface),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
+                )
+
+                if (!isQueryEmpty) {
+                    IconButton(onClick = onClearQueryClicked) {
+                        Icon(
+                            imageVector = Icons.Default.Cancel,
+                            contentDescription = null,
+                        )
                     }
                 }
             }
@@ -174,8 +174,7 @@ private fun SearchHint(modifier: Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxSize()
-            .then(modifier)
-
+            .then(modifier),
     ) {
         Text(
             text = stringResource(R.string.search_hint),
