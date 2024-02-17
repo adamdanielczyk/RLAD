@@ -19,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -36,7 +35,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.core.domain.model.ItemUiModel
 
 @Composable
@@ -45,15 +43,6 @@ internal fun DetailsScreen() {
 
     val viewModel = hiltViewModel<DetailsViewModel>()
     val item = viewModel.item.collectAsState(initial = null).value ?: return
-
-    val systemUiController = rememberSystemUiController()
-    val surfaceColor = MaterialTheme.colorScheme.surface
-
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = surfaceColor,
-        )
-    }
 
     DetailsScreenContent(
         onShareItemClicked = { viewModel.onShareItemClicked(context, item) },

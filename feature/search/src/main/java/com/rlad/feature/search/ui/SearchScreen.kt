@@ -47,7 +47,6 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -76,7 +75,6 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rlad.core.domain.model.DataSourceUiModel
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.feature.search.R
@@ -88,16 +86,6 @@ import kotlinx.coroutines.flow.map
 @Composable
 internal fun SearchScreen(onItemCardClicked: (String) -> Unit) {
     val viewModel = hiltViewModel<SearchViewModel>()
-
-    val systemUiController = rememberSystemUiController()
-    val surfaceColor = MaterialTheme.colorScheme.surface
-
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = surfaceColor,
-        )
-    }
-
     SearchScreenContent(viewModel, onItemCardClicked)
 }
 
