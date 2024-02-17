@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="data_source_picker_rickandmorty">Rick and Morty</string>
+    <string name="details_name">Name</string>
     <string name="details_status">Status</string>
     <string name="details_status_dead">Dead</string>
     <string name="details_status_alive">Alive</string>

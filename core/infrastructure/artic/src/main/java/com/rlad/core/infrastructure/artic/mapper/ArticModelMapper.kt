@@ -30,6 +30,7 @@ internal class ArticModelMapper @Inject constructor(
         name = local.title,
         cardCaption = local.artistDisplay ?: local.dateDisplay,
         detailsKeyValues = listOfNotNull(
+            application.getString(R.string.details_title) to local.title,
             local.artistDisplay?.let { application.getString(R.string.details_artist_display) to it },
             local.placeOfOrigin?.let { application.getString(R.string.details_place_of_origin) to it },
             local.departmentTitle?.let { application.getString(R.string.details_department_title) to it },
