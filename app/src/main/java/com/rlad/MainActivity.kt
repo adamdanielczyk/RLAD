@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,6 +37,7 @@ internal class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
+                    contentAlignment = Alignment.TopCenter,
                     startDestination = navigators.first(Navigator::isStartDestination).route,
                 ) {
                     navigators.forEach { navigator ->
