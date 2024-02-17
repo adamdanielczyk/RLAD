@@ -31,14 +31,14 @@ internal class DetailsViewModel @Inject constructor(
     }
 
     fun onShareItemClicked(context: Context, item: ItemUiModel) {
-        context.imageLoader.diskCache?.get(item.imageUrl)?.use { snapshot ->
+        context.imageLoader.diskCache?.openSnapshot(item.imageUrl)?.use { snapshot ->
             val mimeType = getMimeType(snapshot)
             val sharingFile = getSharingFile(snapshot, mimeType)
 
             val sharingFileUri = FileProvider.getUriForFile(
                 context,
                 context.applicationContext.packageName,
-                sharingFile
+                sharingFile,
             )
 
             val intent = Intent(Intent.ACTION_SEND)
