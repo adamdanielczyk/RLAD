@@ -104,7 +104,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: chkfung/android-version-actions@v1.2.1
+      - uses: chkfung/android-version-actions@v1.2.2
         with:
           gradlePath: app/build.gradle.kts
           versionCode: ${{github.run_number}}
