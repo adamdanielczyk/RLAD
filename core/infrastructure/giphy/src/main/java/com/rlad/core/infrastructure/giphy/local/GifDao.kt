@@ -14,7 +14,7 @@ internal interface GifDao {
         """
         SELECT * FROM giphy_gif 
         ORDER BY id
-        """
+        """,
     )
     fun getAll(): PagingSource<Int, GifEntity>
 

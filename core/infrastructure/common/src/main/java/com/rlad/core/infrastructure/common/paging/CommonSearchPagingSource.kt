@@ -41,7 +41,7 @@ class CommonSearchPagingSource<RemoteModel : Any, RootRemoteData : Any> @Assiste
             LoadResult.Page(
                 data = emptyList(),
                 prevKey = null,
-                nextKey = null
+                nextKey = null,
             )
         } else {
             LoadResult.Error(exception)

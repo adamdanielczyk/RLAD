@@ -45,7 +45,7 @@ internal interface ArticModule {
         fun database(application: Application): ArticDatabase = Room.databaseBuilder(
             application,
             ArticDatabase::class.java,
-            "artic_database"
+            "artic_database",
         ).fallbackToDestructiveMigration().build()
 
         @Provides

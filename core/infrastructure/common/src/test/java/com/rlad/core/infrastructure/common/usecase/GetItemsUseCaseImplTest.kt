@@ -39,14 +39,14 @@ class GetItemsUseCaseImplTest {
     private val useCase = GetItemsUseCaseImpl(
         getCommonRepositoryUseCase = object : GetCommonRepositoryUseCase {
             override fun invoke(): Flow<CommonRepository> = flowOf(commonRepository)
-        }
+        },
     )
 
     @Test
     fun allItemsAreReturnedIfQueryIsNull() = runTest {
         assertEquals(
             items,
-            useCase(query = null).first().collectData()
+            useCase(query = null).first().collectData(),
         )
     }
 
@@ -54,7 +54,7 @@ class GetItemsUseCaseImplTest {
     fun searchedItemIsReturnedWhenQueryIsNotNull() = runTest {
         assertEquals(
             listOf(items[1]),
-            useCase(query = "name2").first().collectData()
+            useCase(query = "name2").first().collectData(),
         )
     }
 }

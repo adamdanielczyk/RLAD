@@ -39,7 +39,7 @@ internal interface CommonModule {
             return Room.databaseBuilder(
                 application,
                 CommonDatabase::class.java,
-                "common_database"
+                "common_database",
             ).fallbackToDestructiveMigration().build()
         }
 

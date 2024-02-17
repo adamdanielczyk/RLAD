@@ -19,7 +19,7 @@ class RickAndMortyRemoteDataSourceTest {
             gender = Gender.MALE,
             location = Location("location 1"),
             imageUrl = "url 1",
-            created = "created 1"
+            created = "created 1",
         ),
         ServerCharacter(
             id = 2,
@@ -30,8 +30,8 @@ class RickAndMortyRemoteDataSourceTest {
             gender = Gender.MALE,
             location = Location("location 2"),
             imageUrl = "url 2",
-            created = "created 2"
-        )
+            created = "created 2",
+        ),
     )
 
     private val fakeRickAndMortyApi = FakeRickAndMortyApi(characters)
@@ -41,7 +41,7 @@ class RickAndMortyRemoteDataSourceTest {
     fun getCharacters_allApiItemsAreReturned() = runTest {
         assertEquals(
             ServerGetCharacters(characters),
-            remoteDataSource.getRootData(offset = 0, pageSize = 10)
+            remoteDataSource.getRootData(offset = 0, pageSize = 10),
         )
     }
 
@@ -49,7 +49,7 @@ class RickAndMortyRemoteDataSourceTest {
     fun getCharacters_apiItemsAreFilteredByName() = runTest {
         assertEquals(
             ServerGetCharacters(listOf(characters[1])),
-            remoteDataSource.search(query = "Morty", offset = 0, pageSize = 10)
+            remoteDataSource.search(query = "Morty", offset = 0, pageSize = 10),
         )
     }
 
@@ -57,7 +57,7 @@ class RickAndMortyRemoteDataSourceTest {
     fun getCharacter_itemWithMatchingIdIsReturned() = runTest {
         assertEquals(
             characters[1],
-            remoteDataSource.getItem(id = "2")
+            remoteDataSource.getItem(id = "2"),
         )
     }
 

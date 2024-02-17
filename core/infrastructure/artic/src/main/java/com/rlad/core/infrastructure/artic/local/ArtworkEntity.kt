@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "artic_artwork",
     indices = [
-        Index(value = ["artic_id"], unique = true)
+        Index(value = ["artic_id"], unique = true),
     ],
 )
 internal data class ArtworkEntity(
@@ -22,5 +22,4 @@ internal data class ArtworkEntity(
     @ColumnInfo(name = "place_of_origin") val placeOfOrigin: String?,
     @ColumnInfo(name = "alt_text") val altText: String?,
     @ColumnInfo(name = "date_display") val dateDisplay: String?,
-) {
-}
+)

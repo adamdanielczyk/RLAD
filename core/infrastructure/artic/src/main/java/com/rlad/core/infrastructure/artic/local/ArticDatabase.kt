@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [ArtworkEntity::class],
-    version = 1
+    version = 1,
 )
 internal abstract class ArticDatabase : RoomDatabase() {
 

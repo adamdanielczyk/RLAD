@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
     entities = [
         AppPreferencesEntity::class,
     ],
-    version = 1
+    version = 1,
 )
 internal abstract class CommonDatabase : RoomDatabase() {
 

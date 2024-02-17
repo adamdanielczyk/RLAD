@@ -18,7 +18,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
     override suspend fun saveSelectedDataSourceName(dataSourceName: String) {
         appPreferencesLocalDataSource.save(
             key = SELECTED_DATA_SOURCE_KEY,
-            value = dataSourceName
+            value = dataSourceName,
         )
     }
 

@@ -30,7 +30,7 @@ internal class RickAndMortyModelMapper @Inject constructor(
         },
         location = CharacterEntity.Location(remote.location.name),
         imageUrl = remote.imageUrl,
-        created = remote.created
+        created = remote.created,
     )
 
     override fun toUiModel(local: CharacterEntity): ItemUiModel = ItemUiModel(
@@ -57,7 +57,7 @@ internal class RickAndMortyModelMapper @Inject constructor(
         ) + listOfNotNull(
             if (!local.type.isNullOrBlank()) {
                 application.getString(R.string.details_type) to local.type
-            } else null
+            } else null,
         ),
     )
 }

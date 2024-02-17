@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [GifEntity::class],
-    version = 1
+    version = 1,
 )
 internal abstract class GiphyDatabase : RoomDatabase() {
 

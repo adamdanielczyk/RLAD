@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [CharacterEntity::class],
-    version = 1
+    version = 1,
 )
 @TypeConverters(RickAndMortyTypeConverters::class)
 internal abstract class RickAndMortyDatabase : RoomDatabase() {

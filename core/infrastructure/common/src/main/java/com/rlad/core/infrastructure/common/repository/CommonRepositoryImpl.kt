@@ -39,10 +39,10 @@ class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData :
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
-                enablePlaceholders = false
+                enablePlaceholders = false,
             ),
             remoteMediator = remoteMediator,
-            pagingSourceFactory = localDataSource::getAll
+            pagingSourceFactory = localDataSource::getAll,
         ).flow.map { pagingData -> pagingData.map(modelMapper::toUiModel) }
     }
 
@@ -50,9 +50,9 @@ class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData :
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
-                enablePlaceholders = false
+                enablePlaceholders = false,
             ),
-            pagingSourceFactory = { searchPagingSourceFactory.create(query) }
+            pagingSourceFactory = { searchPagingSourceFactory.create(query) },
         ).flow.map { pagingData ->
             pagingData
                 .map(modelMapper::toLocalModel)

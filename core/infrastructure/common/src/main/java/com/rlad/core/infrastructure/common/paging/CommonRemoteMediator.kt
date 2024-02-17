@@ -70,8 +70,8 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
         saveNextOffsetToLoad(
             offset = remoteDataSource.getNextPagingOffset(
                 rootData = rootData,
-                currentlyLoadedPage = nextOffsetToLoad
-            )
+                currentlyLoadedPage = nextOffsetToLoad,
+            ),
         )
 
         val totalLoadedItemsCount = loadedItemsCount + items.size

@@ -27,7 +27,7 @@ class GetSelectedDataSourceUseCaseImplTest {
 
         assertEquals(
             DataSource.values()[1],
-            useCase().first()
+            useCase().first(),
         )
     }
 
@@ -39,7 +39,7 @@ class GetSelectedDataSourceUseCaseImplTest {
 
         assertEquals(
             DataSource.GIPHY,
-            useCase().first()
+            useCase().first(),
         )
     }
 }

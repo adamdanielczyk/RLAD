@@ -45,7 +45,7 @@ internal interface GiphyModule {
         fun database(application: Application): GiphyDatabase = Room.databaseBuilder(
             application,
             GiphyDatabase::class.java,
-            "giphy_database"
+            "giphy_database",
         ).fallbackToDestructiveMigration().build()
 
         @Provides

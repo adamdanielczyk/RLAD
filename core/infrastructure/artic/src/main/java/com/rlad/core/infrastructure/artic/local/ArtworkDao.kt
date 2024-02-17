@@ -14,7 +14,7 @@ internal interface ArtworkDao {
         """
         SELECT * FROM artic_artwork 
         ORDER BY id
-        """
+        """,
     )
     fun getAll(): PagingSource<Int, ArtworkEntity>
 

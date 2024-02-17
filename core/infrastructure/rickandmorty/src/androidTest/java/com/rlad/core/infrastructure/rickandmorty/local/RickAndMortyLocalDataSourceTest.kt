@@ -21,7 +21,7 @@ class RickAndMortyLocalDataSourceTest {
     fun createDb() = runTest {
         val database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            RickAndMortyDatabase::class.java
+            RickAndMortyDatabase::class.java,
         ).build()
 
         localDataSource = RickAndMortyLocalDataSource(database.characterDao())
@@ -32,7 +32,7 @@ class RickAndMortyLocalDataSourceTest {
     fun getCharacterById_loadCharacterFromDb() = runTest {
         assertEquals(
             characters.first(),
-            localDataSource.getById(id = "1").first()
+            localDataSource.getById(id = "1").first(),
         )
     }
 
@@ -40,7 +40,7 @@ class RickAndMortyLocalDataSourceTest {
     fun getCharacterById_returnNullIfDoesNotExist() = runTest {
         assertEquals(
             null,
-            localDataSource.getById(id = "10").first()
+            localDataSource.getById(id = "10").first(),
         )
     }
 
@@ -53,6 +53,6 @@ class RickAndMortyLocalDataSourceTest {
         gender = Gender.MALE,
         location = Location("location"),
         imageUrl = "url",
-        created = "created"
+        created = "created",
     )
 }

@@ -20,7 +20,7 @@ internal class SearchNavigatorImpl @Inject constructor(
     @Composable
     override fun Content(navController: NavHostController) {
         SearchScreen(
-            onItemCardClicked = { id -> detailsNavigator.navigate(navController, id) }
+            onItemCardClicked = { id -> detailsNavigator.navigate(navController, id) },
         )
     }
 }

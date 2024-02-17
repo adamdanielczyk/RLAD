@@ -14,7 +14,7 @@ internal interface CharacterDao {
         """
         SELECT * FROM rickandmorty_character 
         ORDER BY id
-        """
+        """,
     )
     fun getAll(): PagingSource<Int, CharacterEntity>
 

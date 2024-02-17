@@ -45,7 +45,7 @@ internal interface RickAndMortyModule {
         fun database(application: Application): RickAndMortyDatabase = Room.databaseBuilder(
             application,
             RickAndMortyDatabase::class.java,
-            "rickandmorty_database"
+            "rickandmorty_database",
         ).fallbackToDestructiveMigration().build()
 
         @Provides

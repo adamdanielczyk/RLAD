@@ -29,7 +29,7 @@ class GetAvailableDataSourcesUseCaseImplTest {
                 DataSource.RICKANDMORTY to object : DataSourceConfiguration {
                     override fun getDataSourcePickerText(): String = "picker3"
                 },
-            )
+            ),
         )
 
         assertEquals(
@@ -38,7 +38,7 @@ class GetAvailableDataSourcesUseCaseImplTest {
                 DataSourceUiModel(name = DataSource.GIPHY.dataSourceName, pickerText = "picker2", isSelected = false),
                 DataSourceUiModel(name = DataSource.RICKANDMORTY.dataSourceName, pickerText = "picker3", isSelected = true),
             ),
-            useCase().first()
+            useCase().first(),
         )
     }
 }

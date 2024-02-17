@@ -108,9 +108,11 @@ class SearchViewModelTest {
     @Test
     @Ignore("Enable when mockk issue is fixed: https://github.com/mockk/mockk/issues/957")
     fun onDataSourceClicked_saveSelectedDataSourceAndDisplayAllItems() = runTest {
-        viewModel.onDataSourceClicked(DataSourceUiModel(
-            name = "name", pickerText = "picker text", isSelected = true
-        ))
+        viewModel.onDataSourceClicked(
+            DataSourceUiModel(
+                name = "name", pickerText = "picker text", isSelected = true,
+            ),
+        )
 
         coVerify {
             appSettingsRepository.saveSelectedDataSourceName(dataSourceName = "name")

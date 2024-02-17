@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "giphy_gif",
     indices = [
-        Index(value = ["giphy_id"], unique = true)
+        Index(value = ["giphy_id"], unique = true),
     ],
 )
 internal data class GifEntity(
