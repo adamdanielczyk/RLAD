@@ -7,6 +7,7 @@ dependencies {
     implementation(libs.hilt.gradlePlugin)
     implementation(libs.kotlin.gradlePlugin)
     implementation(libs.ksp.gradlePlugin)
+    implementation(libs.room.gradlePlugin)
 
     // workaround to enable version catalog in build-logic
     // see https://github.com/gradle/gradle/issues/15383

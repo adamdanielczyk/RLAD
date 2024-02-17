@@ -2,11 +2,11 @@ plugins {
     id("com.android.library")
     kotlin("android")
     id("com.google.devtools.ksp")
+    id("androidx.room")
 }
 
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-    arg("room.incremental", "true")
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
