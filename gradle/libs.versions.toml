@@ -9,7 +9,7 @@ coil = "2.6.0"
 hilt = "2.51.1"
 kotlin = "1.9.23"
 kotlinxCoroutines = "1.8.0"
-ksp = "1.9.23-1.0.19"
+ksp = "1.9.23-1.0.20"
 moshi = "1.15.1"
 retrofit = "2.11.0"
 
