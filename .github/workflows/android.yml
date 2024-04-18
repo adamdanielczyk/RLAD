@@ -59,7 +59,7 @@ jobs:
         with:
           arguments: assembleDebug --stacktrace
 
-      - uses: actions/upload-artifact@v4.3.1
+      - uses: actions/upload-artifact@v4.3.2
         with:
           name: rlad-debug-apk
           path: app/build/outputs/apk/debug/*debug*.apk
@@ -87,7 +87,7 @@ jobs:
           keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
-      - uses: actions/upload-artifact@v4.3.1
+      - uses: actions/upload-artifact@v4.3.2
         with:
           name: rlad-release-apk
           path: ${{steps.sign_app.outputs.signedFile}}
@@ -123,7 +123,7 @@ jobs:
           keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
-      - uses: actions/upload-artifact@v4.3.1
+      - uses: actions/upload-artifact@v4.3.2
         with:
           name: rlad-release-bundle
           path: ${{steps.sign_app.outputs.signedFile}}
