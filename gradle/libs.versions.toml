@@ -50,7 +50,7 @@ retrofit-converterMoshi = { module = "com.squareup.retrofit2:converter-moshi", v
 test-junit = { module = "junit:junit", version = "4.13.2" }
 test-mockk = { module = "io.mockk:mockk", version = "1.13.11" }
 test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-test-androidx-runner = { module = "androidx.test:runner", version = "1.6.0" }
+test-androidx-runner = { module = "androidx.test:runner", version = "1.6.1" }
 test-androidx-core = { module = "androidx.test:core", version = "1.6.1" }
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
