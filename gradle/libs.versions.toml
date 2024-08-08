@@ -1,15 +1,15 @@
 [versions]
 androidGradlePlugin = "8.5.1"
 androidxActivity = "1.9.1"
-androidxComposeCompiler = "1.5.14"
+androidxComposeCompiler = "1.5.15"
 androidxLifecycle = "2.8.4"
 androidxPaging = "3.2.1"
 androidxRoom = "2.6.1"
 coil = "2.7.0"
 hilt = "2.52"
-kotlin = "1.9.24"
+kotlin = "1.9.25"
 kotlinxCoroutines = "1.8.1"
-ksp = "1.9.24-1.0.20"
+ksp = "1.9.25-1.0.20"
 moshi = "1.15.1"
 retrofit = "2.11.0"
 
