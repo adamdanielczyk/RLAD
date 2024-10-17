@@ -40,7 +40,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: reactivecircus/android-emulator-runner@v2.32.0
+      - uses: reactivecircus/android-emulator-runner@v2.33.0
         with:
           api-level: 29
           script: ./gradlew connectedAndroidTest
