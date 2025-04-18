@@ -78,7 +78,7 @@ jobs:
         with:
           arguments: assembleRelease --stacktrace
 
-      - uses: ilharp/sign-android-release@v1.0.4
+      - uses: ilharp/sign-android-release@v2.0.0
         id: sign_app
         with:
           releaseDir: app/build/outputs/apk/release
@@ -114,7 +114,7 @@ jobs:
         with:
           arguments: bundleRelease --stacktrace
 
-      - uses: ilharp/sign-android-release@v1.0.4
+      - uses: ilharp/sign-android-release@v2.0.0
         id: sign_app
         with:
           releaseDir: app/build/outputs/bundle/release
