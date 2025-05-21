@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.rlad.core.domain.model.ItemUiModel
+import com.rlad.core.ui.RladTheme
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun DetailsScreen() {
@@ -156,4 +158,24 @@ private fun DetailsText(title: String, text: String) {
         modifier = Modifier.padding(bottom = 8.dp),
         style = MaterialTheme.typography.bodyMedium,
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DetailsScreenContentPreview() {
+    RladTheme(useDarkTheme = false) {
+        DetailsScreenContent(
+            onShareItemClicked = {},
+            item = ItemUiModel(
+                id = "id",
+                imageUrl = "",
+                name = "Preview item",
+                cardCaption = "Preview caption",
+                detailsKeyValues = listOf(
+                    "Year" to "2024",
+                    "Description" to "Some description",
+                ),
+            ),
+        )
+    }
 }

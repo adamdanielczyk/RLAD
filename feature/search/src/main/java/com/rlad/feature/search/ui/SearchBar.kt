@@ -40,7 +40,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.rlad.feature.search.R
+import com.rlad.core.ui.RladTheme
 
 /**
  * Simplified version of SearchBar implemented in https://github.com/SmartToolFactory/Jetpack-Compose-Tutorials
@@ -180,6 +182,20 @@ private fun SearchHint(modifier: Modifier) {
     ) {
         Text(
             text = stringResource(R.string.search_hint),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchBarPreview() {
+    RladTheme(useDarkTheme = false) {
+        SearchBar(
+            modifier = Modifier,
+            onQueryChanged = {},
+            onSearchFocusChanged = {},
+            onClearQueryClicked = {},
+            onBackClicked = {},
         )
     }
 }

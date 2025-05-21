@@ -78,6 +78,8 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.rlad.core.domain.model.DataSourceUiModel
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.feature.search.R
+import com.rlad.core.ui.RladTheme
+import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
@@ -421,5 +423,22 @@ private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ItemCardPreview() {
+    RladTheme(useDarkTheme = false) {
+        ItemCard(
+            item = ItemUiModel(
+                id = "id",
+                imageUrl = "",
+                name = "Preview item",
+                cardCaption = "Preview caption",
+                detailsKeyValues = emptyList(),
+            ),
+            onItemCardClicked = {},
+        )
     }
 }
