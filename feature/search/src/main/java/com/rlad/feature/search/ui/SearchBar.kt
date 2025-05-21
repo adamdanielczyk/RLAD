@@ -48,12 +48,12 @@ import com.rlad.feature.search.R
 @Composable
 internal fun SearchBar(
     modifier: Modifier,
+    query: String,
     onQueryChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit = {},
     onClearQueryClicked: () -> Unit,
     onBackClicked: () -> Unit,
 ) {
-    var query by rememberSaveable { mutableStateOf("") }
     var focused by rememberSaveable { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
@@ -71,7 +71,7 @@ internal fun SearchBar(
                 onClick = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
-                    query = ""
+                    onQueryChanged("")
                     onBackClicked()
                 },
             ) {
@@ -81,16 +81,13 @@ internal fun SearchBar(
 
         SearchTextField(
             query,
-            { newQuery ->
-                query = newQuery
-                onQueryChanged(newQuery)
-            },
+            onQueryChanged,
             { newFocused ->
                 focused = newFocused
                 onSearchFocusChanged(newFocused)
             },
             {
-                query = ""
+                onQueryChanged("")
                 onClearQueryClicked()
             },
             focused,

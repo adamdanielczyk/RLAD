@@ -95,6 +95,7 @@ private fun SearchScreenContent(
     onItemCardClicked: (String) -> Unit,
 ) {
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
 
     val gridState = rememberLazyGridState()
     val isScrollToTopButtonVisible by remember {
@@ -110,8 +111,15 @@ private fun SearchScreenContent(
                 modifier = Modifier
                     .statusBarsPadding()
                     .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)),
-                onQueryTextChanged = viewModel::onQueryTextChanged,
-                onClearSearchClicked = viewModel::onClearSearchClicked,
+                query = searchQuery,
+                onQueryTextChanged = { newQuery ->
+                    searchQuery = newQuery
+                    viewModel.onQueryTextChanged(newQuery)
+                },
+                onClearSearchClicked = {
+                    searchQuery = ""
+                    viewModel.onClearSearchClicked()
+                },
             )
         },
         floatingActionButton = {
@@ -161,6 +169,10 @@ private fun SearchScreenContent(
                 availableDataSources = viewModel.getAvailableDataSourcesUseCase().collectAsState(initial = emptyList()).value,
                 onDataSourceClicked = { dataSource ->
                     viewModel.onDataSourceClicked(dataSource)
+                    if (searchQuery.isNotEmpty()) {
+                        searchQuery = ""
+                        viewModel.onClearSearchClicked()
+                    }
                     openBottomSheet = false
                 },
             )
@@ -226,11 +238,13 @@ private fun SheetItem(
 @Composable
 private fun SearchBar(
     modifier: Modifier,
+    query: String,
     onQueryTextChanged: (String) -> Unit,
     onClearSearchClicked: () -> Unit,
 ) {
     SearchBar(
         modifier = modifier,
+        query = query,
         onQueryChanged = onQueryTextChanged,
         onClearQueryClicked = onClearSearchClicked,
         onBackClicked = onClearSearchClicked,
