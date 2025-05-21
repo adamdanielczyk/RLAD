@@ -3,4 +3,9 @@
     <string name="search_hint">Search</string>
     <string name="search_no_results">No results found</string>
     <string name="data_source_picker_title">Pick data source</string>
+    <string name="cd_navigate_back">Back</string>
+    <string name="cd_clear_search">Clear search</string>
+    <string name="cd_scroll_to_top">Scroll to top</string>
+    <string name="cd_filter">Filter</string>
+    <string name="cd_selected">Selected</string>
 </resources>

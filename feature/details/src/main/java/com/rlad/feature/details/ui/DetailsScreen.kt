@@ -32,11 +32,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.rlad.core.domain.model.ItemUiModel
+import com.rlad.feature.details.R
 
 @Composable
 internal fun DetailsScreen() {
@@ -71,7 +73,7 @@ private fun DetailsScreenContent(
                     IconButton(onClick = { onBackPressedDispatcher?.onBackPressed() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_navigate_back),
                         )
                     }
                 },
@@ -79,7 +81,7 @@ private fun DetailsScreenContent(
                     IconButton(onClick = onShareItemClicked) {
                         Icon(
                             imageVector = Icons.Default.Share,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_share),
                         )
                     }
                 },
@@ -91,7 +93,10 @@ private fun DetailsScreenContent(
                 .verticalScroll(rememberScrollState())
                 .padding(contentPadding),
         ) {
-            ImageWithGradient(item.imageUrl)
+            ImageWithGradient(
+                imageUrl = item.imageUrl,
+                contentDescription = item.name,
+            )
 
             Column(modifier = Modifier.padding(16.dp)) {
                 item.detailsKeyValues.forEach { (title, text) ->
@@ -103,7 +108,10 @@ private fun DetailsScreenContent(
 }
 
 @Composable
-private fun ImageWithGradient(imageUrl: String) {
+private fun ImageWithGradient(
+    imageUrl: String,
+    contentDescription: String,
+) {
     var imageHeightY by remember { mutableFloatStateOf(0f) }
     var imageSize by remember { mutableStateOf(Size.Zero) }
 
@@ -123,7 +131,7 @@ private fun ImageWithGradient(imageUrl: String) {
     Box {
         AsyncImage(
             model = imageUrl,
-            contentDescription = null,
+            contentDescription = contentDescription,
             onSuccess = { state ->
                 imageSize = state.painter.intrinsicSize
             },

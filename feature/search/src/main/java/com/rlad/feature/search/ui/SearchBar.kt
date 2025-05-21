@@ -75,7 +75,10 @@ internal fun SearchBar(
                     onBackClicked()
                 },
             ) {
-                Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    contentDescription = stringResource(R.string.cd_navigate_back),
+                )
             }
         }
 
@@ -161,7 +164,7 @@ private fun SearchTextField(
                     IconButton(onClick = onClearQueryClicked) {
                         Icon(
                             imageVector = Icons.Default.Cancel,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.cd_clear_search),
                         )
                     }
                 }

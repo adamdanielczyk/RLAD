@@ -125,14 +125,20 @@ private fun SearchScreenContent(
                     modifier = Modifier.padding(bottom = 8.dp),
                 ) {
                     FloatingActionButton(onClick = viewModel::onScrollToTopClicked) {
-                        Icon(imageVector = Icons.Default.ArrowUpward, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Default.ArrowUpward,
+                            contentDescription = stringResource(R.string.cd_scroll_to_top),
+                        )
                     }
                 }
 
                 FloatingActionButton(
                     onClick = { openBottomSheet = true },
                 ) {
-                    Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
+                    Icon(
+                        imageVector = Icons.Default.FilterList,
+                        contentDescription = stringResource(R.string.cd_filter),
+                    )
                 }
             }
         },
@@ -211,7 +217,10 @@ private fun SheetItem(
             .fillMaxWidth(),
     ) {
         if (isSelected) {
-            Icon(imageVector = Icons.Default.Check, contentDescription = null)
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = stringResource(R.string.cd_selected),
+            )
             Spacer(modifier = Modifier.width(8.dp))
         } else {
             Spacer(modifier = Modifier.width(32.dp))
@@ -275,6 +284,7 @@ private fun EmptyState() {
             composition = composition,
             iterations = LottieConstants.IterateForever,
             modifier = Modifier.size(120.dp),
+            contentDescription = stringResource(R.string.search_no_results),
         )
         Text(
             text = stringResource(R.string.search_no_results),
@@ -396,7 +406,7 @@ private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
         Column {
             AsyncImage(
                 model = item.imageUrl,
-                contentDescription = null,
+                contentDescription = item.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .height(150.dp)
