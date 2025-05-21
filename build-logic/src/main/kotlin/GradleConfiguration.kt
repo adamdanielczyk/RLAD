@@ -29,7 +29,7 @@ internal fun Project.configureKotlinAndroid() {
     }
 
     android {
-        compileSdkVersion(34)
+        compileSdkVersion(36)
 
         defaultConfig {
             minSdk = 26
