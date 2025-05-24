@@ -42,8 +42,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,7 +57,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -155,7 +153,6 @@ private fun SearchScreenContent(
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet = false },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            windowInsets = WindowInsets(0, 0, 0, 0),
         ) {
             SheetContent(
                 availableDataSources = viewModel.getAvailableDataSourcesUseCase().collectAsState(initial = emptyList()).value,
@@ -330,26 +327,11 @@ private fun PullRefreshWithGrid(
             }
     }
 
-    val pullToRefreshState = rememberPullToRefreshState()
-
-    if (pullToRefreshState.isRefreshing) {
-        lazyPagingItems.refresh()
-    }
-
-    LaunchedEffect(lazyPagingItems.loadState) {
-        when (lazyPagingItems.loadState.refresh) {
-            is LoadState.Loading -> Unit
-            is LoadState.Error, is LoadState.NotLoading -> {
-                pullToRefreshState.endRefresh()
-            }
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(pullToRefreshState.nestedScrollConnection),
+    PullToRefreshBox(
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter,
+        onRefresh = lazyPagingItems::refresh,
+        isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading,
     ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 150.dp),
@@ -380,10 +362,6 @@ private fun PullRefreshWithGrid(
                 }
             }
         }
-
-        PullToRefreshContainer(
-            state = pullToRefreshState,
-        )
     }
 }
 
