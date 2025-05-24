@@ -11,7 +11,7 @@ class GetAllDataSourcesUseCaseImplTest {
         val useCase = GetAllDataSourcesUseCaseImpl()
 
         assertEquals(
-            DataSource.values().sortedBy { it.dataSourceName },
+            DataSource.entries.sortedBy { it.dataSourceName },
             useCase(),
         )
     }

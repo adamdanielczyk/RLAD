@@ -9,5 +9,5 @@ internal interface GetAllDataSourcesUseCase {
 
 internal class GetAllDataSourcesUseCaseImpl @Inject constructor() : GetAllDataSourcesUseCase {
 
-    override operator fun invoke(): List<DataSource> = DataSource.values().sortedBy(DataSource::dataSourceName)
+    override operator fun invoke(): List<DataSource> = DataSource.entries.sortedBy(DataSource::dataSourceName)
 }

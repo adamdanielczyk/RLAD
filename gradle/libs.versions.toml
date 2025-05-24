@@ -1,23 +1,21 @@
 [versions]
 androidGradlePlugin = "8.10.0"
 androidxActivity = "1.10.1"
-androidxComposeCompiler = "1.5.15"
 androidxLifecycle = "2.9.0"
-androidxPaging = "3.2.1"
-androidxRoom = "2.6.1"
+androidxPaging = "3.3.6"
+androidxRoom = "2.7.1"
 coil = "2.7.0"
-hilt = "2.53"
-kotlin = "1.9.25"
-kotlinxCoroutines = "1.9.0"
-ksp = "1.9.25-1.0.20"
+hilt = "2.56.2"
+kotlin = "2.1.21"
+kotlinxCoroutines = "1.10.2"
+ksp = "2.1.21-2.0.1"
 moshi = "1.15.2"
-retrofit = "2.11.0"
+retrofit = "3.0.0"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2024.08.00" }
-androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
@@ -52,10 +50,12 @@ test-mockk = { module = "io.mockk:mockk", version = "1.14.2" }
 test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 test-androidx-runner = { module = "androidx.test:runner", version = "1.6.2" }
 test-androidx-core = { module = "androidx.test:core", version = "1.6.1" }
+test-androidx-paging = { module = "androidx.paging:paging-testing", version.ref = "androidxPaging" }
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 room-gradlePlugin = { module = "androidx.room:room-gradle-plugin", version.ref = "androidxRoom" }
 
@@ -63,6 +63,8 @@ room-gradlePlugin = { module = "androidx.room:room-gradle-plugin", version.ref =
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidxRoom" }

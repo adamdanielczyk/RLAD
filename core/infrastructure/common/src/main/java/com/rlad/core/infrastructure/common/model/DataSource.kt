@@ -8,7 +8,7 @@ enum class DataSource(val dataSourceName: String) {
     RICKANDMORTY("RICK_AND_MORTY");
 
     companion object {
-        fun fromString(dataSourceName: String) = values().first { it.dataSourceName == dataSourceName }
+        fun fromString(dataSourceName: String) = entries.first { it.dataSourceName == dataSourceName }
     }
 }
 

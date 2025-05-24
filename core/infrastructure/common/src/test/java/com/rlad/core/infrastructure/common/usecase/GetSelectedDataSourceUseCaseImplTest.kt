@@ -23,10 +23,10 @@ class GetSelectedDataSourceUseCaseImplTest {
     fun selectedRepositoryIsReturned() = runTest {
         every {
             appSettingsRepository.getSelectedDataSource()
-        } returns flowOf(DataSource.values()[1])
+        } returns flowOf(DataSource.entries[1])
 
         assertEquals(
-            DataSource.values()[1],
+            DataSource.entries[1],
             useCase().first(),
         )
     }

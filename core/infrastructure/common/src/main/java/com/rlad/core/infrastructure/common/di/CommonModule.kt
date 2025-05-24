@@ -40,7 +40,7 @@ internal interface CommonModule {
                 application,
                 CommonDatabase::class.java,
                 "common_database",
-            ).fallbackToDestructiveMigration().build()
+            ).fallbackToDestructiveMigration(dropAllTables = true).build()
         }
 
         @Provides

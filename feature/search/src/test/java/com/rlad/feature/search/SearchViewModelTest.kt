@@ -1,11 +1,11 @@
 package com.rlad.feature.search
 
 import androidx.paging.PagingData
+import androidx.paging.testing.asSnapshot
 import com.rlad.core.domain.model.DataSourceUiModel
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.domain.repository.AppSettingsRepository
 import com.rlad.core.domain.usecase.GetItemsUseCase
-import com.rlad.core.testing.paging.collectData
 import com.rlad.core.testing.rule.TestDispatcherRule
 import com.rlad.feature.search.ui.SearchViewModel
 import io.mockk.coEvery
@@ -121,5 +121,5 @@ class SearchViewModelTest {
     }
 
     private suspend fun SearchViewModel.getCurrentItems(): List<ItemUiModel> =
-        itemsPagingData.value?.first()?.collectData().orEmpty()
+        itemsPagingData.value?.asSnapshot().orEmpty()
 }

@@ -3,7 +3,6 @@ package com.rlad.feature.search.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.rlad.core.domain.model.DataSourceUiModel
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.domain.repository.AppSettingsRepository
@@ -75,7 +74,7 @@ internal class SearchViewModel @Inject constructor(
     }
 
     private suspend fun postNewPagingData(newItems: Flow<PagingData<ItemUiModel>>) {
-        _itemsUpdates.emit(newItems.cachedIn(viewModelScope))
+        _itemsUpdates.emit(newItems)
     }
 
     fun onDataSourceClicked(dataSource: DataSourceUiModel) {

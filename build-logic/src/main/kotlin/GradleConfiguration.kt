@@ -4,10 +4,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.the
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal val Project.libs
     get() = the<LibrariesForLibs>()
@@ -17,15 +14,15 @@ internal fun Project.configureKotlinAndroid() {
 
     kotlin {
         jvmToolchain(javaVersion.majorVersion.toInt())
-    }
 
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf(
-            "-opt-in=kotlin.RequiresOptIn",
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-opt-in=kotlinx.coroutines.FlowPreview",
-            "-opt-in=androidx.paging.ExperimentalPagingApi",
-        )
+        compilerOptions {
+            freeCompilerArgs.addAll(
+                "-opt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlinx.coroutines.FlowPreview",
+                "-opt-in=androidx.paging.ExperimentalPagingApi",
+            )
+        }
     }
 
     android {
@@ -54,20 +51,18 @@ internal fun Project.configureKotlinAndroid() {
 }
 
 internal fun Project.configureCompose() {
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf(
-            "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
-            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-            "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
-        )
+    kotlin {
+        compilerOptions {
+            freeCompilerArgs.addAll(
+                "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+                "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+            )
+        }
     }
 
     android {
         buildFeatures.compose = true
-
-        composeOptions {
-            kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
-        }
     }
 }
 
@@ -77,10 +72,4 @@ private fun Project.android(action: BaseExtension.() -> Unit) {
 
 private fun Project.kotlin(action: KotlinAndroidProjectExtension.() -> Unit) {
     (this as ExtensionAware).extensions.configure("kotlin", action)
-}
-
-private fun Project.kotlinOptions(action: KotlinJvmOptions.() -> Unit) {
-    tasks.withType<KotlinCompile> {
-        kotlinOptions(action)
-    }
 }

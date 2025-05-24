@@ -24,7 +24,7 @@ internal data class CharacterEntity(
         UNKNOWN(3);
 
         companion object {
-            fun fromId(id: Int): Status = values().first { it.id == id }
+            fun fromId(id: Int): Status = entries.first { it.id == id }
         }
     }
 
@@ -35,7 +35,7 @@ internal data class CharacterEntity(
         UNKNOWN(4);
 
         companion object {
-            fun fromId(id: Int): Gender = values().first { it.id == id }
+            fun fromId(id: Int): Gender = entries.first { it.id == id }
         }
     }
 

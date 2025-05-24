@@ -46,7 +46,7 @@ internal interface ArticModule {
             application,
             ArticDatabase::class.java,
             "artic_database",
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration(dropAllTables = true).build()
 
         @Provides
         fun dao(database: ArticDatabase): ArtworkDao = database.artworkDao()

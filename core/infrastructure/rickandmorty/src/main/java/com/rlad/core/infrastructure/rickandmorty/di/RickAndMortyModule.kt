@@ -46,7 +46,7 @@ internal interface RickAndMortyModule {
             application,
             RickAndMortyDatabase::class.java,
             "rickandmorty_database",
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration(dropAllTables = true).build()
 
         @Provides
         fun dao(database: RickAndMortyDatabase): CharacterDao = database.characterDao()

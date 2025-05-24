@@ -46,7 +46,7 @@ internal interface GiphyModule {
             application,
             GiphyDatabase::class.java,
             "giphy_database",
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration(dropAllTables = true).build()
 
         @Provides
         fun dao(database: GiphyDatabase): GifDao = database.gifDao()

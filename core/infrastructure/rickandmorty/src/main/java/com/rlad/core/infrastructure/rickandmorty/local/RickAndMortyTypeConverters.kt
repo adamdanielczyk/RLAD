@@ -5,16 +5,14 @@ import androidx.room.TypeConverter
 internal class RickAndMortyTypeConverters {
 
     @TypeConverter
-    fun CharacterEntity.Status.toInt() = id
+    fun statusToInt(status: CharacterEntity.Status): Int = status.id
 
     @TypeConverter
-    fun Int.toCharacterEntityStatus() =
-        CharacterEntity.Status.fromId(this)
+    fun intToCharacterEntityStatus(value: Int): CharacterEntity.Status = CharacterEntity.Status.fromId(value)
 
     @TypeConverter
-    fun CharacterEntity.Gender.toInt() = id
+    fun genderToInt(gender: CharacterEntity.Gender): Int = gender.id
 
     @TypeConverter
-    fun Int.toCharacterEntityGender() =
-        CharacterEntity.Gender.fromId(this)
+    fun intToCharacterEntityGender(value: Int): CharacterEntity.Gender = CharacterEntity.Gender.fromId(value)
 }

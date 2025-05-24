@@ -12,4 +12,5 @@ dependencies {
     api(libs.test.mockk)
     api(libs.test.androidx.runner)
     api(libs.test.androidx.core)
+    api(libs.test.androidx.paging)
 }

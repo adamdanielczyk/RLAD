@@ -96,6 +96,7 @@ output.json
 # Java class files
 
 # Generated files
+.kotlin/
 
 # Gradle files
 .gradle
