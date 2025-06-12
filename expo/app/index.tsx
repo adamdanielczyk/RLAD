@@ -9,7 +9,6 @@ import {
   Dimensions,
   FlatList,
   RefreshControl,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -142,19 +141,29 @@ export default function HomeScreen() {
   const renderItem = useCallback(
     ({ item }: { item: ItemUiModel }) => (
       <TouchableOpacity
-        style={[styles.card, { backgroundColor: isDark ? "#333" : "#fff" }]}
+        className="m-2 rounded-lg"
+        style={{
+          width: CARD_WIDTH,
+          backgroundColor: isDark ? "#333" : "#fff",
+          elevation: 3,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+        }}
         onPress={() => handleItemPress(item)}
       >
-        <Image source={{ uri: item.imageUrl }} style={styles.cardImage} contentFit="cover" />
-        <View style={styles.cardContent}>
-          <Text style={[styles.cardTitle, { color: isDark ? "#fff" : "#000" }]} numberOfLines={1}>
+        <Image
+          source={{ uri: item.imageUrl }}
+          className="w-full rounded-t-lg"
+          style={{ height: 150 }}
+          contentFit="cover"
+        />
+        <View className="p-3">
+          <Text className="mb-1 text-base font-bold" style={{ color: isDark ? "#fff" : "#000" }} numberOfLines={1}>
             {item.name}
           </Text>
           {item.cardCaption && (
-            <Text
-              style={[styles.cardCaption, { color: isDark ? "#ccc" : "#666" }]}
-              numberOfLines={1}
-            >
+            <Text className="text-sm" style={{ color: isDark ? "#ccc" : "#666" }} numberOfLines={1}>
               {item.cardCaption}
             </Text>
           )}
@@ -167,10 +176,11 @@ export default function HomeScreen() {
   const renderDataSourceItem = useCallback(
     ({ item }: { item: DataSourceUiModel }) => (
       <TouchableOpacity
-        style={[styles.dataSourceItem, { backgroundColor: isDark ? "#444" : "#f0f0f0" }]}
+        className="my-1 flex-row items-center justify-between rounded-lg p-4"
+        style={{ backgroundColor: isDark ? "#444" : "#f0f0f0" }}
         onPress={() => handleDataSourceChange(item)}
       >
-        <Text style={[styles.dataSourceText, { color: isDark ? "#fff" : "#000" }]}>
+        <Text className="text-base" style={{ color: isDark ? "#fff" : "#000" }}>
           {item.name}
         </Text>
         {item.isSelected && (
@@ -188,11 +198,12 @@ export default function HomeScreen() {
   }));
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? "#000" : "#fff" }]}>
-      <View style={[styles.searchContainer, { backgroundColor: isDark ? "#222" : "#f0f0f0" }]}>
+    <SafeAreaView className="flex-1" style={{ backgroundColor: isDark ? "#000" : "#fff" }}>
+      <View className="m-4 flex-row items-center rounded-lg p-3" style={{ backgroundColor: isDark ? "#222" : "#f0f0f0" }}>
         <Ionicons name="search" size={20} color={isDark ? "#ccc" : "#666"} />
         <TextInput
-          style={[styles.searchInput, { color: isDark ? "#fff" : "#000" }]}
+          className="ml-2 flex-1 text-base"
+          style={{ color: isDark ? "#fff" : "#000" }}
           placeholder="Search..."
           placeholderTextColor={isDark ? "#ccc" : "#666"}
           value={searchQuery}
@@ -208,21 +219,21 @@ export default function HomeScreen() {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         numColumns={CARDS_PER_ROW}
-        contentContainerStyle={styles.gridContainer}
+        contentContainerStyle={{ padding: CARD_MARGIN }}
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.1}
         ListFooterComponent={
           isLoadingMore ? (
-            <View style={styles.loadingFooter}>
+            <View className="items-center p-5">
               <ActivityIndicator size="large" color={isDark ? "#fff" : "#000"} />
             </View>
           ) : null
         }
         ListEmptyComponent={
           !isLoading ? (
-            <View style={styles.emptyContainer}>
-              <Text style={[styles.emptyText, { color: isDark ? "#ccc" : "#666" }]}>
+            <View className="flex-1 items-center justify-center pt-[100px]">
+              <Text className="text-lg text-center" style={{ color: isDark ? "#ccc" : "#666" }}>
                 No items found
               </Text>
             </View>
@@ -239,8 +250,8 @@ export default function HomeScreen() {
         backgroundStyle={{ backgroundColor: isDark ? "#333" : "#fff" }}
         backdropComponent={renderBackdrop}
       >
-        <BottomSheetView style={styles.bottomSheetContent}>
-          <Text style={[styles.bottomSheetTitle, { color: isDark ? "#fff" : "#000" }]}>
+        <BottomSheetView className="flex-1 p-4">
+          <Text className="mb-4 text-xl font-bold text-center" style={{ color: isDark ? "#fff" : "#000" }}>
             Select Data Source
           </Text>
           <FlatList
@@ -252,7 +263,10 @@ export default function HomeScreen() {
       </BottomSheet>
 
       {isLoading && (
-        <View style={styles.loadingOverlay}>
+        <View
+          className="absolute inset-0 items-center justify-center"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
           <ActivityIndicator size="large" color={isDark ? "#fff" : "#000"} />
         </View>
       )}
@@ -260,94 +274,3 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    margin: 16,
-    padding: 12,
-    borderRadius: 8,
-  },
-  searchInput: {
-    flex: 1,
-    marginLeft: 8,
-    fontSize: 16,
-  },
-  gridContainer: {
-    padding: CARD_MARGIN,
-  },
-  card: {
-    width: CARD_WIDTH,
-    margin: CARD_MARGIN,
-    borderRadius: 8,
-    elevation: 3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  cardImage: {
-    width: "100%",
-    height: 150,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-  },
-  cardContent: {
-    padding: 12,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 4,
-  },
-  cardCaption: {
-    fontSize: 14,
-  },
-  loadingFooter: {
-    padding: 20,
-    alignItems: "center",
-  },
-  loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 100,
-  },
-  emptyText: {
-    fontSize: 18,
-    textAlign: "center",
-  },
-  bottomSheetContent: {
-    flex: 1,
-    padding: 16,
-  },
-  bottomSheetTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 16,
-    textAlign: "center",
-  },
-  dataSourceItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    marginVertical: 4,
-    borderRadius: 8,
-  },
-  dataSourceText: {
-    fontSize: 16,
-  },
-});

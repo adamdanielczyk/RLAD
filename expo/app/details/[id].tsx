@@ -9,7 +9,6 @@ import {
   Dimensions,
   Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -75,7 +74,7 @@ export default function DetailsScreen() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <View style={styles.loadingContainer}>
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color={isDark ? "#fff" : "#000"} />
         </View>
       );
@@ -83,30 +82,30 @@ export default function DetailsScreen() {
 
     if (!item) {
       return (
-        <View style={styles.errorContainer}>
-          <Text style={[styles.errorText, { color: isDark ? "#fff" : "#000" }]}>
+        <View className="flex-1 items-center justify-center p-5">
+          <Text className="mb-5 text-lg text-center" style={{ color: isDark ? "#fff" : "#000" }}>
             Item not found
           </Text>
-          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <Text style={styles.backButtonText}>Go Back</Text>
+          <TouchableOpacity onPress={handleBack} className="rounded-lg bg-blue-500 p-3">
+            <Text className="text-base font-semibold text-white">Go Back</Text>
           </TouchableOpacity>
         </View>
       );
     }
 
     return (
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: item.imageUrl }} style={styles.image} contentFit="cover" />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View className="relative">
+          <Image source={{ uri: item.imageUrl }} style={{ width, height: width * 0.75 }} contentFit="cover" />
         </View>
 
-        <View style={styles.detailsContainer}>
+        <View className="p-5">
           {item.detailsKeyValues.map((detail, index) => (
-            <View key={index} style={styles.detailItem}>
-              <Text style={[styles.detailKey, { color: isDark ? "#fff" : "#000" }]}>
+            <View key={index} className="mb-4">
+              <Text className="text-lg font-semibold mb-1" style={{ color: isDark ? "#fff" : "#000" }}>
                 {detail.key}
               </Text>
-              <Text style={[styles.detailValue, { color: isDark ? "#ccc" : "#666" }]}>
+              <Text className="text-base leading-6" style={{ color: isDark ? "#ccc" : "#666" }}>
                 {detail.value}
               </Text>
             </View>
@@ -133,7 +132,8 @@ export default function DetailsScreen() {
     return () => (
       <Pressable
         onPress={handleShare}
-        style={({ pressed }) => [styles.shareButton, { opacity: pressed ? 0.7 : 1 }]}
+        className="p-2"
+        style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
         android_ripple={{ color: "rgba(128, 128, 128, 0.3)", borderless: true, radius: 20 }}
       >
         <Ionicons name="share-outline" size={24} color={isDark ? "#fff" : "#000"} />
@@ -151,7 +151,8 @@ export default function DetailsScreen() {
       />
       <SafeAreaView
         edges={["bottom", "left", "right"]}
-        style={[styles.container, { backgroundColor: isDark ? "#000" : "#fff" }]}
+        className="flex-1"
+        style={{ backgroundColor: isDark ? "#000" : "#fff" }}
       >
         {renderContent()}
       </SafeAreaView>
@@ -159,62 +160,3 @@ export default function DetailsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 18,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  backButton: {
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: "#007AFF",
-  },
-  backButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  shareButton: {
-    padding: 8,
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  imageContainer: {
-    position: "relative",
-  },
-  image: {
-    width: width,
-    height: width * 0.75, // 4:3 aspect ratio
-  },
-  detailsContainer: {
-    padding: 20,
-  },
-  detailItem: {
-    marginBottom: 16,
-  },
-  detailKey: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  detailValue: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-});
