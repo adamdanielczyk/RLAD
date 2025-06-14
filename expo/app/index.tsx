@@ -182,7 +182,7 @@ export default function HomeScreen() {
         contentContainerStyle={{ padding: 8 }}
         refreshControl={
           <RefreshControl
-            refreshing={isLoading}
+            refreshing={isLoading && loadingPage === 1}
             onRefresh={handleRefresh}
           />
         }
@@ -209,12 +209,6 @@ export default function HomeScreen() {
         dataSources={dataSourceOptions}
         onSelect={handleDataSourceChange}
       />
-
-      {isLoading && loadingPage === 1 && (
-        <View className="absolute inset-0 items-center justify-center bg-black/50">
-          <ActivityIndicator size="large" />
-        </View>
-      )}
     </SafeAreaView>
   );
 }
