@@ -13,15 +13,12 @@ interface AppState {
 
   // Items management
   items: ItemUiModel[];
-  setItems: (items: ItemUiModel[]) => void;
   addItems: (items: ItemUiModel[]) => void;
   clearItems: () => void;
 
   // Loading and pagination
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
-  isLoadingMore: boolean;
-  setIsLoadingMore: (loading: boolean) => void;
   currentPage: number;
   setCurrentPage: (page: number) => void;
   hasMorePages: boolean;
@@ -39,7 +36,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   searchQuery: "",
   items: [],
   isLoading: false,
-  isLoadingMore: false,
   currentPage: 1,
   hasMorePages: true,
 
@@ -69,13 +65,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   // Items management
-  setItems: (items: ItemUiModel[]) => {
-    set({ items });
-  },
-
-  addItems: (newItems: ItemUiModel[]) => {
-    const { items } = get();
-    set({ items: [...items, ...newItems] });
+  addItems: (items: ItemUiModel[]) => {
+    const { items: currentItems } = get();
+    set({ items: [...currentItems, ...items] });
   },
 
   clearItems: () => {
@@ -85,10 +77,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Loading and pagination
   setIsLoading: (loading: boolean) => {
     set({ isLoading: loading });
-  },
-
-  setIsLoadingMore: (loading: boolean) => {
-    set({ isLoadingMore: loading });
   },
 
   setCurrentPage: (page: number) => {
@@ -102,11 +90,12 @@ export const useAppStore = create<AppState>((set, get) => ({
   initialize: async () => {
     try {
       const savedDataSource = await AsyncStorage.getItem(STORAGE_KEY);
-      if (savedDataSource && ["rick-and-morty", "giphy", "artic"].includes(savedDataSource)) {
+      if (savedDataSource) {
         set({ selectedDataSource: savedDataSource as DataSourceType });
       }
     } catch (error) {
       console.error("Failed to load selected data source:", error);
+      set({ selectedDataSource: DEFAULT_DATA_SOURCE });
     }
   },
 }));
