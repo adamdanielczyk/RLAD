@@ -43,72 +43,75 @@ export default function HomeScreen() {
   }));
 
 
-  useEffect(() => {
-    loadItems(1);
-  }, [selectedDataSource, searchQuery]);
+  const loadItems = useCallback(
+    async (page: number) => {
+      const {
+        setIsLoading,
+        setItems,
+        addItems,
+        setCurrentPage,
+        setHasMorePages,
+        isLoading: storeIsLoading,
+        hasMorePages: storeHasMorePages,
+      } = useAppStore.getState();
 
-  const loadItems = async (page: number) => {
-    const {
-      setIsLoading,
-      setItems,
-      addItems,
-      setCurrentPage,
-      setHasMorePages,
-      isLoading: storeIsLoading,
-      hasMorePages: storeHasMorePages,
-    } = useAppStore.getState();
+      const isInitialLoad = page === 1;
 
-    const isInitialLoad = page === 1;
-
-    if (storeIsLoading) {
-      return;
-    }
-    if (!isInitialLoad && !storeHasMorePages) {
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setLoadingPage(page);
-
-      const result = await fetchItems({
-        dataSource: selectedDataSource,
-        page,
-        query: searchQuery || undefined,
-      });
-
-      if (isInitialLoad) {
-        setItems(result.items);
-      } else {
-        addItems(result.items);
+      if (storeIsLoading) {
+        return;
+      }
+      if (!isInitialLoad && !storeHasMorePages) {
+        return;
       }
 
-      setHasMorePages(result.hasMore);
-      setCurrentPage(page);
-    } catch (error) {
-      console.error(
-        `Failed to load${isInitialLoad ? '' : ' more'} items:`,
-        error,
-      );
-      Alert.alert(
-        'Error',
-        `Failed to load${isInitialLoad ? '' : ' more'} items. Please try again.`,
-      );
-    } finally {
-      useAppStore.getState().setIsLoading(false);
-      setLoadingPage(null);
-    }
-  };
+      try {
+        setIsLoading(true);
+        setLoadingPage(page);
+
+        const result = await fetchItems({
+          dataSource: selectedDataSource,
+          page,
+          query: searchQuery || undefined,
+        });
+
+        if (isInitialLoad) {
+          setItems(result.items);
+        } else {
+          addItems(result.items);
+        }
+
+        setHasMorePages(result.hasMore);
+        setCurrentPage(page);
+      } catch (error) {
+        console.error(
+          `Failed to load${isInitialLoad ? '' : ' more'} items:`,
+          error,
+        );
+        Alert.alert(
+          'Error',
+          `Failed to load${isInitialLoad ? '' : ' more'} items. Please try again.`,
+        );
+      } finally {
+        useAppStore.getState().setIsLoading(false);
+        setLoadingPage(null);
+      }
+    },
+    [selectedDataSource, searchQuery],
+  );
+
+  useEffect(() => {
+    loadItems(1);
+  }, [loadItems]);
 
   const handleRefresh = useCallback(() => {
     loadItems(1);
-  }, [selectedDataSource, searchQuery]);
+  }, [loadItems]);
 
   const handleLoadMore = useCallback(() => {
     if (!isLoading && hasMorePages) {
       loadItems(currentPage + 1);
     }
-  }, [currentPage, hasMorePages, isLoading, selectedDataSource, searchQuery]);
+  }, [currentPage, hasMorePages, isLoading, loadItems]);
 
   const handleItemPress = useCallback(
     (item: ItemUiModel) => {
