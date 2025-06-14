@@ -4,7 +4,7 @@ import { useAppStore } from "@/lib/store/appStore";
 import { DataSourceUiModel, ItemUiModel } from "@/lib/types/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -24,13 +24,13 @@ import { DataSourcePicker } from "@/components/app/DataSourcePicker";
 export default function HomeScreen() {
   const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet | null>(null);
+  const [loadingPage, setLoadingPage] = useState<number | null>(null);
 
   const {
     selectedDataSource,
     searchQuery,
     items,
     isLoading,
-    isLoadingMore,
     currentPage,
     hasMorePages,
   } = useAppStore((state) => ({
@@ -38,7 +38,6 @@ export default function HomeScreen() {
     searchQuery: state.searchQuery,
     items: state.items,
     isLoading: state.isLoading,
-    isLoadingMore: state.isLoadingMore,
     currentPage: state.currentPage,
     hasMorePages: state.hasMorePages,
   }));
@@ -51,25 +50,26 @@ export default function HomeScreen() {
   const loadItems = async (page: number) => {
     const {
       setIsLoading,
-      setIsLoadingMore,
       setItems,
       addItems,
       setCurrentPage,
       setHasMorePages,
-      isLoadingMore: storeIsLoadingMore,
+      isLoading: storeIsLoading,
       hasMorePages: storeHasMorePages,
     } = useAppStore.getState();
 
     const isInitialLoad = page === 1;
 
+    if (storeIsLoading) {
+      return;
+    }
+    if (!isInitialLoad && !storeHasMorePages) {
+      return;
+    }
+
     try {
-      if (isInitialLoad) {
-        setIsLoading(true);
-      } else if (storeIsLoadingMore || !storeHasMorePages) {
-        return;
-      } else {
-        setIsLoadingMore(true);
-      }
+      setIsLoading(true);
+      setLoadingPage(page);
 
       const result = await fetchItems({
         dataSource: selectedDataSource,
@@ -95,11 +95,8 @@ export default function HomeScreen() {
         `Failed to load${isInitialLoad ? '' : ' more'} items. Please try again.`,
       );
     } finally {
-      if (isInitialLoad) {
-        useAppStore.getState().setIsLoading(false);
-      } else {
-        useAppStore.getState().setIsLoadingMore(false);
-      }
+      useAppStore.getState().setIsLoading(false);
+      setLoadingPage(null);
     }
   };
 
@@ -108,8 +105,10 @@ export default function HomeScreen() {
   }, [selectedDataSource, searchQuery]);
 
   const handleLoadMore = useCallback(() => {
-    loadItems(currentPage + 1);
-  }, [currentPage, hasMorePages, isLoadingMore, selectedDataSource, searchQuery]);
+    if (!isLoading && hasMorePages) {
+      loadItems(currentPage + 1);
+    }
+  }, [currentPage, hasMorePages, isLoading, selectedDataSource, searchQuery]);
 
   const handleItemPress = useCallback(
     (item: ItemUiModel) => {
@@ -145,6 +144,8 @@ export default function HomeScreen() {
     ),
     [handleItemPress],
   );
+
+  const isLoadingMore = isLoading && loadingPage !== null && loadingPage > 1;
 
   const dataSourceOptions = DATA_SOURCES.map((config) => ({
     name: config.name,
@@ -209,7 +210,7 @@ export default function HomeScreen() {
         onSelect={handleDataSourceChange}
       />
 
-      {isLoading && (
+      {isLoading && loadingPage === 1 && (
         <View className="absolute inset-0 items-center justify-center bg-black/50">
           <ActivityIndicator size="large" />
         </View>

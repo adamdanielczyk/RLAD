@@ -20,8 +20,6 @@ interface AppState {
   // Loading and pagination
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
-  isLoadingMore: boolean;
-  setIsLoadingMore: (loading: boolean) => void;
   currentPage: number;
   setCurrentPage: (page: number) => void;
   hasMorePages: boolean;
@@ -39,7 +37,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   searchQuery: "",
   items: [],
   isLoading: false,
-  isLoadingMore: false,
   currentPage: 1,
   hasMorePages: true,
 
@@ -87,9 +84,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ isLoading: loading });
   },
 
-  setIsLoadingMore: (loading: boolean) => {
-    set({ isLoadingMore: loading });
-  },
 
   setCurrentPage: (page: number) => {
     set({ currentPage: page });
