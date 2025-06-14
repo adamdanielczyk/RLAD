@@ -1,4 +1,3 @@
-// API Response Types
 export interface RickAndMortyCharactersResponse {
   results: RickAndMortyCharacter[];
   info: {

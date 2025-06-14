@@ -1,15 +1,29 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import "@/global.css";
+
+import { NAV_THEME } from "@/lib/constants";
+import { useAppStore } from "@/lib/store/appStore";
+import { useColorScheme } from "@/lib/useColorScheme";
+import { Ionicons } from "@expo/vector-icons";
+import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { cssInterop } from "nativewind";
+import * as React from "react";
 import { useEffect } from "react";
+import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { useAppStore } from "@/store/appStore";
+export { ErrorBoundary } from "expo-router";
 
-SplashScreen.preventAutoHideAsync();
+const LIGHT_THEME: Theme = {
+  ...DefaultTheme,
+  colors: NAV_THEME.light,
+};
+const DARK_THEME: Theme = {
+  ...DarkTheme,
+  colors: NAV_THEME.dark,
+};
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,8 +34,12 @@ const queryClient = new QueryClient({
   },
 });
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const hasMounted = React.useRef(false);
+  const { isDarkColorScheme } = useColorScheme();
+  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const initialize = useAppStore((state) => state.initialize);
 
   useEffect(() => {
@@ -29,23 +47,56 @@ export default function RootLayout() {
     initialize();
   }, [initialize]);
 
+  useIsomorphicLayoutEffect(() => {
+    if (hasMounted.current) {
+      return;
+    }
+
+    if (Platform.OS === "web") {
+      document.documentElement.classList.add("bg-background");
+    }
+
+    setIsColorSchemeLoaded(true);
+    hasMounted.current = true;
+  }, []);
+
+  if (!isColorSchemeLoaded) {
+    return null;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <GestureHandlerRootView className="flex-1">
+        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+          <StatusBar style="auto" />
           <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="index"
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="details/[id]"
               options={{
                 presentation: "modal",
               }}
             />
-            <Stack.Screen name="+not-found" />
+            <Stack.Screen
+              name="+not-found"
+              options={{ headerShown: false }}
+            />
           </Stack>
-          <StatusBar style="auto" />
         </ThemeProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>
   );
 }
+
+const useIsomorphicLayoutEffect =
+  Platform.OS === "web" && typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+
+cssInterop(Ionicons, {
+  className: {
+    target: "style",
+    nativeStyleToProp: { color: true },
+  },
+});

@@ -1,5 +1,5 @@
-import { RickAndMortyCharacter } from "@/services/rick-and-morty/types";
-import { ItemUiModel } from "@/types/uiModelTypes";
+import { RickAndMortyCharacter } from "@/lib/services/rick-and-morty/types";
+import { ItemUiModel } from "@/lib/types/uiModelTypes";
 
 export const mapRickAndMortyCharacterToItem = (character: RickAndMortyCharacter): ItemUiModel => {
   return {

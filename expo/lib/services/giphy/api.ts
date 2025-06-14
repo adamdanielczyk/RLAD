@@ -1,4 +1,4 @@
-import { GiphyResponse } from "@/services/giphy/types";
+import { GiphyResponse } from "@/lib/services/giphy/types";
 
 const GIPHY_BASE_URL = "https://api.giphy.com/v1/gifs";
 

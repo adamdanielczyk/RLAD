@@ -1,6 +1,6 @@
-import { FetchItemsResult } from "@/services/dataService";
-import { rickAndMortyApi } from "@/services/rick-and-morty/api";
-import { mapRickAndMortyCharacterToItem } from "@/services/rick-and-morty/mappers";
+import { FetchItemsResult } from "@/lib/services/dataService";
+import { rickAndMortyApi } from "@/lib/services/rick-and-morty/api";
+import { mapRickAndMortyCharacterToItem } from "@/lib/services/rick-and-morty/mappers";
 
 export const fetchRickAndMortyItems = async (
   page: number,

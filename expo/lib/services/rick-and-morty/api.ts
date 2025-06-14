@@ -1,7 +1,7 @@
 import {
   RickAndMortyCharacter,
   RickAndMortyCharactersResponse,
-} from "@/services/rick-and-morty/types";
+} from "@/lib/services/rick-and-morty/types";
 
 const RICK_AND_MORTY_BASE_URL = "https://rickandmortyapi.com/api";
 
