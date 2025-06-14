@@ -6,7 +6,7 @@ export const mapRickAndMortyCharacterToItem = (character: RickAndMortyCharacter)
     id: character.id.toString(),
     imageUrl: character.image,
     name: character.name,
-    cardCaption: `${character.species} • ${character.status}`,
+    cardCaption: `${character.species}`,
     detailsKeyValues: [
       { key: "Name", value: character.name },
       { key: "Status", value: character.status },

@@ -43,8 +43,12 @@ export default function RootLayout() {
   const initialize = useAppStore((state) => state.initialize);
 
   useEffect(() => {
-    SplashScreen.hideAsync();
-    initialize();
+    const initializeApp = async () => {
+      await initialize();
+      SplashScreen.hideAsync();
+    };
+
+    initializeApp();
   }, [initialize]);
 
   useIsomorphicLayoutEffect(() => {

@@ -6,14 +6,14 @@ import { TouchableOpacity } from "react-native";
 
 interface ItemCardProps {
   item: ItemUiModel;
-  onPress?: (item: ItemUiModel) => void;
+  onPress: (item: ItemUiModel) => void;
 }
 
 export function ItemCard({ item, onPress }: ItemCardProps) {
   return (
     <TouchableOpacity
       className="w-1/2 p-2"
-      onPress={() => onPress?.(item)}
+      onPress={() => onPress(item)}
     >
       <Card className="w-full">
         <Image
@@ -23,9 +23,7 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
         />
         <CardHeader>
           <CardTitle className="line-clamp-1">{item.name}</CardTitle>
-          <CardDescription className="line-clamp-1">
-            {item.cardCaption}
-          </CardDescription>
+          <CardDescription className="line-clamp-1">{item.cardCaption}</CardDescription>
         </CardHeader>
       </Card>
     </TouchableOpacity>

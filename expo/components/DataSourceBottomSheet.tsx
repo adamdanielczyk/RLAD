@@ -1,25 +1,32 @@
-import { cn } from "@/lib/utils";
+import { DATA_SOURCES } from "@/lib/services/dataSources";
+import { useAppStore } from "@/lib/store/appStore";
 import { DataSourceUiModel } from "@/lib/types/uiModelTypes";
+import { cn } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
 import { cssInterop } from "nativewind";
-import React, { forwardRef, useCallback } from "react";
+import React, { forwardRef, useCallback, useMemo } from "react";
 import { FlatList, Text, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-cssInterop(BottomSheet, {
-  className: "backgroundStyle",
-  handleIndicatorClassName: "handleIndicatorStyle",
-});
-
-export interface DataSourcePickerProps {
-  dataSources: DataSourceUiModel[];
-  onSelect: (ds: DataSourceUiModel) => void;
+export interface DataSourceBottomSheetProps {
+  onSelect: (dataSource: DataSourceUiModel) => void;
 }
 
-export const DataSourcePicker = forwardRef<BottomSheet, DataSourcePickerProps>(
-  ({ dataSources, onSelect }, ref) => {
+export const DataSourceBottomSheet = forwardRef<BottomSheet, DataSourceBottomSheetProps>(
+  ({ onSelect }, ref) => {
     const insets = useSafeAreaInsets();
+    const selectedDataSource = useAppStore((state) => state.selectedDataSource);
+
+    const dataSources = useMemo(
+      () =>
+        DATA_SOURCES.map((config) => ({
+          name: config.name,
+          type: config.type,
+          isSelected: config.type === selectedDataSource,
+        })),
+      [selectedDataSource],
+    );
 
     const renderBackdrop = useCallback(
       (props: any) => (
@@ -40,10 +47,7 @@ export const DataSourcePicker = forwardRef<BottomSheet, DataSourcePickerProps>(
         >
           <Ionicons
             name="checkmark"
-            className={cn(
-              "text-foreground",
-              item.isSelected ? "visible" : "invisible",
-            )}
+            className={cn("text-foreground", item.isSelected ? "visible" : "invisible")}
             size={24}
           />
           <Text className="ms-2 text-base text-foreground">{item.name}</Text>
@@ -53,7 +57,7 @@ export const DataSourcePicker = forwardRef<BottomSheet, DataSourcePickerProps>(
     );
 
     return (
-      <BottomSheet
+      <StyledBottomSheet
         ref={ref}
         index={-1}
         enableDynamicSizing
@@ -63,19 +67,23 @@ export const DataSourcePicker = forwardRef<BottomSheet, DataSourcePickerProps>(
         className="bg-background"
         handleIndicatorClassName="bg-foreground"
       >
-        <BottomSheetView className="p-8" style={{ paddingBottom: insets.bottom }}>
-          <Text className="mb-4 text-xl font-bold text-foreground">
-            Pick data source
-          </Text>
+        <BottomSheetView
+          className="p-8"
+          style={{ paddingBottom: insets.bottom }}
+        >
+          <Text className="mb-4 text-xl font-bold text-foreground">Pick data source</Text>
           <FlatList
             data={dataSources}
             renderItem={renderItem}
             keyExtractor={(item) => item.name}
           />
         </BottomSheetView>
-      </BottomSheet>
+      </StyledBottomSheet>
     );
   },
 );
 
-DataSourcePicker.displayName = "DataSourcePicker";
+const StyledBottomSheet = cssInterop(BottomSheet, {
+  className: "backgroundStyle",
+  handleIndicatorClassName: "handleIndicatorStyle",
+});

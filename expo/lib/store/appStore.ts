@@ -1,3 +1,4 @@
+import { DATA_SOURCES } from "@/lib/services/dataSources";
 import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
@@ -13,7 +14,6 @@ interface AppState {
 
   // Items management
   items: ItemUiModel[];
-  setItems: (items: ItemUiModel[]) => void;
   addItems: (items: ItemUiModel[]) => void;
   clearItems: () => void;
 
@@ -66,13 +66,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   // Items management
-  setItems: (items: ItemUiModel[]) => {
-    set({ items });
-  },
-
-  addItems: (newItems: ItemUiModel[]) => {
-    const { items } = get();
-    set({ items: [...items, ...newItems] });
+  addItems: (items: ItemUiModel[]) => {
+    const { items: currentItems } = get();
+    set({ items: [...currentItems, ...items] });
   },
 
   clearItems: () => {
@@ -83,7 +79,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   setIsLoading: (loading: boolean) => {
     set({ isLoading: loading });
   },
-
 
   setCurrentPage: (page: number) => {
     set({ currentPage: page });
@@ -96,11 +91,12 @@ export const useAppStore = create<AppState>((set, get) => ({
   initialize: async () => {
     try {
       const savedDataSource = await AsyncStorage.getItem(STORAGE_KEY);
-      if (savedDataSource && ["rick-and-morty", "giphy", "artic"].includes(savedDataSource)) {
+      if (savedDataSource && DATA_SOURCES.some((ds) => ds.type === savedDataSource)) {
         set({ selectedDataSource: savedDataSource as DataSourceType });
       }
     } catch (error) {
       console.error("Failed to load selected data source:", error);
+      set({ selectedDataSource: DEFAULT_DATA_SOURCE });
     }
   },
 }));

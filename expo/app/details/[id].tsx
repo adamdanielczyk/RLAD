@@ -1,19 +1,19 @@
+import { ItemDetails } from "@/components/ItemDetails";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { ItemDetails } from "@/components/app/ItemDetails";
 import { fetchItemById } from "@/lib/services/dataService";
+import { useAppStore } from "@/lib/store/appStore";
 import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DetailsScreen() {
-  const router = useRouter();
-  const { id, dataSource } =
-    useLocalSearchParams<{ id: string; dataSource: string }>();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const dataSource = useAppStore((state) => state.selectedDataSource);
 
   const [item, setItem] = useState<ItemUiModel | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,10 +54,6 @@ export default function DetailsScreen() {
     }
   };
 
-  const handleBack = () => {
-    router.back();
-  };
-
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -70,13 +66,18 @@ export default function DetailsScreen() {
     if (!item) {
       return (
         <View className="flex-1 items-center justify-center p-5">
-          <Text className="mb-5 text-center text-lg">Item not found</Text>
-          <Button
-            variant="outline"
-            onPress={handleBack}
+          <Text className="text-2xl font-bold">Item not found</Text>
+          <Link
+            href="/"
+            asChild
           >
-            <Text>Go back</Text>
-          </Button>
+            <Button
+              variant="outline"
+              className="mt-4"
+            >
+              <Text>Go to home screen</Text>
+            </Button>
+          </Link>
         </View>
       );
     }
@@ -84,16 +85,15 @@ export default function DetailsScreen() {
     return <ItemDetails item={item} />;
   };
 
-  const headerTitle = isLoading
-    ? "Loading..."
-    : item
-      ? item.name
-      : "Not Found";
+  const headerTitle = isLoading ? "Loading..." : item ? item.name : "Not Found";
 
   const headerRight =
     !isLoading && item
       ? () => (
-          <TouchableOpacity onPress={handleShare} className="p-2">
+          <TouchableOpacity
+            onPress={handleShare}
+            className="p-2"
+          >
             <Ionicons
               name="share-outline"
               size={24}
@@ -106,7 +106,10 @@ export default function DetailsScreen() {
   return (
     <>
       <Stack.Screen options={{ title: headerTitle, headerRight }} />
-      <SafeAreaView edges={["bottom", "left", "right"]} className="flex-1">
+      <SafeAreaView
+        edges={["top", "left", "right"]}
+        className="flex-1"
+      >
         {renderContent()}
       </SafeAreaView>
     </>

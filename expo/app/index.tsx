@@ -1,10 +1,10 @@
 import { fetchItems } from "@/lib/services/dataService";
-import { DATA_SOURCES } from "@/lib/services/dataSources";
 import { useAppStore } from "@/lib/store/appStore";
 import { DataSourceUiModel, ItemUiModel } from "@/lib/types/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -16,57 +16,31 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BottomSheet from "@gorhom/bottom-sheet";
 
-import { ItemCard } from "@/components/app/ItemCard";
-import { DataSourcePicker } from "@/components/app/DataSourcePicker";
+import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
+import { ItemCard } from "@/components/ItemCard";
 
 export default function HomeScreen() {
   const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet | null>(null);
-  const [loadingPage, setLoadingPage] = useState<number | null>(null);
 
-  const {
-    selectedDataSource,
-    searchQuery,
-    items,
-    isLoading,
-    currentPage,
-    hasMorePages,
-  } = useAppStore((state) => ({
-    selectedDataSource: state.selectedDataSource,
-    searchQuery: state.searchQuery,
-    items: state.items,
-    isLoading: state.isLoading,
-    currentPage: state.currentPage,
-    hasMorePages: state.hasMorePages,
-  }));
-
+  const selectedDataSource = useAppStore((state) => state.selectedDataSource);
+  const searchQuery = useAppStore((state) => state.searchQuery);
+  const items = useAppStore((state) => state.items);
+  const isLoading = useAppStore((state) => state.isLoading);
+  const currentPage = useAppStore((state) => state.currentPage);
 
   const loadItems = useCallback(
     async (page: number) => {
-      const {
-        setIsLoading,
-        setItems,
-        addItems,
-        setCurrentPage,
-        setHasMorePages,
-        isLoading: storeIsLoading,
-        hasMorePages: storeHasMorePages,
-      } = useAppStore.getState();
+      const { isLoading, hasMorePages } = useAppStore.getState();
 
+      if (isLoading) return;
       const isInitialLoad = page === 1;
-
-      if (storeIsLoading) {
-        return;
-      }
-      if (!isInitialLoad && !storeHasMorePages) {
-        return;
-      }
+      if (!isInitialLoad && !hasMorePages) return;
+      if (page === currentPage) return;
 
       try {
-        setIsLoading(true);
-        setLoadingPage(page);
+        useAppStore.getState().setIsLoading(true);
 
         const result = await fetchItems({
           dataSource: selectedDataSource,
@@ -74,26 +48,15 @@ export default function HomeScreen() {
           query: searchQuery || undefined,
         });
 
-        if (isInitialLoad) {
-          setItems(result.items);
-        } else {
-          addItems(result.items);
-        }
-
-        setHasMorePages(result.hasMore);
+        const { addItems, setCurrentPage, setHasMorePages } = useAppStore.getState();
+        addItems(result.items);
         setCurrentPage(page);
+        setHasMorePages(result.hasMore);
       } catch (error) {
-        console.error(
-          `Failed to load${isInitialLoad ? '' : ' more'} items:`,
-          error,
-        );
-        Alert.alert(
-          'Error',
-          `Failed to load${isInitialLoad ? '' : ' more'} items. Please try again.`,
-        );
+        console.error(`Failed to load items:`, error);
+        Alert.alert("Error", `Failed to load items. Please try again.`);
       } finally {
         useAppStore.getState().setIsLoading(false);
-        setLoadingPage(null);
       }
     },
     [selectedDataSource, searchQuery],
@@ -101,37 +64,15 @@ export default function HomeScreen() {
 
   useEffect(() => {
     loadItems(1);
-  }, [loadItems]);
+  }, [selectedDataSource, searchQuery]);
 
   const handleRefresh = useCallback(() => {
     loadItems(1);
   }, [loadItems]);
 
   const handleLoadMore = useCallback(() => {
-    if (!isLoading && hasMorePages) {
-      loadItems(currentPage + 1);
-    }
-  }, [currentPage, hasMorePages, isLoading, loadItems]);
-
-  const handleItemPress = useCallback(
-    (item: ItemUiModel) => {
-      router.push({
-        pathname: "/details/[id]",
-        params: { id: item.id, dataSource: selectedDataSource },
-      });
-    },
-    [router, selectedDataSource],
-  );
-
-  const handleDataSourceChange = useCallback(
-    async (dataSource: DataSourceUiModel) => {
-      if (dataSource.type !== selectedDataSource) {
-        await useAppStore.getState().setSelectedDataSource(dataSource.type);
-      }
-      bottomSheetRef?.current?.close();
-    },
-    [selectedDataSource, bottomSheetRef],
-  );
+    loadItems(currentPage + 1);
+  }, [currentPage, loadItems]);
 
   const handleSearchChange = useCallback((text: string) => {
     useAppStore.getState().setSearchQuery(text);
@@ -141,20 +82,30 @@ export default function HomeScreen() {
     bottomSheetRef?.current?.expand();
   }, [bottomSheetRef]);
 
-  const renderItem = useCallback(
-    ({ item }: { item: ItemUiModel }) => (
-      <ItemCard item={item} onPress={handleItemPress} />
-    ),
-    [handleItemPress],
+  const handleDataSourceSelected = useCallback(
+    async (dataSource: DataSourceUiModel) => {
+      if (dataSource.type !== selectedDataSource) {
+        await useAppStore.getState().setSelectedDataSource(dataSource.type);
+      }
+      bottomSheetRef?.current?.close();
+    },
+    [selectedDataSource, bottomSheetRef],
   );
 
-  const isLoadingMore = isLoading && loadingPage !== null && loadingPage > 1;
-
-  const dataSourceOptions = DATA_SOURCES.map((config) => ({
-    name: config.name,
-    type: config.type,
-    isSelected: config.type === selectedDataSource,
-  }));
+  const renderItem = useCallback(
+    ({ item }: { item: ItemUiModel }) => (
+      <ItemCard
+        item={item}
+        onPress={(item) =>
+          router.push({
+            pathname: "/details/[id]",
+            params: { id: item.id },
+          })
+        }
+      />
+    ),
+    [router],
+  );
 
   return (
     <SafeAreaView
@@ -185,14 +136,14 @@ export default function HomeScreen() {
         contentContainerStyle={{ padding: 8 }}
         refreshControl={
           <RefreshControl
-            refreshing={isLoading && loadingPage === 1}
+            refreshing={isLoading && currentPage === 1}
             onRefresh={handleRefresh}
           />
         }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.1}
         ListFooterComponent={
-          isLoadingMore ? (
+          isLoading && items.length > 0 ? (
             <View className="items-center p-5">
               <ActivityIndicator size="large" />
             </View>
@@ -207,10 +158,9 @@ export default function HomeScreen() {
         }
       />
 
-      <DataSourcePicker
+      <DataSourceBottomSheet
         ref={bottomSheetRef}
-        dataSources={dataSourceOptions}
-        onSelect={handleDataSourceChange}
+        onSelect={handleDataSourceSelected}
       />
     </SafeAreaView>
   );

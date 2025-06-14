@@ -1,12 +1,11 @@
+import { fetchJson } from "@/lib/services/apiClient";
 import {
   RickAndMortyCharacter,
   RickAndMortyCharactersResponse,
 } from "@/lib/services/rick-and-morty/types";
-import { fetchJson } from "@/lib/services/apiClient";
 
 const RICK_AND_MORTY_BASE_URL = "https://rickandmortyapi.com/api";
 
-// Rick and Morty API
 export const rickAndMortyApi = {
   getCharacters: async (
     page: number = 1,
@@ -26,8 +25,6 @@ export const rickAndMortyApi = {
   },
 
   getCharacter: async (id: number): Promise<RickAndMortyCharacter> => {
-    return fetchJson<RickAndMortyCharacter>(
-      `${RICK_AND_MORTY_BASE_URL}/character/${id}`,
-    );
+    return fetchJson<RickAndMortyCharacter>(`${RICK_AND_MORTY_BASE_URL}/character/${id}`);
   },
 };
