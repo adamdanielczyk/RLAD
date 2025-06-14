@@ -45,66 +45,70 @@ export default function HomeScreen() {
 
 
   useEffect(() => {
-    loadData();
+    loadItems(1);
   }, [selectedDataSource, searchQuery]);
 
-  const loadData = async () => {
-    try {
-      const { setIsLoading, setItems, setCurrentPage, setHasMorePages } = useAppStore.getState();
+  const loadItems = async (page: number) => {
+    const {
+      setIsLoading,
+      setIsLoadingMore,
+      setItems,
+      addItems,
+      setCurrentPage,
+      setHasMorePages,
+      isLoadingMore: storeIsLoadingMore,
+      hasMorePages: storeHasMorePages,
+    } = useAppStore.getState();
 
-      setIsLoading(true);
-      setCurrentPage(1);
+    const isInitialLoad = page === 1;
+
+    try {
+      if (isInitialLoad) {
+        setIsLoading(true);
+      } else if (storeIsLoadingMore || !storeHasMorePages) {
+        return;
+      } else {
+        setIsLoadingMore(true);
+      }
 
       const result = await fetchItems({
         dataSource: selectedDataSource,
-        page: 1,
+        page,
         query: searchQuery || undefined,
       });
 
-      setItems(result.items);
+      if (isInitialLoad) {
+        setItems(result.items);
+      } else {
+        addItems(result.items);
+      }
+
       setHasMorePages(result.hasMore);
-      setCurrentPage(1);
+      setCurrentPage(page);
     } catch (error) {
-      console.error("Failed to load items:", error);
-      Alert.alert("Error", "Failed to load items. Please try again.");
+      console.error(
+        `Failed to load${isInitialLoad ? '' : ' more'} items:`,
+        error,
+      );
+      Alert.alert(
+        'Error',
+        `Failed to load${isInitialLoad ? '' : ' more'} items. Please try again.`,
+      );
     } finally {
-      useAppStore.getState().setIsLoading(false);
-    }
-  };
-
-  const loadMoreData = async () => {
-    if (isLoadingMore || !hasMorePages) return;
-
-    try {
-      const { setIsLoadingMore, addItems, setCurrentPage, setHasMorePages } =
-        useAppStore.getState();
-
-      setIsLoadingMore(true);
-
-      const nextPage = currentPage + 1;
-      const result = await fetchItems({
-        dataSource: selectedDataSource,
-        page: nextPage,
-        query: searchQuery || undefined,
-      });
-
-      addItems(result.items);
-      setHasMorePages(result.hasMore);
-      setCurrentPage(nextPage);
-    } catch (error) {
-      console.error("Failed to load more items:", error);
-      Alert.alert("Error", "Failed to load more items. Please try again.");
-    } finally {
-      useAppStore.getState().setIsLoadingMore(false);
+      if (isInitialLoad) {
+        useAppStore.getState().setIsLoading(false);
+      } else {
+        useAppStore.getState().setIsLoadingMore(false);
+      }
     }
   };
 
   const handleRefresh = useCallback(() => {
-    loadData();
+    loadItems(1);
   }, [selectedDataSource, searchQuery]);
 
   const handleLoadMore = useCallback(() => {
-    loadMoreData();
+    loadItems(currentPage + 1);
   }, [currentPage, hasMorePages, isLoadingMore, selectedDataSource, searchQuery]);
 
   const handleItemPress = useCallback(
