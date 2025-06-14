@@ -22,16 +22,6 @@ export interface FetchItemsResult {
   totalPages?: number;
 }
 
-const listFetchers: Record<DataSourceType, (
-  page: number,
-  query?: string,
-  limit?: number,
-) => Promise<FetchItemsResult>> = {
-  "rick-and-morty": fetchRickAndMortyItems,
-  giphy: fetchGiphyItems,
-  artic: fetchArticItems,
-};
-
 export const fetchItems = async ({
   dataSource,
   page,
@@ -39,21 +29,20 @@ export const fetchItems = async ({
   limit = 25,
 }: FetchItemsParams): Promise<FetchItemsResult> => {
   try {
-    return await listFetchers[dataSource](page, query, limit);
+    switch (dataSource) {
+      case "rick-and-morty":
+        return await fetchRickAndMortyItems(page, query);
+
+      case "giphy":
+        return await fetchGiphyItems(page, query, limit);
+
+      case "artic":
+        return await fetchArticItems(page, query, limit);
+    }
   } catch (error) {
     console.error(`Error fetching items for ${dataSource}:`, error);
     throw error;
   }
-};
-
-const itemFetchers: Record<DataSourceType, (id: string) => Promise<ItemUiModel>> = {
-  "rick-and-morty": async (id) =>
-    mapRickAndMortyCharacterToItem(
-      await rickAndMortyApi.getCharacter(parseInt(id)),
-    ),
-  giphy: async (id) => mapGiphyGifToItem(await giphyApi.getGif(id)),
-  artic: async (id) =>
-    mapArticArtworkToItem(await articApi.getArtwork(parseInt(id))),
 };
 
 export const fetchItemById = async (
@@ -61,7 +50,19 @@ export const fetchItemById = async (
   id: string,
 ): Promise<ItemUiModel> => {
   try {
-    return await itemFetchers[dataSource](id);
+    switch (dataSource) {
+      case "rick-and-morty":
+        const character = await rickAndMortyApi.getCharacter(parseInt(id));
+        return mapRickAndMortyCharacterToItem(character);
+
+      case "giphy":
+        const gif = await giphyApi.getGif(id);
+        return mapGiphyGifToItem(gif);
+
+      case "artic":
+        const artwork = await articApi.getArtwork(parseInt(id));
+        return mapArticArtworkToItem(artwork);
+    }
   } catch (error) {
     console.error(`Error fetching item ${id} for ${dataSource}:`, error);
     throw error;

@@ -1,4 +1,3 @@
-import { DATA_SOURCES } from "@/lib/services/dataSources";
 import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
@@ -91,7 +90,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   initialize: async () => {
     try {
       const savedDataSource = await AsyncStorage.getItem(STORAGE_KEY);
-      if (savedDataSource && DATA_SOURCES.some((ds) => ds.type === savedDataSource)) {
+      if (savedDataSource) {
         set({ selectedDataSource: savedDataSource as DataSourceType });
       }
     } catch (error) {
