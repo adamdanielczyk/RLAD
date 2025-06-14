@@ -1,14 +1,9 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchItems } from "@/lib/services/dataService";
 import { DATA_SOURCES } from "@/lib/services/dataSources";
 import { useAppStore } from "@/lib/store/appStore";
 import { DataSourceUiModel, ItemUiModel } from "@/lib/types/uiModelTypes";
-import { cn } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
-import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { cssInterop } from "nativewind";
 import React, { useCallback, useEffect, useRef } from "react";
 import {
   ActivityIndicator,
@@ -20,21 +15,34 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
+import BottomSheet from "@gorhom/bottom-sheet";
+
+import { ItemCard } from "@/components/app/ItemCard";
+import { DataSourcePicker } from "@/components/app/DataSourcePicker";
 
 export default function HomeScreen() {
   const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet | null>(null);
 
-  const selectedDataSource = useAppStore((state) => state.selectedDataSource);
-  const searchQuery = useAppStore((state) => state.searchQuery);
-  const items = useAppStore((state) => state.items);
-  const isLoading = useAppStore((state) => state.isLoading);
-  const isLoadingMore = useAppStore((state) => state.isLoadingMore);
-  const currentPage = useAppStore((state) => state.currentPage);
-  const hasMorePages = useAppStore((state) => state.hasMorePages);
+  const {
+    selectedDataSource,
+    searchQuery,
+    items,
+    isLoading,
+    isLoadingMore,
+    currentPage,
+    hasMorePages,
+  } = useAppStore((state) => ({
+    selectedDataSource: state.selectedDataSource,
+    searchQuery: state.searchQuery,
+    items: state.items,
+    isLoading: state.isLoading,
+    isLoadingMore: state.isLoadingMore,
+    currentPage: state.currentPage,
+    hasMorePages: state.hasMorePages,
+  }));
 
-  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     loadData();
@@ -127,54 +135,11 @@ export default function HomeScreen() {
     bottomSheetRef?.current?.expand();
   }, [bottomSheetRef]);
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-      />
-    ),
-    [],
-  );
-
   const renderItem = useCallback(
     ({ item }: { item: ItemUiModel }) => (
-      <TouchableOpacity
-        className="w-1/2 p-2"
-        onPress={() => handleItemPress(item)}
-      >
-        <Card className="w-full">
-          <Image
-            source={{ uri: item.imageUrl }}
-            style={{ width: "100%", height: 150 }}
-            contentFit="cover"
-          />
-          <CardHeader>
-            <CardTitle className="line-clamp-1">{item.name}</CardTitle>
-            <CardDescription className="line-clamp-1">{item.cardCaption}</CardDescription>
-          </CardHeader>
-        </Card>
-      </TouchableOpacity>
+      <ItemCard item={item} onPress={handleItemPress} />
     ),
     [handleItemPress],
-  );
-
-  const renderDataSourceItem = useCallback(
-    ({ item }: { item: DataSourceUiModel }) => (
-      <TouchableOpacity
-        className="flex-row items-center py-4"
-        onPress={() => handleDataSourceChange(item)}
-      >
-        <Ionicons
-          name="checkmark"
-          className={cn("text-foreground", item.isSelected ? "visible" : "invisible")}
-          size={24}
-        />
-        <Text className="ms-2 text-base text-foreground">{item.name}</Text>
-      </TouchableOpacity>
-    ),
-    [handleDataSourceChange],
   );
 
   const dataSourceOptions = DATA_SOURCES.map((config) => ({
@@ -234,28 +199,11 @@ export default function HomeScreen() {
         }
       />
 
-      <StyledBottomSheet
+      <DataSourcePicker
         ref={bottomSheetRef}
-        index={-1}
-        enableDynamicSizing
-        enablePanDownToClose
-        enableOverDrag={false}
-        backdropComponent={renderBackdrop}
-        className="bg-background"
-        handleIndicatorClassName="bg-foreground"
-      >
-        <BottomSheetView
-          className="p-8"
-          style={{ paddingBottom: insets.bottom }}
-        >
-          <Text className="mb-4 text-xl font-bold text-foreground">Pick data source</Text>
-          <FlatList
-            data={dataSourceOptions}
-            renderItem={renderDataSourceItem}
-            keyExtractor={(item) => item.name}
-          />
-        </BottomSheetView>
-      </StyledBottomSheet>
+        dataSources={dataSourceOptions}
+        onSelect={handleDataSourceChange}
+      />
 
       {isLoading && (
         <View className="absolute inset-0 items-center justify-center bg-black/50">
@@ -265,8 +213,3 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
-
-const StyledBottomSheet = cssInterop(BottomSheet, {
-  className: "backgroundStyle",
-  handleIndicatorClassName: "handleIndicatorStyle",
-});

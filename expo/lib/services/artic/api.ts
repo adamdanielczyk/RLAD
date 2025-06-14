@@ -1,4 +1,5 @@
 import { ArticArtwork, ArticResponse } from "@/lib/services/artic/types";
+import { fetchJson } from "@/lib/services/apiClient";
 
 const ARTIC_BASE_URL = "https://api.artic.edu/api/v1";
 
@@ -19,13 +20,9 @@ export const articApi = {
       params.append("q", query);
     }
 
-    const response = await fetch(`${ARTIC_BASE_URL}/artworks/search?${params}`);
-
-    if (!response.ok) {
-      throw new Error(`Artic API error: ${response.status}`);
-    }
-
-    return response.json();
+    return fetchJson<ArticResponse>(
+      `${ARTIC_BASE_URL}/artworks/search?${params}`,
+    );
   },
 
   getArtwork: async (id: number): Promise<ArticArtwork> => {
@@ -34,13 +31,9 @@ export const articApi = {
         "id,title,image_id,thumbnail,artist_title,artist_display,place_of_origin,department_title,date_display",
     });
 
-    const response = await fetch(`${ARTIC_BASE_URL}/artworks/${id}?${params}`);
-
-    if (!response.ok) {
-      throw new Error(`Artic API error: ${response.status}`);
-    }
-
-    const result = await response.json();
+    const result = await fetchJson<{ data: ArticArtwork }>(
+      `${ARTIC_BASE_URL}/artworks/${id}?${params}`,
+    );
     return result.data;
   },
 };

@@ -1,36 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { ItemDetails } from "@/components/app/ItemDetails";
 import { fetchItemById } from "@/lib/services/dataService";
 import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const { width } = Dimensions.get("window");
 
 export default function DetailsScreen() {
   const router = useRouter();
-  const { id, dataSource } = useLocalSearchParams<{ id: string; dataSource: string }>();
+  const { id, dataSource } =
+    useLocalSearchParams<{ id: string; dataSource: string }>();
 
   const [item, setItem] = useState<ItemUiModel | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (id && dataSource) {
+    if (dataSource && id) {
       loadItemDetails();
     }
-  }, [id, dataSource]);
+  }, [dataSource, id]);
 
   const loadItemDetails = async () => {
     try {
@@ -89,71 +81,32 @@ export default function DetailsScreen() {
       );
     }
 
-    return (
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="relative">
-          <Image
-            source={{ uri: item.imageUrl }}
-            style={{ width, height: width * 0.75 }}
-            contentFit="cover"
-          />
-        </View>
-
-        <View className="p-6">
-          {item.detailsKeyValues.map((detail, index) => (
-            <View
-              key={index}
-              className="mb-4"
-            >
-              <Text className="mb-1 text-lg font-semibold">{detail.key}</Text>
-              <Text className="text-base leading-6">{detail.value}</Text>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-    );
+    return <ItemDetails item={item} />;
   };
 
-  const getHeaderTitle = () => {
-    if (isLoading) {
-      return "Loading...";
-    }
-    if (!item) {
-      return "Not Found";
-    }
-    return item.name;
-  };
+  const headerTitle = isLoading
+    ? "Loading..."
+    : item
+      ? item.name
+      : "Not Found";
 
-  const getHeaderRight = () => {
-    if (isLoading || !item) {
-      return undefined;
-    }
-    return () => (
-      <TouchableOpacity
-        onPress={handleShare}
-        className="p-2"
-      >
-        <Ionicons
-          name="share-outline"
-          size={24}
-          className="text-foreground"
-        />
-      </TouchableOpacity>
-    );
-  };
+  const headerRight =
+    !isLoading && item
+      ? () => (
+          <TouchableOpacity onPress={handleShare} className="p-2">
+            <Ionicons
+              name="share-outline"
+              size={24}
+              className="text-foreground"
+            />
+          </TouchableOpacity>
+        )
+      : undefined;
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: getHeaderTitle(),
-          headerRight: getHeaderRight(),
-        }}
-      />
-      <SafeAreaView
-        edges={["bottom", "left", "right"]}
-        className="flex-1"
-      >
+      <Stack.Screen options={{ title: headerTitle, headerRight }} />
+      <SafeAreaView edges={["bottom", "left", "right"]} className="flex-1">
         {renderContent()}
       </SafeAreaView>
     </>
