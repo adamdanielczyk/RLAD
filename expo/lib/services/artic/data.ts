@@ -1,6 +1,6 @@
-import { articApi } from "@/services/artic/api";
-import { mapArticArtworkToItem } from "@/services/artic/mappers";
-import { FetchItemsResult } from "@/services/dataService";
+import { articApi } from "@/lib/services/artic/api";
+import { mapArticArtworkToItem } from "@/lib/services/artic/mappers";
+import { FetchItemsResult } from "@/lib/services/dataService";
 
 export const fetchArticItems = async (
   page: number,

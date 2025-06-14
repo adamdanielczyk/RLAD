@@ -1,6 +1,6 @@
-import { getArticImageUrl } from "@/services/artic/api";
-import { ArticArtwork } from "@/services/artic/types";
-import { ItemUiModel } from "@/types/uiModelTypes";
+import { getArticImageUrl } from "@/lib/services/artic/api";
+import { ArticArtwork } from "@/lib/services/artic/types";
+import { ItemUiModel } from "@/lib/types/uiModelTypes";
 
 export const mapArticArtworkToItem = (artwork: ArticArtwork): ItemUiModel => {
   const imageUrl = artwork.image_id

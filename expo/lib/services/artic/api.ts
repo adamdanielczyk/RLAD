@@ -1,4 +1,4 @@
-import { ArticArtwork, ArticResponse } from "@/services/artic/types";
+import { ArticArtwork, ArticResponse } from "@/lib/services/artic/types";
 
 const ARTIC_BASE_URL = "https://api.artic.edu/api/v1";
 

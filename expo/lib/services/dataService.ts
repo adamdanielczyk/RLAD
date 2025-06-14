@@ -1,13 +1,13 @@
-import { articApi } from "@/services/artic/api";
-import { fetchArticItems } from "@/services/artic/data";
-import { mapArticArtworkToItem } from "@/services/artic/mappers";
-import { giphyApi } from "@/services/giphy/api";
-import { fetchGiphyItems } from "@/services/giphy/data";
-import { mapGiphyGifToItem } from "@/services/giphy/mappers";
-import { rickAndMortyApi } from "@/services/rick-and-morty/api";
-import { fetchRickAndMortyItems } from "@/services/rick-and-morty/data";
-import { mapRickAndMortyCharacterToItem } from "@/services/rick-and-morty/mappers";
-import { DataSourceType, ItemUiModel } from "@/types/uiModelTypes";
+import { articApi } from "@/lib/services/artic/api";
+import { fetchArticItems } from "@/lib/services/artic/data";
+import { mapArticArtworkToItem } from "@/lib/services/artic/mappers";
+import { giphyApi } from "@/lib/services/giphy/api";
+import { fetchGiphyItems } from "@/lib/services/giphy/data";
+import { mapGiphyGifToItem } from "@/lib/services/giphy/mappers";
+import { rickAndMortyApi } from "@/lib/services/rick-and-morty/api";
+import { fetchRickAndMortyItems } from "@/lib/services/rick-and-morty/data";
+import { mapRickAndMortyCharacterToItem } from "@/lib/services/rick-and-morty/mappers";
+import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
 
 export interface FetchItemsParams {
   dataSource: DataSourceType;

@@ -1,6 +1,6 @@
-import { FetchItemsResult } from "@/services/dataService";
-import { giphyApi } from "@/services/giphy/api";
-import { mapGiphyGifToItem } from "@/services/giphy/mappers";
+import { FetchItemsResult } from "@/lib/services/dataService";
+import { giphyApi } from "@/lib/services/giphy/api";
+import { mapGiphyGifToItem } from "@/lib/services/giphy/mappers";
 
 export const fetchGiphyItems = async (
   page: number,
