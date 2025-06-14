@@ -1,4 +1,5 @@
-import { GiphyResponse } from "@/lib/services/giphy/types";
+import { GiphyResponse, GiphyGif } from "@/lib/services/giphy/types";
+import { fetchJson } from "@/lib/services/apiClient";
 
 const GIPHY_BASE_URL = "https://api.giphy.com/v1/gifs";
 
@@ -19,25 +20,15 @@ export const giphyApi = {
       params.append("q", query);
     }
 
-    const response = await fetch(`${GIPHY_BASE_URL}/${endpoint}?${params}`);
-
-    if (!response.ok) {
-      throw new Error(`Giphy API error: ${response.status}`);
-    }
-
-    return response.json();
+    return fetchJson<GiphyResponse>(
+      `${GIPHY_BASE_URL}/${endpoint}?${params}`,
+    );
   },
 
   getGif: async (id: string) => {
-    const response = await fetch(
+    const result = await fetchJson<{ data: GiphyGif }>(
       `${GIPHY_BASE_URL}/${id}?api_key=${process.env.EXPO_PUBLIC_GIPHY_API_KEY}`,
     );
-
-    if (!response.ok) {
-      throw new Error(`Giphy API error: ${response.status}`);
-    }
-
-    const result = await response.json();
     return result.data;
   },
 };
