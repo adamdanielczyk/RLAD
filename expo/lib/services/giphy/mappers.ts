@@ -1,5 +1,5 @@
-import { GiphyGif } from "@/services/giphy/types";
-import { ItemUiModel } from "@/types/uiModelTypes";
+import { GiphyGif } from "@/lib/services/giphy/types";
+import { ItemUiModel } from "@/lib/types/uiModelTypes";
 
 export const mapGiphyGifToItem = (gif: GiphyGif): ItemUiModel => {
   const username = gif.username || "Unknown";

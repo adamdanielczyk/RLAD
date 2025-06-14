@@ -1,6 +1,6 @@
+import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
-import { DataSourceType, ItemUiModel } from "../types/uiModelTypes";
 
 interface AppState {
   // Data source management
