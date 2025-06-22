@@ -24,55 +24,52 @@ export default function HomeScreen() {
   const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet | null>(null);
 
-  const selectedDataSource = useAppStore((state) => state.selectedDataSource);
   const searchQuery = useAppStore((state) => state.searchQuery);
   const items = useAppStore((state) => state.items);
   const isLoading = useAppStore((state) => state.isLoading);
-  const currentPage = useAppStore((state) => state.currentPage);
+  const isInitialized = useAppStore((state) => state.isInitialized);
 
-  const loadItems = useCallback(
-    async (page: number) => {
-      const { isLoading, hasMorePages } = useAppStore.getState();
+  const loadItems = useCallback(async (offset?: number) => {
+    const { isLoading, hasMorePages, searchQuery, isInitialized } = useAppStore.getState();
 
-      if (isLoading) return;
-      const isInitialLoad = page === 1;
-      if (!isInitialLoad && !hasMorePages) return;
-      if (page === currentPage) return;
+    if (!isInitialized) return;
+    if (isLoading) return;
+    if (!hasMorePages) return;
 
-      try {
-        useAppStore.getState().setIsLoading(true);
+    const { addItems, setNextOffset, setHasMorePages, setIsLoading } = useAppStore.getState();
+    try {
+      setIsLoading(true);
 
-        const result = await fetchItems({
-          dataSource: selectedDataSource,
-          page,
-          query: searchQuery || undefined,
-        });
+      const result = await fetchItems({
+        offset,
+        query: searchQuery || undefined,
+      });
 
-        const { addItems, setCurrentPage, setHasMorePages } = useAppStore.getState();
-        addItems(result.items);
-        setCurrentPage(page);
-        setHasMorePages(result.hasMore);
-      } catch (error) {
-        console.error(`Failed to load items:`, error);
-        Alert.alert("Error", `Failed to load items. Please try again.`);
-      } finally {
-        useAppStore.getState().setIsLoading(false);
-      }
-    },
-    [selectedDataSource, searchQuery],
-  );
+      addItems(result.items);
+      setNextOffset(result.nextOffset);
+      setHasMorePages(result.hasMorePages);
+    } catch (error) {
+      console.error(`Failed to load items:`, error);
+      Alert.alert("Error", `Failed to load items. Please try again.`);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    loadItems(1);
-  }, [selectedDataSource, searchQuery]);
+    if (isInitialized) {
+      loadItems();
+    }
+  }, [loadItems, isInitialized]);
 
   const handleRefresh = useCallback(() => {
-    loadItems(1);
+    loadItems();
   }, [loadItems]);
 
   const handleLoadMore = useCallback(() => {
-    loadItems(currentPage + 1);
-  }, [currentPage, loadItems]);
+    const { nextOffset } = useAppStore.getState();
+    loadItems(nextOffset);
+  }, [loadItems]);
 
   const handleSearchChange = useCallback((text: string) => {
     useAppStore.getState().setSearchQuery(text);
@@ -80,17 +77,15 @@ export default function HomeScreen() {
 
   const openDataSourcePicker = useCallback(() => {
     bottomSheetRef?.current?.expand();
-  }, [bottomSheetRef]);
+  }, []);
 
-  const handleDataSourceSelected = useCallback(
-    async (dataSource: DataSourceUiModel) => {
-      if (dataSource.type !== selectedDataSource) {
-        await useAppStore.getState().setSelectedDataSource(dataSource.type);
-      }
-      bottomSheetRef?.current?.close();
-    },
-    [selectedDataSource, bottomSheetRef],
-  );
+  const handleDataSourceSelected = useCallback(async (dataSource: DataSourceUiModel) => {
+    const { selectedDataSource: currentDataSource, setSelectedDataSource } = useAppStore.getState();
+    if (dataSource.type !== currentDataSource) {
+      await setSelectedDataSource(dataSource.type);
+    }
+    bottomSheetRef?.current?.close();
+  }, []);
 
   const renderItem = useCallback(
     ({ item }: { item: ItemUiModel }) => (
@@ -104,7 +99,7 @@ export default function HomeScreen() {
         }
       />
     ),
-    [router],
+    [],
   );
 
   return (
@@ -114,10 +109,12 @@ export default function HomeScreen() {
     >
       <View className="m-4 flex-row items-center rounded-lg border bg-card px-4 py-2">
         <TextInput
-          className="flex-1 placeholder:text-card-foreground"
+          className="flex-1 text-card-foreground placeholder:text-card-foreground"
           placeholder="Search..."
           value={searchQuery}
           onChangeText={handleSearchChange}
+          autoCorrect={false}
+          autoCapitalize="none"
         />
         <TouchableOpacity onPress={openDataSourcePicker}>
           <Ionicons
@@ -136,7 +133,7 @@ export default function HomeScreen() {
         contentContainerStyle={{ padding: 8 }}
         refreshControl={
           <RefreshControl
-            refreshing={isLoading && currentPage === 1}
+            refreshing={isLoading && items.length === 0}
             onRefresh={handleRefresh}
           />
         }

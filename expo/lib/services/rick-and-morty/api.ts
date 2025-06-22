@@ -7,10 +7,7 @@ import {
 const RICK_AND_MORTY_BASE_URL = "https://rickandmortyapi.com/api";
 
 export const rickAndMortyApi = {
-  getCharacters: async (
-    page: number = 1,
-    name?: string,
-  ): Promise<RickAndMortyCharactersResponse> => {
+  getCharacters: async (page: number, name?: string): Promise<RickAndMortyCharactersResponse> => {
     const params = new URLSearchParams({
       page: page.toString(),
     });

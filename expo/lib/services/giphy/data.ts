@@ -1,22 +1,51 @@
 import { FetchItemsResult } from "@/lib/services/dataService";
 import { giphyApi } from "@/lib/services/giphy/api";
-import { mapGiphyGifToItem } from "@/lib/services/giphy/mappers";
+import { GiphyGif } from "@/lib/services/giphy/types";
+import { ItemUiModel } from "@/lib/types/uiModelTypes";
+
+const INITIAL_OFFSET = 0;
 
 export const fetchGiphyItems = async (
-  page: number,
+  offset?: number,
   query?: string,
-  limit: number = 25,
 ): Promise<FetchItemsResult> => {
-  const offset = (page - 1) * limit;
-  const response = await giphyApi.searchGifs(query, limit, offset);
+  const resolvedOffset = offset ?? INITIAL_OFFSET;
+  const response = await giphyApi.getGifs(resolvedOffset, query);
   const items = response.data.map(mapGiphyGifToItem);
 
-  const totalItems = response.pagination.total_count;
-  const currentOffset = response.pagination.offset;
-  const currentCount = response.pagination.count;
+  const hasMorePages = items.length !== 0;
+  const nextOffset = response.pagination.offset + response.pagination.count + 1;
 
   return {
     items,
-    hasMore: currentOffset + currentCount < totalItems,
+    hasMorePages,
+    nextOffset,
+  };
+};
+
+export const fetchGiphyItemById = async (id: string): Promise<ItemUiModel> => {
+  const response = await giphyApi.getGif(id);
+  return mapGiphyGifToItem(response);
+};
+
+const mapGiphyGifToItem = (gif: GiphyGif): ItemUiModel => {
+  const username = gif.username || "Unknown";
+  const importDate = gif.import_datetime ? new Date(gif.import_datetime).toLocaleDateString() : "";
+  const trendingDate = gif.trending_datetime
+    ? new Date(gif.trending_datetime).toLocaleDateString()
+    : "";
+
+  return {
+    id: gif.id,
+    imageUrl: gif.images.fixed_width.url,
+    name: gif.title || "Untitled GIF",
+    cardCaption: username !== "Unknown" ? `by ${username}` : undefined,
+    detailsKeyValues: [
+      { key: "Title", value: gif.title || "Untitled" },
+      { key: "Creator", value: username },
+      { key: "Import Date", value: importDate },
+      { key: "Trending Date", value: trendingDate },
+      { key: "URL", value: gif.url },
+    ].filter((item) => item.value && item.value !== "Unknown" && item.value.trim() !== ""),
   };
 };

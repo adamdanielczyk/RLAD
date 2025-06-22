@@ -1,19 +1,17 @@
-import { ArticArtwork, ArticResponse } from "@/lib/services/artic/types";
 import { fetchJson } from "@/lib/services/apiClient";
+import { ArticArtwork, ArticResponse } from "@/lib/services/artic/types";
 
 const ARTIC_BASE_URL = "https://api.artic.edu/api/v1";
+const FIELDS =
+  "fields=id,title,image_id,artist_title,artist_display,department_title,place_of_origin,date_display,thumbnail";
+const ELASTICSEARCH_QUERY_ONLY_WITH_IMAGE_IDS = "query[exists][field]=image_id";
+const LIMIT = 20;
 
 export const articApi = {
-  getArtworks: async (
-    page: number = 1,
-    query?: string,
-    limit: number = 25,
-  ): Promise<ArticResponse> => {
+  getArtworks: async (from: number, query?: string): Promise<ArticResponse> => {
     const params = new URLSearchParams({
-      page: page.toString(),
-      limit: limit.toString(),
-      fields:
-        "id,title,image_id,thumbnail,artist_title,artist_display,place_of_origin,department_title,date_display",
+      from: from.toString(),
+      size: LIMIT.toString(),
     });
 
     if (query) {
@@ -21,32 +19,14 @@ export const articApi = {
     }
 
     return fetchJson<ArticResponse>(
-      `${ARTIC_BASE_URL}/artworks/search?${params}`,
+      `${ARTIC_BASE_URL}/artworks/search?${params}&${FIELDS}&${ELASTICSEARCH_QUERY_ONLY_WITH_IMAGE_IDS}`,
     );
   },
 
-  getArtwork: async (id: number): Promise<ArticArtwork> => {
-    const params = new URLSearchParams({
-      fields:
-        "id,title,image_id,thumbnail,artist_title,artist_display,place_of_origin,department_title,date_display",
-    });
-
+  getArtwork: async (id: string): Promise<ArticArtwork> => {
     const result = await fetchJson<{ data: ArticArtwork }>(
-      `${ARTIC_BASE_URL}/artworks/${id}?${params}`,
+      `${ARTIC_BASE_URL}/artworks/${id}?${FIELDS}`,
     );
     return result.data;
   },
-};
-
-export const getArticImageUrl = (
-  imageId: string,
-  size: "small" | "medium" | "large" = "medium",
-): string => {
-  const sizeMap = {
-    small: "400",
-    medium: "843",
-    large: "1686",
-  };
-
-  return `https://www.artic.edu/iiif/2/${imageId}/full/${sizeMap[size]},/0/default.jpg`;
 };

@@ -14,21 +14,21 @@ interface AppState {
   // Items management
   items: ItemUiModel[];
   addItems: (items: ItemUiModel[]) => void;
-  clearItems: () => void;
 
   // Loading and pagination
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
-  currentPage: number;
-  setCurrentPage: (page: number) => void;
+  nextOffset?: number;
+  setNextOffset: (offset: number) => void;
   hasMorePages: boolean;
   setHasMorePages: (hasMore: boolean) => void;
 
   // Initialize store
+  isInitialized: boolean;
   initialize: () => Promise<void>;
 }
 
-const STORAGE_KEY = "selected_data_source";
+const DATA_SOURCE_STORAGE_KEY = "selected_data_source";
 const DEFAULT_DATA_SOURCE: DataSourceType = "giphy";
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -36,17 +36,19 @@ export const useAppStore = create<AppState>((set, get) => ({
   searchQuery: "",
   items: [],
   isLoading: false,
-  currentPage: 1,
+  nextOffset: undefined,
   hasMorePages: true,
+  isInitialized: false,
 
   // Data source management
   setSelectedDataSource: async (dataSource: DataSourceType) => {
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, dataSource);
+      await AsyncStorage.setItem(DATA_SOURCE_STORAGE_KEY, dataSource);
       set({
         selectedDataSource: dataSource,
-        items: [], // Clear items when switching data source
-        currentPage: 1,
+        searchQuery: "",
+        items: [],
+        nextOffset: undefined,
         hasMorePages: true,
       });
     } catch (error) {
@@ -58,8 +60,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   setSearchQuery: (query: string) => {
     set({
       searchQuery: query,
-      items: [], // Clear items when search changes
-      currentPage: 1,
+      items: [],
+      nextOffset: undefined,
       hasMorePages: true,
     });
   },
@@ -70,17 +72,13 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ items: [...currentItems, ...items] });
   },
 
-  clearItems: () => {
-    set({ items: [], currentPage: 1, hasMorePages: true });
-  },
-
   // Loading and pagination
   setIsLoading: (loading: boolean) => {
     set({ isLoading: loading });
   },
 
-  setCurrentPage: (page: number) => {
-    set({ currentPage: page });
+  setNextOffset: (offset: number) => {
+    set({ nextOffset: offset });
   },
 
   setHasMorePages: (hasMore: boolean) => {
@@ -89,13 +87,24 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   initialize: async () => {
     try {
-      const savedDataSource = await AsyncStorage.getItem(STORAGE_KEY);
+      const savedDataSource = await AsyncStorage.getItem(DATA_SOURCE_STORAGE_KEY);
       if (savedDataSource) {
-        set({ selectedDataSource: savedDataSource as DataSourceType });
+        set({
+          selectedDataSource: savedDataSource as DataSourceType,
+          isInitialized: true,
+        });
+      } else {
+        set({
+          selectedDataSource: DEFAULT_DATA_SOURCE,
+          isInitialized: true,
+        });
       }
     } catch (error) {
       console.error("Failed to load selected data source:", error);
-      set({ selectedDataSource: DEFAULT_DATA_SOURCE });
+      set({
+        selectedDataSource: DEFAULT_DATA_SOURCE,
+        isInitialized: true,
+      });
     }
   },
 }));

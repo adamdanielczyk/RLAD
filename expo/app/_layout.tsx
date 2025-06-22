@@ -40,16 +40,15 @@ export default function RootLayout() {
   const hasMounted = React.useRef(false);
   const { isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
-  const initialize = useAppStore((state) => state.initialize);
 
   useEffect(() => {
     const initializeApp = async () => {
-      await initialize();
+      await useAppStore.getState().initialize();
       SplashScreen.hideAsync();
     };
 
     initializeApp();
-  }, [initialize]);
+  }, []);
 
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {

@@ -2,8 +2,7 @@ import { ItemDetails } from "@/components/ItemDetails";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { fetchItemById } from "@/lib/services/dataService";
-import { useAppStore } from "@/lib/store/appStore";
-import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
+import { ItemUiModel } from "@/lib/types/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
@@ -13,21 +12,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const dataSource = useAppStore((state) => state.selectedDataSource);
 
   const [item, setItem] = useState<ItemUiModel | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (dataSource && id) {
+    if (id) {
       loadItemDetails();
     }
-  }, [dataSource, id]);
+  }, [id]);
 
   const loadItemDetails = async () => {
     try {
       setIsLoading(true);
-      const itemData = await fetchItemById(dataSource as DataSourceType, id);
+      const itemData = await fetchItemById(id);
       setItem(itemData);
     } catch (error) {
       console.error("Failed to load item details:", error);

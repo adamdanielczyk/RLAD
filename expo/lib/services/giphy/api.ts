@@ -1,28 +1,25 @@
-import { GiphyResponse, GiphyGif } from "@/lib/services/giphy/types";
 import { fetchJson } from "@/lib/services/apiClient";
+import { GiphyGif, GiphyResponse } from "@/lib/services/giphy/types";
 
 const GIPHY_BASE_URL = "https://api.giphy.com/v1/gifs";
+const BUNDLE = "clips_grid_picker";
+const LIMIT = 20;
 
 export const giphyApi = {
-  searchGifs: async (
-    query: string = "",
-    limit: number = 25,
-    offset: number = 0,
-  ): Promise<GiphyResponse> => {
+  getGifs: async (offset: number, query?: string): Promise<GiphyResponse> => {
     const endpoint = query ? "search" : "trending";
     const params = new URLSearchParams({
       api_key: process.env.EXPO_PUBLIC_GIPHY_API_KEY!,
-      limit: limit.toString(),
+      limit: LIMIT.toString(),
       offset: offset.toString(),
+      bundle: BUNDLE,
     });
 
     if (query) {
       params.append("q", query);
     }
 
-    return fetchJson<GiphyResponse>(
-      `${GIPHY_BASE_URL}/${endpoint}?${params}`,
-    );
+    return fetchJson<GiphyResponse>(`${GIPHY_BASE_URL}/${endpoint}?${params}`);
   },
 
   getGif: async (id: string) => {

@@ -1,7 +1,6 @@
 export interface GiphyResponse {
   data: GiphyGif[];
   pagination: {
-    total_count: number;
     count: number;
     offset: number;
   };

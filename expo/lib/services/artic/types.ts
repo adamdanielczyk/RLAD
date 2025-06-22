@@ -3,9 +3,6 @@ export interface ArticResponse {
   pagination: {
     limit: number;
     offset: number;
-    total: number;
-    current_page: number;
-    total_pages: number;
   };
 }
 
