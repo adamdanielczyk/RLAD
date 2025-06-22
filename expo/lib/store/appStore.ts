@@ -10,6 +10,13 @@ interface AppState {
   // Search management
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  isSearchFocused: boolean;
+  setIsSearchFocused: (isFocused: boolean) => void;
+  clearSearch: () => void;
+
+  // Bottom sheet management
+  isBottomSheetOpen: boolean;
+  setIsBottomSheetOpen: (isOpen: boolean) => void;
 
   // Items management
   items: ItemUiModel[];
@@ -34,6 +41,8 @@ const DEFAULT_DATA_SOURCE: DataSourceType = "giphy";
 export const useAppStore = create<AppState>((set, get) => ({
   selectedDataSource: DEFAULT_DATA_SOURCE,
   searchQuery: "",
+  isSearchFocused: false,
+  isBottomSheetOpen: false,
   items: [],
   isLoading: false,
   nextOffset: undefined,
@@ -41,15 +50,25 @@ export const useAppStore = create<AppState>((set, get) => ({
   isInitialized: false,
 
   // Data source management
-  setSelectedDataSource: async (dataSource: DataSourceType) => {
-    try {
-      await AsyncStorage.setItem(DATA_SOURCE_STORAGE_KEY, dataSource);
+  setSelectedDataSource: async (newDataSource: DataSourceType) => {
+    const { selectedDataSource: currentDataSource } = get();
+    if (currentDataSource === newDataSource) {
       set({
-        selectedDataSource: dataSource,
+        isBottomSheetOpen: false,
+      });
+      return;
+    }
+
+    try {
+      await AsyncStorage.setItem(DATA_SOURCE_STORAGE_KEY, newDataSource);
+      set({
+        selectedDataSource: newDataSource,
         searchQuery: "",
         items: [],
         nextOffset: undefined,
         hasMorePages: true,
+        isSearchFocused: false,
+        isBottomSheetOpen: false,
       });
     } catch (error) {
       console.error("Failed to save selected data source:", error);
@@ -63,6 +82,28 @@ export const useAppStore = create<AppState>((set, get) => ({
       items: [],
       nextOffset: undefined,
       hasMorePages: true,
+    });
+  },
+
+  clearSearch: () => {
+    set({
+      searchQuery: "",
+      items: [],
+      nextOffset: undefined,
+      hasMorePages: true,
+      isSearchFocused: false,
+    });
+  },
+
+  setIsSearchFocused: (isFocused: boolean) => {
+    set({ isSearchFocused: isFocused });
+  },
+
+  // Bottom sheet management
+  setIsBottomSheetOpen: (isOpen: boolean) => {
+    set({
+      isBottomSheetOpen: isOpen,
+      isSearchFocused: false,
     });
   },
 
