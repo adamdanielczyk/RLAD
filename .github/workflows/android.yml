@@ -23,6 +23,7 @@ jobs:
       - uses: gradle/gradle-build-action@v3.5.0
         with:
           arguments: test --stacktrace
+          build-root-directory: native-android
 
   connectedAndroidTest:
     runs-on: ubuntu-latest
@@ -44,6 +45,7 @@ jobs:
         with:
           api-level: 29
           script: ./gradlew connectedAndroidTest
+          working-directory: native-android
 
   assembleDebug:
     runs-on: ubuntu-latest
@@ -58,11 +60,12 @@ jobs:
       - uses: gradle/gradle-build-action@v3.5.0
         with:
           arguments: assembleDebug --stacktrace
+          build-root-directory: native-android
 
       - uses: actions/upload-artifact@v4.6.2
         with:
           name: rlad-debug-apk
-          path: app/build/outputs/apk/debug/*debug*.apk
+          path: native-android/app/build/outputs/apk/debug/*debug*.apk
 
   assembleRelease:
     runs-on: ubuntu-latest
@@ -77,11 +80,12 @@ jobs:
       - uses: gradle/gradle-build-action@v3.5.0
         with:
           arguments: assembleRelease --stacktrace
+          build-root-directory: native-android
 
       - uses: ilharp/sign-android-release@v2.0.0
         id: sign_app
         with:
-          releaseDir: app/build/outputs/apk/release
+          releaseDir: native-android/app/build/outputs/apk/release
           signingKey: ${{ secrets.RELEASE_SIGNING_KEY }}
           keyAlias: ${{ secrets.RELEASE_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
@@ -94,7 +98,7 @@ jobs:
 
   bundleRelease:
     if: github.ref == 'refs/heads/master'
-    needs: [ test, connectedAndroidTest, assembleDebug, assembleRelease ]
+    needs: [test, connectedAndroidTest, assembleDebug, assembleRelease]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
@@ -106,18 +110,19 @@ jobs:
 
       - uses: chkfung/android-version-actions@v1.2.3
         with:
-          gradlePath: app/build.gradle.kts
+          gradlePath: native-android/app/build.gradle.kts
           versionCode: ${{github.run_number}}
-          versionName: '1.0.${{github.run_number}}'
+          versionName: "1.0.${{github.run_number}}"
 
       - uses: gradle/gradle-build-action@v3.5.0
         with:
           arguments: bundleRelease --stacktrace
+          build-root-directory: native-android
 
       - uses: ilharp/sign-android-release@v2.0.0
         id: sign_app
         with:
-          releaseDir: app/build/outputs/bundle/release
+          releaseDir: native-android/app/build/outputs/bundle/release
           signingKey: ${{ secrets.RELEASE_SIGNING_KEY }}
           keyAlias: ${{ secrets.RELEASE_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
