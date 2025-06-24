@@ -30,6 +30,11 @@ export function ItemDetails({ item }: { item: ItemUiModel }) {
             style={{ flex: 1 }}
           />
         </View>
+        <View style={{ position: "absolute", bottom: 16, left: 16, right: 16 }}>
+          <Text className="text-2xl font-bold text-white">
+            {item.name}
+          </Text>
+        </View>
       </View>
 
       <View className="relative z-10 -mt-6 rounded-t-3xl bg-background">

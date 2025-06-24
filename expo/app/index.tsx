@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
 import { ItemCard } from "@/components/ItemCard";
@@ -63,10 +64,14 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView
+    <LinearGradient
+      colors={["#f5d0fe", "#fef3c7"]}
       className="flex-1"
-      edges={["top", "left", "right"]}
     >
+      <SafeAreaView
+        className="flex-1"
+        edges={["top", "left", "right"]}
+      >
       <SearchBar
         query={searchQuery}
         onQueryChanged={onSearchQueryChanged}
@@ -116,6 +121,7 @@ export default function HomeScreen() {
         selectedDataSource={selectedDataSource}
         onDataSourceSelected={onDataSourceSelected}
       />
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
