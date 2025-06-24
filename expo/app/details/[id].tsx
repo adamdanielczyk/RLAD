@@ -54,7 +54,7 @@ export default function DetailsScreen() {
 
     if (!item) {
       return (
-        <View className="flex-1 items-center justify-center p-5">
+        <View className="flex-1 items-center justify-center p-4">
           <Text className="text-2xl font-bold">Item not found</Text>
           <Link
             href="/"
@@ -97,7 +97,7 @@ export default function DetailsScreen() {
     <>
       <Stack.Screen options={{ title: headerTitle, headerRight }} />
       <SafeAreaView
-        edges={["top", "left", "right"]}
+        edges={["left", "right"]}
         className="flex-1"
       >
         {renderContent()}

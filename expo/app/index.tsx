@@ -15,11 +15,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
 import { ItemCard } from "@/components/ItemCard";
 import { SearchBar } from "@/components/SearchBar";
+import { useTheme } from "@react-navigation/native";
 
 const ITEM_MIN_WIDTH = 150;
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { colors } = useTheme();
 
   const items = useAppStore((state) => state.items);
   const isLoading = useAppStore((state) => state.isLoading);
@@ -83,6 +85,9 @@ export default function HomeScreen() {
         contentContainerStyle={{ padding: 8 }}
         refreshControl={
           <RefreshControl
+            tintColor={colors.text}
+            progressBackgroundColor={colors.card}
+            colors={[colors.text]}
             refreshing={isLoading && items.length === 0}
             onRefresh={onPullToRefresh}
           />
@@ -91,14 +96,14 @@ export default function HomeScreen() {
         onEndReachedThreshold={0.1}
         ListFooterComponent={
           isLoading && items.length > 0 ? (
-            <View className="items-center p-5">
+            <View className="p-4">
               <ActivityIndicator size="large" />
             </View>
           ) : null
         }
         ListEmptyComponent={
           !isLoading ? (
-            <View className="flex-1 items-center justify-center pt-[100px]">
+            <View className="p-8">
               <Text className="text-center text-lg">No items found</Text>
             </View>
           ) : null

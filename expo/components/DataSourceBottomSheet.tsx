@@ -90,6 +90,10 @@ export const DataSourceBottomSheet = ({
       onChange={handleSheetChanges}
       className="bg-background"
       handleIndicatorClassName="bg-foreground"
+      style={{
+        marginLeft: insets.left,
+        marginRight: insets.right,
+      }}
     >
       <BottomSheetView
         className="p-8"
