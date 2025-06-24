@@ -10,6 +10,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
@@ -63,59 +64,64 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView
-      className="flex-1"
-      edges={["top", "left", "right"]}
+    <LinearGradient
+      colors={[colors.primary, colors.background]}
+      style={{ flex: 1 }}
     >
-      <SearchBar
-        query={searchQuery}
-        onQueryChanged={onSearchQueryChanged}
-        isFocused={isSearchFocused}
-        onFocused={onSearchFocused}
-        onClearButtonClicked={onClearButtonClicked}
-        onFilterButtonClicked={onFilterButtonClicked}
-      />
+      <SafeAreaView
+        className="flex-1"
+        edges={["top", "left", "right"]}
+      >
+        <SearchBar
+          query={searchQuery}
+          onQueryChanged={onSearchQueryChanged}
+          isFocused={isSearchFocused}
+          onFocused={onSearchFocused}
+          onClearButtonClicked={onClearButtonClicked}
+          onFilterButtonClicked={onFilterButtonClicked}
+        />
 
-      <FlatList
-        data={items}
-        renderItem={renderItem}
-        key={listKey}
-        keyExtractor={(item) => item.id}
-        numColumns={numColumns}
-        contentContainerStyle={{ padding: 8 }}
-        refreshControl={
-          <RefreshControl
-            tintColor={colors.text}
-            progressBackgroundColor={colors.card}
-            colors={[colors.text]}
-            refreshing={isLoading && items.length === 0}
-            onRefresh={onPullToRefresh}
-          />
-        }
-        onEndReached={onLoadMoreItems}
-        onEndReachedThreshold={0.1}
-        ListFooterComponent={
-          isLoading && items.length > 0 ? (
-            <View className="p-4">
-              <ActivityIndicator size="large" />
-            </View>
-          ) : null
-        }
-        ListEmptyComponent={
-          !isLoading ? (
-            <View className="p-8">
-              <Text className="text-center text-lg">No items found</Text>
-            </View>
-          ) : null
-        }
-      />
+        <FlatList
+          data={items}
+          renderItem={renderItem}
+          key={listKey}
+          keyExtractor={(item) => item.id}
+          numColumns={numColumns}
+          contentContainerStyle={{ padding: 8 }}
+          refreshControl={
+            <RefreshControl
+              tintColor={colors.text}
+              progressBackgroundColor={colors.card}
+              colors={[colors.text]}
+              refreshing={isLoading && items.length === 0}
+              onRefresh={onPullToRefresh}
+            />
+          }
+          onEndReached={onLoadMoreItems}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={
+            isLoading && items.length > 0 ? (
+              <View className="p-4">
+                <ActivityIndicator size="large" />
+              </View>
+            ) : null
+          }
+          ListEmptyComponent={
+            !isLoading ? (
+              <View className="p-8">
+                <Text className="text-center text-lg">No items found</Text>
+              </View>
+            ) : null
+          }
+        />
 
-      <DataSourceBottomSheet
-        isOpen={isBottomSheetOpen}
-        onClose={onBottomSheetClosed}
-        selectedDataSource={selectedDataSource}
-        onDataSourceSelected={onDataSourceSelected}
-      />
-    </SafeAreaView>
+        <DataSourceBottomSheet
+          isOpen={isBottomSheetOpen}
+          onClose={onBottomSheetClosed}
+          selectedDataSource={selectedDataSource}
+          onDataSourceSelected={onDataSourceSelected}
+        />
+      </SafeAreaView>
+    </LinearGradient>
   );
 }

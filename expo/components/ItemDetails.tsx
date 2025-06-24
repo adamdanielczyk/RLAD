@@ -23,12 +23,21 @@ export function ItemDetails({ item }: { item: ItemUiModel }) {
           style={{ width: "100%", height: "100%" }}
           contentFit="cover"
         />
-
         <View style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "30%" }}>
           <LinearGradient
-            colors={["transparent", "rgba(0,0,0,0.4)"]}
+            colors={["transparent", "rgba(0,0,0,0.6)"]}
             style={{ flex: 1 }}
           />
+        </View>
+        <View className="absolute bottom-4 left-4 right-4">
+          <Text className="text-2xl font-bold text-card-foreground" numberOfLines={2}>
+            {item.name}
+          </Text>
+          {item.cardCaption ? (
+            <Text className="text-base text-card-foreground/80" numberOfLines={1}>
+              {item.cardCaption}
+            </Text>
+          ) : null}
         </View>
       </View>
 
