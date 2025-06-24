@@ -1,39 +1,30 @@
 import { ItemDetails } from "@/components/ItemDetails";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { fetchItemById } from "@/lib/services/dataService";
-import { ItemUiModel } from "@/lib/types/uiModelTypes";
+import { useAppStore } from "@/lib/store/appStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const [item, setItem] = useState<ItemUiModel | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const item = useAppStore((state) => state.detailedItem);
+  const isLoading = useAppStore((state) => state.isDetailedItemLoading);
+  const loadItemById = useAppStore((state) => state.loadItemById);
+  const clearDetailedItem = useAppStore((state) => state.clearDetailedItem);
 
   useEffect(() => {
     if (id) {
-      loadItemDetails();
+      loadItemById(id);
     }
-  }, [id]);
-
-  const loadItemDetails = async () => {
-    try {
-      setIsLoading(true);
-      const itemData = await fetchItemById(id);
-      setItem(itemData);
-    } catch (error) {
-      console.error("Failed to load item details:", error);
-      Alert.alert("Error", "Failed to load item details. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    return () => {
+      clearDetailedItem();
+    };
+  }, [id, loadItemById, clearDetailedItem]);
 
   const handleShare = async () => {
     if (!item) return;
@@ -67,6 +58,7 @@ export default function DetailsScreen() {
           <Text className="text-2xl font-bold">Item not found</Text>
           <Link
             href="/"
+            replace
             asChild
           >
             <Button

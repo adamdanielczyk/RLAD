@@ -4,10 +4,10 @@ import {
   fetchRickAndMortyItemById,
   fetchRickAndMortyItems,
 } from "@/lib/services/rick-and-morty/data";
-import { useAppStore } from "@/lib/store/appStore";
-import { ItemUiModel } from "@/lib/types/uiModelTypes";
+import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
 
 export interface FetchItemsParams {
+  dataSource: DataSourceType;
   offset?: number;
   query?: string;
 }
@@ -19,12 +19,12 @@ export interface FetchItemsResult {
 }
 
 export const fetchItems = async ({
+  dataSource,
   offset,
   query,
 }: FetchItemsParams): Promise<FetchItemsResult> => {
-  const { selectedDataSource } = useAppStore.getState();
   try {
-    switch (selectedDataSource) {
+    switch (dataSource) {
       case "rick-and-morty":
         return await fetchRickAndMortyItems(offset, query);
 
@@ -35,15 +35,17 @@ export const fetchItems = async ({
         return await fetchArticItems(offset, query);
     }
   } catch (error) {
-    console.error(`Error fetching items for ${selectedDataSource}:`, error);
+    console.error(`Error fetching items for ${dataSource}:`, error);
     throw error;
   }
 };
 
-export const fetchItemById = async (id: string): Promise<ItemUiModel> => {
-  const { selectedDataSource } = useAppStore.getState();
+export const fetchItemById = async (
+  id: string,
+  dataSource: DataSourceType,
+): Promise<ItemUiModel> => {
   try {
-    switch (selectedDataSource) {
+    switch (dataSource) {
       case "rick-and-morty":
         return await fetchRickAndMortyItemById(id);
 
@@ -54,7 +56,7 @@ export const fetchItemById = async (id: string): Promise<ItemUiModel> => {
         return await fetchArticItemById(id);
     }
   } catch (error) {
-    console.error(`Error fetching item ${id} for ${selectedDataSource}:`, error);
+    console.error(`Error fetching item ${id} for ${dataSource}:`, error);
     throw error;
   }
 };

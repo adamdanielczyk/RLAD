@@ -1,151 +1,173 @@
+import { fetchItemById, fetchItems } from "@/lib/services/dataService";
 import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 
-interface AppState {
-  // Data source management
-  selectedDataSource: DataSourceType;
-  setSelectedDataSource: (dataSource: DataSourceType) => Promise<void>;
-
-  // Search management
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  isSearchFocused: boolean;
-  setIsSearchFocused: (isFocused: boolean) => void;
-  clearSearch: () => void;
-
-  // Bottom sheet management
-  isBottomSheetOpen: boolean;
-  setIsBottomSheetOpen: (isOpen: boolean) => void;
-
-  // Items management
-  items: ItemUiModel[];
-  addItems: (items: ItemUiModel[]) => void;
-
-  // Loading and pagination
-  isLoading: boolean;
-  setIsLoading: (loading: boolean) => void;
-  nextOffset?: number;
-  setNextOffset: (offset: number) => void;
-  hasMorePages: boolean;
-  setHasMorePages: (hasMore: boolean) => void;
-
-  // Initialize store
-  isInitialized: boolean;
-  initialize: () => Promise<void>;
-}
-
 const DATA_SOURCE_STORAGE_KEY = "selected_data_source";
 const DEFAULT_DATA_SOURCE: DataSourceType = "giphy";
 
-export const useAppStore = create<AppState>((set, get) => ({
-  selectedDataSource: DEFAULT_DATA_SOURCE,
-  searchQuery: "",
-  isSearchFocused: false,
-  isBottomSheetOpen: false,
-  items: [],
-  isLoading: false,
-  nextOffset: undefined,
-  hasMorePages: true,
-  isInitialized: false,
+interface AppState {
+  initialize: () => Promise<void>;
 
-  // Data source management
-  setSelectedDataSource: async (newDataSource: DataSourceType) => {
-    const { selectedDataSource: currentDataSource } = get();
-    if (currentDataSource === newDataSource) {
-      set({
-        isBottomSheetOpen: false,
-      });
-      return;
+  selectedDataSource: DataSourceType;
+  onDataSourceSelected: (dataSource: DataSourceType) => Promise<void>;
+
+  searchQuery: string;
+  isSearchFocused: boolean;
+  onSearchFocused: (isFocused: boolean) => void;
+  onSearchQueryChanged: (query: string) => Promise<void>;
+  onClearButtonClicked: () => Promise<void>;
+  onFilterButtonClicked: () => void;
+
+  isBottomSheetOpen: boolean;
+  onBottomSheetClosed: () => void;
+
+  items: ItemUiModel[];
+  isLoading: boolean;
+  onPullToRefresh: () => Promise<void>;
+  onLoadMoreItems: () => Promise<void>;
+
+  detailedItem: ItemUiModel | null;
+  isDetailedItemLoading: boolean;
+  loadItemById: (id: string) => Promise<void>;
+  clearDetailedItem: () => void;
+}
+
+export const useAppStore = create<AppState>((set, get) => {
+  let nextOffset: number | undefined = undefined;
+  let hasMorePages = true;
+
+  const loadItems = async (options?: { forceRefresh?: boolean }) => {
+    const { isLoading, searchQuery, selectedDataSource } = get();
+    const isForceRefresh = options?.forceRefresh;
+
+    if (!isForceRefresh) {
+      if (isLoading) return;
+      if (!hasMorePages) return;
+    }
+
+    set({ isLoading: true });
+
+    if (isForceRefresh) {
+      nextOffset = undefined;
+      hasMorePages = true;
+      set({ items: [] });
     }
 
     try {
-      await AsyncStorage.setItem(DATA_SOURCE_STORAGE_KEY, newDataSource);
-      set({
-        selectedDataSource: newDataSource,
-        searchQuery: "",
-        items: [],
-        nextOffset: undefined,
-        hasMorePages: true,
-        isSearchFocused: false,
-        isBottomSheetOpen: false,
+      const result = await fetchItems({
+        dataSource: selectedDataSource,
+        offset: nextOffset,
+        query: searchQuery,
       });
+
+      nextOffset = result.nextOffset;
+      hasMorePages = result.hasMorePages;
+
+      const { items: currentItems } = get();
+      set({ items: [...currentItems, ...result.items] });
     } catch (error) {
-      console.error("Failed to save selected data source:", error);
+      console.error(`Failed to load items:`, error);
+    } finally {
+      set({ isLoading: false });
     }
-  },
+  };
 
-  // Search management
-  setSearchQuery: (query: string) => {
-    set({
-      searchQuery: query,
-      items: [],
-      nextOffset: undefined,
-      hasMorePages: true,
-    });
-  },
+  return {
+    selectedDataSource: DEFAULT_DATA_SOURCE,
+    searchQuery: "",
+    isSearchFocused: false,
+    isBottomSheetOpen: false,
+    items: [],
+    isLoading: false,
 
-  clearSearch: () => {
-    set({
-      searchQuery: "",
-      items: [],
-      nextOffset: undefined,
-      hasMorePages: true,
-      isSearchFocused: false,
-    });
-  },
+    detailedItem: null,
+    isDetailedItemLoading: false,
 
-  setIsSearchFocused: (isFocused: boolean) => {
-    set({ isSearchFocused: isFocused });
-  },
-
-  // Bottom sheet management
-  setIsBottomSheetOpen: (isOpen: boolean) => {
-    set({
-      isBottomSheetOpen: isOpen,
-      isSearchFocused: false,
-    });
-  },
-
-  // Items management
-  addItems: (items: ItemUiModel[]) => {
-    const { items: currentItems } = get();
-    set({ items: [...currentItems, ...items] });
-  },
-
-  // Loading and pagination
-  setIsLoading: (loading: boolean) => {
-    set({ isLoading: loading });
-  },
-
-  setNextOffset: (offset: number) => {
-    set({ nextOffset: offset });
-  },
-
-  setHasMorePages: (hasMore: boolean) => {
-    set({ hasMorePages: hasMore });
-  },
-
-  initialize: async () => {
-    try {
-      const savedDataSource = await AsyncStorage.getItem(DATA_SOURCE_STORAGE_KEY);
-      if (savedDataSource) {
+    initialize: async () => {
+      try {
+        const savedDataSource = await AsyncStorage.getItem(DATA_SOURCE_STORAGE_KEY);
         set({
-          selectedDataSource: savedDataSource as DataSourceType,
-          isInitialized: true,
+          selectedDataSource: savedDataSource
+            ? (savedDataSource as DataSourceType)
+            : DEFAULT_DATA_SOURCE,
         });
-      } else {
-        set({
-          selectedDataSource: DEFAULT_DATA_SOURCE,
-          isInitialized: true,
-        });
+      } catch (error) {
+        console.error("Failed to load selected data source:", error);
+        set({ selectedDataSource: DEFAULT_DATA_SOURCE });
+      } finally {
+        await loadItems({ forceRefresh: true });
       }
-    } catch (error) {
-      console.error("Failed to load selected data source:", error);
+    },
+
+    onDataSourceSelected: async (newDataSource: DataSourceType) => {
+      const { selectedDataSource: currentDataSource } = get();
+      set({ isBottomSheetOpen: false });
+      if (currentDataSource === newDataSource) {
+        return;
+      }
+
+      try {
+        await AsyncStorage.setItem(DATA_SOURCE_STORAGE_KEY, newDataSource);
+        set({ selectedDataSource: newDataSource });
+      } catch (error) {
+        console.error("Failed to save selected data source:", error);
+      }
+
+      set({ searchQuery: "" });
+      await loadItems({ forceRefresh: true });
+    },
+
+    onSearchFocused: (isFocused: boolean) => {
+      set({ isSearchFocused: isFocused });
+    },
+
+    onSearchQueryChanged: async (query: string) => {
+      set({ searchQuery: query });
+      await loadItems({ forceRefresh: true });
+    },
+
+    onClearButtonClicked: async () => {
+      set({ searchQuery: "", isSearchFocused: false });
+      await loadItems({ forceRefresh: true });
+    },
+
+    onFilterButtonClicked: () => {
       set({
-        selectedDataSource: DEFAULT_DATA_SOURCE,
-        isInitialized: true,
+        isBottomSheetOpen: true,
+        isSearchFocused: false,
       });
-    }
-  },
-}));
+    },
+
+    onBottomSheetClosed: () => {
+      set({
+        isBottomSheetOpen: false,
+      });
+    },
+
+    onPullToRefresh: async () => {
+      await loadItems({ forceRefresh: true });
+    },
+
+    onLoadMoreItems: async () => {
+      await loadItems();
+    },
+
+    loadItemById: async (id: string) => {
+      const { selectedDataSource } = get();
+      set({ isDetailedItemLoading: true });
+      try {
+        const itemData = await fetchItemById(id, selectedDataSource);
+        set({ detailedItem: itemData });
+      } catch (error) {
+        console.error(`Failed to load item by id: ${id}`, error);
+      } finally {
+        set({ isDetailedItemLoading: false });
+      }
+    },
+
+    clearDetailedItem: () => {
+      set({ detailedItem: null });
+    },
+  };
+});

@@ -1,22 +1,34 @@
-import { useAppStore } from "@/lib/store/appStore";
 import { cn } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
-export const SearchBar = () => {
+interface SearchBarProps {
+  query: string;
+  onQueryChanged: (text: string) => Promise<void>;
+  isFocused: boolean;
+  onFocused: (isFocused: boolean) => void;
+  onClearButtonClicked: () => Promise<void>;
+  onFilterButtonClicked: () => void;
+}
+
+export const SearchBar = ({
+  query,
+  onQueryChanged,
+  isFocused,
+  onFocused,
+  onClearButtonClicked,
+  onFilterButtonClicked,
+}: SearchBarProps) => {
   const textInputRef = useRef<TextInput | null>(null);
 
-  const searchQuery = useAppStore((state) => state.searchQuery);
-  const isSearchFocused = useAppStore((state) => state.isSearchFocused);
-
   useEffect(() => {
-    if (isSearchFocused) {
+    if (isFocused) {
       textInputRef.current?.focus();
     } else {
       textInputRef.current?.blur();
     }
-  }, [isSearchFocused]);
+  }, [isFocused]);
 
   return (
     <View className="m-4 flex-row items-stretch gap-x-2">
@@ -25,17 +37,17 @@ export const SearchBar = () => {
           ref={textInputRef}
           className="flex-1 text-card-foreground placeholder:text-card-foreground"
           placeholder="Search..."
-          value={searchQuery}
-          onChangeText={(text) => useAppStore.getState().setSearchQuery(text)}
+          value={query}
+          onChangeText={onQueryChanged}
           autoCorrect={false}
           autoCapitalize="none"
-          onFocus={() => useAppStore.getState().setIsSearchFocused(true)}
-          onBlur={() => useAppStore.getState().setIsSearchFocused(false)}
+          onFocus={() => onFocused(true)}
+          onBlur={() => onFocused(false)}
         />
         <TouchableOpacity
-          onPress={() => useAppStore.getState().clearSearch()}
-          disabled={!searchQuery}
-          className={cn(searchQuery ? "opacity-100" : "opacity-0")}
+          onPress={onClearButtonClicked}
+          disabled={!query}
+          className={cn(query ? "opacity-100" : "opacity-0")}
         >
           <Ionicons
             name="close"
@@ -45,7 +57,7 @@ export const SearchBar = () => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-        onPress={() => useAppStore.getState().setIsBottomSheetOpen(true)}
+        onPress={onFilterButtonClicked}
         className="flex aspect-square items-center justify-center rounded-lg border bg-card"
       >
         <Ionicons

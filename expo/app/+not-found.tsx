@@ -11,6 +11,7 @@ export default function NotFoundScreen() {
       <Text className="text-2xl font-bold">This screen does not exist.</Text>
       <Link
         href="/"
+        replace
         asChild
       >
         <Button

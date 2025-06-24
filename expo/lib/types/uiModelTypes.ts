@@ -7,9 +7,3 @@ export interface ItemUiModel {
   cardCaption?: string;
   detailsKeyValues: Array<{ key: string; value: string }>;
 }
-
-export interface DataSourceUiModel {
-  name: string;
-  type: DataSourceType;
-  isSelected: boolean;
-}

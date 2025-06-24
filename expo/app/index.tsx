@@ -1,9 +1,8 @@
-import { fetchItems } from "@/lib/services/dataService";
 import { useAppStore } from "@/lib/store/appStore";
 import { ItemUiModel } from "@/lib/types/uiModelTypes";
 import { useRouter } from "expo-router";
-import React, { useCallback, useEffect } from "react";
-import { ActivityIndicator, Alert, FlatList, RefreshControl, Text, View } from "react-native";
+import React, { useCallback } from "react";
+import { ActivityIndicator, FlatList, RefreshControl, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
@@ -15,49 +14,21 @@ export default function HomeScreen() {
 
   const items = useAppStore((state) => state.items);
   const isLoading = useAppStore((state) => state.isLoading);
-  const isInitialized = useAppStore((state) => state.isInitialized);
 
-  const loadItems = useCallback(async (offset?: number) => {
-    const { isLoading, hasMorePages, searchQuery, isInitialized } = useAppStore.getState();
+  const searchQuery = useAppStore((state) => state.searchQuery);
+  const isSearchFocused = useAppStore((state) => state.isSearchFocused);
+  const onSearchQueryChanged = useAppStore((state) => state.onSearchQueryChanged);
+  const onSearchFocused = useAppStore((state) => state.onSearchFocused);
+  const onClearButtonClicked = useAppStore((state) => state.onClearButtonClicked);
+  const onFilterButtonClicked = useAppStore((state) => state.onFilterButtonClicked);
 
-    if (!isInitialized) return;
-    if (isLoading) return;
-    if (!hasMorePages) return;
+  const onPullToRefresh = useAppStore((state) => state.onPullToRefresh);
+  const onLoadMoreItems = useAppStore((state) => state.onLoadMoreItems);
 
-    const { addItems, setNextOffset, setHasMorePages, setIsLoading } = useAppStore.getState();
-    try {
-      setIsLoading(true);
-
-      const result = await fetchItems({
-        offset,
-        query: searchQuery || undefined,
-      });
-
-      addItems(result.items);
-      setNextOffset(result.nextOffset);
-      setHasMorePages(result.hasMorePages);
-    } catch (error) {
-      console.error(`Failed to load items:`, error);
-      Alert.alert("Error", `Failed to load items. Please try again.`);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isInitialized) {
-      loadItems();
-    }
-  }, [loadItems, isInitialized]);
-
-  const handleRefresh = useCallback(() => {
-    loadItems();
-  }, [loadItems]);
-
-  const handleLoadMore = useCallback(() => {
-    const { nextOffset } = useAppStore.getState();
-    loadItems(nextOffset);
-  }, [loadItems]);
+  const isBottomSheetOpen = useAppStore((state) => state.isBottomSheetOpen);
+  const selectedDataSource = useAppStore((state) => state.selectedDataSource);
+  const onDataSourceSelected = useAppStore((state) => state.onDataSourceSelected);
+  const onBottomSheetClosed = useAppStore((state) => state.onBottomSheetClosed);
 
   const renderItem = useCallback(
     ({ item }: { item: ItemUiModel }) => (
@@ -79,7 +50,14 @@ export default function HomeScreen() {
       className="flex-1"
       edges={["top", "left", "right"]}
     >
-      <SearchBar />
+      <SearchBar
+        query={searchQuery}
+        onQueryChanged={onSearchQueryChanged}
+        isFocused={isSearchFocused}
+        onFocused={onSearchFocused}
+        onClearButtonClicked={onClearButtonClicked}
+        onFilterButtonClicked={onFilterButtonClicked}
+      />
 
       <FlatList
         data={items}
@@ -90,10 +68,10 @@ export default function HomeScreen() {
         refreshControl={
           <RefreshControl
             refreshing={isLoading && items.length === 0}
-            onRefresh={handleRefresh}
+            onRefresh={onPullToRefresh}
           />
         }
-        onEndReached={handleLoadMore}
+        onEndReached={onLoadMoreItems}
         onEndReachedThreshold={0.1}
         ListFooterComponent={
           isLoading && items.length > 0 ? (
@@ -111,7 +89,12 @@ export default function HomeScreen() {
         }
       />
 
-      <DataSourceBottomSheet />
+      <DataSourceBottomSheet
+        isOpen={isBottomSheetOpen}
+        onClose={onBottomSheetClosed}
+        selectedDataSource={selectedDataSource}
+        onDataSourceSelected={onDataSourceSelected}
+      />
     </SafeAreaView>
   );
 }
