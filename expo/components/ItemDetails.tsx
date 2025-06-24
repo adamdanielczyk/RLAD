@@ -22,13 +22,17 @@ export function ItemDetails({ item }: { item: ItemUiModel }) {
           source={{ uri: item.imageUrl }}
           style={{ width: "100%", height: "100%" }}
           contentFit="cover"
+          transition={300}
         />
 
-        <View style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "30%" }}>
+        <View style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "40%" }}>
           <LinearGradient
-            colors={["transparent", "rgba(0,0,0,0.4)"]}
+            colors={["transparent", "rgba(0,0,0,0.6)"]}
             style={{ flex: 1 }}
           />
+        </View>
+        <View className="absolute bottom-0 left-0 right-0 p-4">
+          <Text className="text-2xl font-bold text-white">{item.name}</Text>
         </View>
       </View>
 
