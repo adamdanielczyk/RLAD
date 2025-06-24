@@ -32,7 +32,7 @@ export const SearchBar = ({
 
   return (
     <View className="m-4 flex-row items-stretch gap-x-2">
-      <View className="flex-1 flex-row items-center rounded-lg border bg-card px-4 py-2">
+      <View className="flex-1 flex-row items-center rounded-lg border bg-card px-4 py-2 shadow-md">
         <TextInput
           ref={textInputRef}
           className="flex-1 text-card-foreground placeholder:text-card-foreground"
@@ -58,7 +58,7 @@ export const SearchBar = ({
       </View>
       <TouchableOpacity
         onPress={onFilterButtonClicked}
-        className="flex aspect-square items-center justify-center rounded-lg border bg-card"
+        className="flex aspect-square items-center justify-center rounded-lg border bg-card shadow-md"
       >
         <Ionicons
           name="filter"

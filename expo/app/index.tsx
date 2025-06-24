@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
+import { Header } from "@/components/Header";
 import { ItemCard } from "@/components/ItemCard";
 import { SearchBar } from "@/components/SearchBar";
 import { useTheme } from "@react-navigation/native";
@@ -67,6 +68,7 @@ export default function HomeScreen() {
       className="flex-1"
       edges={["top", "left", "right"]}
     >
+      <Header />
       <SearchBar
         query={searchQuery}
         onQueryChanged={onSearchQueryChanged}
