@@ -1,13 +1,22 @@
 import { useAppStore } from "@/lib/store/appStore";
 import { ItemUiModel } from "@/lib/types/uiModelTypes";
 import { useRouter } from "expo-router";
-import React, { useCallback } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, Text, View } from "react-native";
+import React, { useCallback, useMemo } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
 import { ItemCard } from "@/components/ItemCard";
 import { SearchBar } from "@/components/SearchBar";
+
+const ITEM_MIN_WIDTH = 150;
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -29,6 +38,12 @@ export default function HomeScreen() {
   const selectedDataSource = useAppStore((state) => state.selectedDataSource);
   const onDataSourceSelected = useAppStore((state) => state.onDataSourceSelected);
   const onBottomSheetClosed = useAppStore((state) => state.onBottomSheetClosed);
+
+  const { width } = useWindowDimensions();
+  const numColumns = useMemo(() => {
+    return Math.max(1, Math.floor(width / ITEM_MIN_WIDTH));
+  }, [width]);
+  const listKey = useMemo(() => `flatlist-${numColumns}-columns`, [numColumns]);
 
   const renderItem = useCallback(
     ({ item }: { item: ItemUiModel }) => (
@@ -62,8 +77,9 @@ export default function HomeScreen() {
       <FlatList
         data={items}
         renderItem={renderItem}
+        key={listKey}
         keyExtractor={(item) => item.id}
-        numColumns={2}
+        numColumns={numColumns}
         contentContainerStyle={{ padding: 8 }}
         refreshControl={
           <RefreshControl

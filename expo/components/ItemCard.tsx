@@ -12,10 +12,10 @@ interface ItemCardProps {
 export function ItemCard({ item, onPress }: ItemCardProps) {
   return (
     <TouchableOpacity
-      className="w-1/2 p-2"
+      className="w-1/2 flex-1 p-2"
       onPress={() => onPress(item)}
     >
-      <Card className="w-full">
+      <Card>
         <Image
           source={{ uri: item.imageUrl }}
           style={{ width: "100%", height: 150 }}
