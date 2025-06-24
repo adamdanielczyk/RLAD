@@ -108,11 +108,15 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Calculate stable run number
+        id: versioning
+        run: echo "stable_run_number=$((${{ github.run_number }} + 2000))" >> $GITHUB_OUTPUT
+
       - uses: chkfung/android-version-actions@v1.2.3
         with:
           gradlePath: native-android/app/build.gradle.kts
-          versionCode: ${{github.run_number}}
-          versionName: "1.0.${{github.run_number}}"
+          versionCode: ${{ steps.versioning.outputs.stable_run_number }}
+          versionName: "1.0.${{ steps.versioning.outputs.stable_run_number }}"
 
       - uses: gradle/gradle-build-action@v3.5.0
         with:
