@@ -36,6 +36,7 @@ interface AppState {
 export const useAppStore = create<AppState>((set, get) => {
   let nextOffset: number | undefined = undefined;
   let hasMorePages = true;
+  let searchDebounceTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
   const loadItems = async (options?: { forceRefresh?: boolean }) => {
     const { isLoading, searchQuery, selectedDataSource } = get();
@@ -124,7 +125,17 @@ export const useAppStore = create<AppState>((set, get) => {
 
     onSearchQueryChanged: async (query: string) => {
       set({ searchQuery: query });
-      await loadItems({ forceRefresh: true });
+
+      if (searchDebounceTimeout) {
+        clearTimeout(searchDebounceTimeout);
+      }
+
+      await new Promise<void>((resolve) => {
+        searchDebounceTimeout = setTimeout(async () => {
+          await loadItems({ forceRefresh: true });
+          resolve();
+        }, 400);
+      });
     },
 
     onClearButtonClicked: async () => {
