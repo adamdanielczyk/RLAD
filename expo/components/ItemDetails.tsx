@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, ScrollView, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
@@ -11,12 +12,12 @@ const HERO_HEIGHT = width * 0.75;
 
 export function ItemDetails({ item }: { item: ItemUiModel }) {
   const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}>
       <View
-        className="relative overflow-hidden"
-        style={{ height: HERO_HEIGHT }}
+        style={{ height: HERO_HEIGHT, overflow: 'hidden', position: 'relative' }}
       >
         <Image
           source={{ uri: item.imageUrl }}
@@ -32,15 +33,24 @@ export function ItemDetails({ item }: { item: ItemUiModel }) {
         </View>
       </View>
 
-      <View className="relative z-10 -mt-6 rounded-t-3xl bg-background">
-        <View className="p-6">
+      <View
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          marginTop: -24,
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          backgroundColor: colors.card,
+        }}
+      >
+        <View style={{ padding: 24 }}>
           {item.detailsKeyValues.map((detail, index) => (
             <View
               key={index}
-              className="mb-4"
+              style={{ marginBottom: 16 }}
             >
-              <Text className="mb-1 text-lg font-semibold">{detail.key}</Text>
-              <Text className="text-base leading-6">{detail.value}</Text>
+              <Text style={{ marginBottom: 4, fontSize: 18, fontWeight: '600' }}>{detail.key}</Text>
+              <Text style={{ fontSize: 16, lineHeight: 24 }}>{detail.value}</Text>
             </View>
           ))}
         </View>

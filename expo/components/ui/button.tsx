@@ -1,81 +1,70 @@
-import { cva, type VariantProps } from 'class-variance-authority';
-import * as React from 'react';
-import { Pressable } from 'react-native';
-import { cn } from '@/lib/utils';
-import { TextClassContext } from '@/components/ui/text';
+import React from 'react';
+import { Pressable, PressableProps, Text, StyleSheet } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
-const buttonVariants = cva(
-  'group flex items-center justify-center rounded-md web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
-  {
-    variants: {
-      variant: {
-        default: 'bg-primary web:hover:opacity-90 active:opacity-90',
-        destructive: 'bg-destructive web:hover:opacity-90 active:opacity-90',
-        outline:
-          'border border-input bg-background web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent',
-        secondary: 'bg-secondary web:hover:opacity-80 active:opacity-80',
-        ghost: 'web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent',
-        link: 'web:underline-offset-4 web:hover:underline web:focus:underline',
-      },
-      size: {
-        default: 'h-10 px-4 py-2 native:h-12 native:px-5 native:py-3',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8 native:h-14',
-        icon: 'h-10 w-10',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-);
+export interface ButtonProps extends PressableProps {
+  variant?: 'default' | 'outline';
+  size?: 'default' | 'sm' | 'lg';
+  children: React.ReactNode;
+}
 
-const buttonTextVariants = cva(
-  'web:whitespace-nowrap text-sm native:text-base font-medium text-foreground web:transition-colors',
-  {
-    variants: {
-      variant: {
-        default: 'text-primary-foreground',
-        destructive: 'text-destructive-foreground',
-        outline: 'group-active:text-accent-foreground',
-        secondary: 'text-secondary-foreground group-active:text-secondary-foreground',
-        ghost: 'group-active:text-accent-foreground',
-        link: 'text-primary group-active:underline',
-      },
-      size: {
-        default: '',
-        sm: '',
-        lg: 'native:text-lg',
-        icon: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-);
+export function Button({ variant = 'default', size = 'default', style, children, ...props }: ButtonProps) {
+  const { colors } = useTheme();
 
-type ButtonProps = React.ComponentProps<typeof Pressable> & VariantProps<typeof buttonVariants>;
+  const buttonStyle = [
+    styles.base,
+    variant === 'outline'
+      ? { borderColor: colors.border, borderWidth: StyleSheet.hairlineWidth, backgroundColor: 'transparent' }
+      : { backgroundColor: colors.primary },
+    size === 'sm' ? styles.sm : size === 'lg' ? styles.lg : styles.default,
+    props.disabled && styles.disabled,
+    style,
+  ];
 
-function Button({ ref, className, variant, size, ...props }: ButtonProps) {
+  const textStyle = [
+    styles.text,
+    variant === 'outline' ? { color: colors.text } : { color: '#fff' },
+    size === 'lg' ? styles.textLg : size === 'sm' ? styles.textSm : null,
+  ];
+
   return (
-    <TextClassContext.Provider
-      value={buttonTextVariants({ variant, size, className: 'web:pointer-events-none' })}
-    >
-      <Pressable
-        className={cn(
-          props.disabled && 'opacity-50 web:pointer-events-none',
-          buttonVariants({ variant, size, className })
-        )}
-        ref={ref}
-        role='button'
-        {...props}
-      />
-    </TextClassContext.Provider>
+    <Pressable style={buttonStyle} {...props}>
+      <Text style={textStyle}>{children}</Text>
+    </Pressable>
   );
 }
 
-export { Button, buttonTextVariants, buttonVariants };
-export type { ButtonProps };
+const styles = StyleSheet.create({
+  base: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    paddingHorizontal: 16,
+  },
+  default: {
+    height: 48,
+    paddingVertical: 12,
+  },
+  sm: {
+    height: 36,
+    paddingVertical: 8,
+  },
+  lg: {
+    height: 56,
+    paddingVertical: 16,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  textSm: {
+    fontSize: 14,
+  },
+  textLg: {
+    fontSize: 18,
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+});

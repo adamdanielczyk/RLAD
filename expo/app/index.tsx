@@ -64,7 +64,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView
-      className="flex-1"
+      style={{ flex: 1 }}
       edges={["top", "left", "right"]}
     >
       <SearchBar
@@ -96,15 +96,17 @@ export default function HomeScreen() {
         onEndReachedThreshold={0.1}
         ListFooterComponent={
           isLoading && items.length > 0 ? (
-            <View className="p-4">
+            <View style={{ padding: 16 }}>
               <ActivityIndicator size="large" />
             </View>
           ) : null
         }
         ListEmptyComponent={
           !isLoading ? (
-            <View className="p-8">
-              <Text className="text-center text-lg">No items found</Text>
+            <View style={{ padding: 32 }}>
+              <Text style={{ textAlign: "center", fontSize: 18 }}>
+                No items found
+              </Text>
             </View>
           ) : null
         }

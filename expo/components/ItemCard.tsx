@@ -12,7 +12,7 @@ interface ItemCardProps {
 export function ItemCard({ item, onPress }: ItemCardProps) {
   return (
     <TouchableOpacity
-      className="w-1/2 flex-1 p-2"
+      style={{ width: '50%', flex: 1, padding: 8 }}
       onPress={() => onPress(item)}
     >
       <Card>
@@ -22,8 +22,8 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
           contentFit="cover"
         />
         <CardHeader>
-          <CardTitle className="line-clamp-1">{item.name}</CardTitle>
-          <CardDescription className="line-clamp-1">{item.cardCaption}</CardDescription>
+          <CardTitle numberOfLines={1}>{item.name}</CardTitle>
+          <CardDescription numberOfLines={1}>{item.cardCaption}</CardDescription>
         </CardHeader>
       </Card>
     </TouchableOpacity>

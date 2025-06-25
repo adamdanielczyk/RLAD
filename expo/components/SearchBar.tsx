@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
 
 interface SearchBarProps {
   query: string;
@@ -21,6 +21,7 @@ export const SearchBar = ({
   onFilterButtonClicked,
 }: SearchBarProps) => {
   const textInputRef = useRef<TextInput | null>(null);
+  const { colors } = useTheme();
 
   useEffect(() => {
     if (isFocused) {
@@ -31,11 +32,12 @@ export const SearchBar = ({
   }, [isFocused]);
 
   return (
-    <View className="m-4 flex-row items-stretch gap-x-2">
-      <View className="flex-1 flex-row items-center rounded-lg border bg-card px-4 py-2">
+    <View style={{ margin: 16, flexDirection: 'row', alignItems: 'stretch', columnGap: 8 }}>
+      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderRadius: 8, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.card, paddingHorizontal: 16, paddingVertical: 8 }}>
         <TextInput
           ref={textInputRef}
-          className="flex-1 text-card-foreground placeholder:text-card-foreground"
+          style={{ flex: 1, color: colors.text }}
+          placeholderTextColor={colors.text}
           placeholder="Search..."
           value={query}
           onChangeText={onQueryChanged}
@@ -47,23 +49,23 @@ export const SearchBar = ({
         <TouchableOpacity
           onPress={onClearButtonClicked}
           disabled={!query}
-          className={cn(query ? "opacity-100" : "opacity-0")}
+          style={{ opacity: query ? 1 : 0 }}
         >
           <Ionicons
             name="close"
             size={16}
-            className="text-card-foreground"
+            color={colors.text}
           />
         </TouchableOpacity>
       </View>
       <TouchableOpacity
         onPress={onFilterButtonClicked}
-        className="flex aspect-square items-center justify-center rounded-lg border bg-card"
+        style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 8, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.card, aspectRatio: 1 }}
       >
         <Ionicons
           name="filter"
           size={16}
-          className="text-card-foreground"
+          color={colors.text}
         />
       </TouchableOpacity>
     </View>

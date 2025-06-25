@@ -1,100 +1,61 @@
-import { TextClassContext } from "@/components/ui/text";
-import { cn } from "@/lib/utils";
-import * as React from "react";
-import { Text, type TextProps, View, type ViewProps } from "react-native";
+import React from 'react';
+import { View, ViewProps, Text, TextProps, StyleSheet } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
-function Card({
-  className,
-  ...props
-}: ViewProps & {
-  ref?: React.RefObject<View>;
-}) {
-  return (
-    <View
-      className={cn(
-        "overflow-hidden rounded-lg border border-border bg-card shadow-sm shadow-foreground/10",
-        className,
-      )}
-      {...props}
-    />
-  );
+export function Card({ style, ...props }: ViewProps) {
+  const { colors } = useTheme();
+  return <View style={[styles.card, { borderColor: colors.border, backgroundColor: colors.card }, style]} {...props} />;
 }
 
-function CardHeader({
-  className,
-  ...props
-}: ViewProps & {
-  ref?: React.RefObject<View>;
-}) {
-  return (
-    <View
-      className={cn("flex flex-col space-y-1.5 p-4", className)}
-      {...props}
-    />
-  );
+export function CardHeader({ style, ...props }: ViewProps) {
+  return <View style={[styles.header, style]} {...props} />;
 }
 
-function CardTitle({
-  className,
-  ...props
-}: TextProps & {
-  ref?: React.RefObject<Text>;
-}) {
-  return (
-    <Text
-      role="heading"
-      aria-level={3}
-      className={cn(
-        "text-xl font-semibold leading-none tracking-tight text-card-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
+export function CardTitle({ style, ...props }: TextProps) {
+  const { colors } = useTheme();
+  return <Text style={[styles.title, { color: colors.text }, style]} {...props} />;
 }
 
-function CardDescription({
-  className,
-  ...props
-}: TextProps & {
-  ref?: React.RefObject<Text>;
-}) {
-  return (
-    <Text
-      className={cn("text-sm text-muted-foreground", className)}
-      {...props}
-    />
-  );
+export function CardDescription({ style, ...props }: TextProps) {
+  const { colors } = useTheme();
+  return <Text style={[styles.description, { color: colors.text }, style]} {...props} />;
 }
 
-function CardContent({
-  className,
-  ...props
-}: ViewProps & {
-  ref?: React.RefObject<View>;
-}) {
-  return (
-    <TextClassContext.Provider value="text-card-foreground">
-      <View
-        className={cn("p-6 pt-0", className)}
-        {...props}
-      />
-    </TextClassContext.Provider>
-  );
+export function CardContent({ style, ...props }: ViewProps) {
+  return <View style={[styles.content, style]} {...props} />;
 }
 
-function CardFooter({
-  className,
-  ...props
-}: ViewProps & {
-  ref?: React.RefObject<View>;
-}) {
-  return (
-    <View
-      className={cn("flex flex-row items-center p-6 pt-0", className)}
-      {...props}
-    />
-  );
+export function CardFooter({ style, ...props }: ViewProps) {
+  return <View style={[styles.footer, style]} {...props} />;
 }
 
-export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle };
+const styles = StyleSheet.create({
+  card: {
+    overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 8,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  header: {
+    padding: 16,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  description: {
+    fontSize: 14,
+  },
+  content: {
+    padding: 24,
+    paddingTop: 0,
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 24,
+    paddingTop: 0,
+  },
+});

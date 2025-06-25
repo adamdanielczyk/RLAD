@@ -4,6 +4,7 @@ import { Text } from "@/components/ui/text";
 import { useAppStore } from "@/lib/store/appStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { useTheme } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import React, { useEffect } from "react";
 import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
@@ -16,6 +17,7 @@ export default function DetailsScreen() {
   const isLoading = useAppStore((state) => state.isDetailedItemLoading);
   const loadItemById = useAppStore((state) => state.loadItemById);
   const clearDetailedItem = useAppStore((state) => state.clearDetailedItem);
+  const { colors } = useTheme();
 
   useEffect(() => {
     if (id) {
@@ -46,7 +48,7 @@ export default function DetailsScreen() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <View className="flex-1 items-center justify-center">
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
           <ActivityIndicator size="large" />
         </View>
       );
@@ -54,17 +56,14 @@ export default function DetailsScreen() {
 
     if (!item) {
       return (
-        <View className="flex-1 items-center justify-center p-4">
-          <Text className="text-2xl font-bold">Item not found</Text>
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 16 }}>
+          <Text style={{ fontSize: 24, fontWeight: "bold" }}>Item not found</Text>
           <Link
             href="/"
             replace
             asChild
           >
-            <Button
-              variant="outline"
-              className="mt-4"
-            >
+            <Button variant="outline" style={{ marginTop: 16 }}>
               <Text>Go to home screen</Text>
             </Button>
           </Link>
@@ -80,14 +79,11 @@ export default function DetailsScreen() {
   const headerRight =
     !isLoading && item
       ? () => (
-          <TouchableOpacity
-            onPress={handleShare}
-            className="p-2"
-          >
+          <TouchableOpacity onPress={handleShare} style={{ padding: 8 }}>
             <Ionicons
               name="share-outline"
               size={24}
-              className="text-foreground"
+              color={colors.text}
             />
           </TouchableOpacity>
         )
@@ -98,7 +94,7 @@ export default function DetailsScreen() {
       <Stack.Screen options={{ title: headerTitle, headerRight }} />
       <SafeAreaView
         edges={["left", "right"]}
-        className="flex-1"
+        style={{ flex: 1 }}
       >
         {renderContent()}
       </SafeAreaView>

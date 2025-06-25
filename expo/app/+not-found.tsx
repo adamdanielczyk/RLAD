@@ -7,17 +7,14 @@ import { View } from "react-native";
 
 export default function NotFoundScreen() {
   return (
-    <View className="flex-1 items-center justify-center p-4">
-      <Text className="text-2xl font-bold">This screen does not exist.</Text>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 16 }}>
+      <Text style={{ fontSize: 24, fontWeight: "bold" }}>This screen does not exist.</Text>
       <Link
         href="/"
         replace
         asChild
       >
-        <Button
-          variant="outline"
-          className="mt-4"
-        >
+        <Button variant="outline" style={{ marginTop: 16 }}>
           <Text>Go to home screen</Text>
         </Button>
       </Link>

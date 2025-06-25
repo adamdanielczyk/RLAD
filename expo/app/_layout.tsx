@@ -1,4 +1,3 @@
-import "@/global.css";
 
 import { NAV_THEME } from "@/lib/constants";
 import { useAppStore } from "@/lib/store/appStore";
@@ -8,7 +7,6 @@ import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from "@react-navigation
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { cssInterop } from "nativewind";
 import * as React from "react";
 import { useEffect } from "react";
 import { Platform } from "react-native";
@@ -69,7 +67,7 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView className="flex-1">
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
           <StatusBar style="auto" />
           <Stack>
@@ -96,10 +94,3 @@ export default function RootLayout() {
 
 const useIsomorphicLayoutEffect =
   Platform.OS === "web" && typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
-
-cssInterop(Ionicons, {
-  className: {
-    target: "style",
-    nativeStyleToProp: { color: true },
-  },
-});
