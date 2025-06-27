@@ -10,7 +10,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
 import { ItemCard } from "@/components/ItemCard";
@@ -22,6 +22,7 @@ const ITEM_MIN_WIDTH = 150;
 export default function HomeScreen() {
   const router = useRouter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const items = useAppStore((state) => state.items);
   const isLoading = useAppStore((state) => state.isLoading);
@@ -64,7 +65,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView
-      className="flex-1"
+      style={{ flex: 1 }}
       edges={["top", "left", "right"]}
     >
       <SearchBar
@@ -82,7 +83,7 @@ export default function HomeScreen() {
         key={listKey}
         keyExtractor={(item) => item.id}
         numColumns={numColumns}
-        contentContainerStyle={{ padding: 8 }}
+        contentContainerStyle={{ marginHorizontal: 8, paddingBottom: insets.bottom }}
         refreshControl={
           <RefreshControl
             tintColor={colors.text}
@@ -96,15 +97,27 @@ export default function HomeScreen() {
         onEndReachedThreshold={0.1}
         ListFooterComponent={
           isLoading && items.length > 0 ? (
-            <View className="p-4">
-              <ActivityIndicator size="large" />
+            <View style={{ padding: 16 }}>
+              <ActivityIndicator
+                size="large"
+                color={colors.text}
+              />
             </View>
           ) : null
         }
         ListEmptyComponent={
           !isLoading ? (
-            <View className="p-8">
-              <Text className="text-center text-lg">No items found</Text>
+            <View style={{ padding: 16 }}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: colors.text,
+                }}
+              >
+                No items found
+              </Text>
             </View>
           ) : null
         }

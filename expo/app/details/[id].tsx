@@ -1,16 +1,16 @@
+import { FullScreenErrorView } from "@/components/FullScreenErrorView";
 import { ItemDetails } from "@/components/ItemDetails";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/ui/text";
 import { useAppStore } from "@/lib/store/appStore";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { useTheme } from "@react-navigation/native";
+import { Stack, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
 import React, { useEffect } from "react";
 import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { colors } = useTheme();
 
   const item = useAppStore((state) => state.detailedItem);
   const isLoading = useAppStore((state) => state.isDetailedItemLoading);
@@ -46,33 +46,20 @@ export default function DetailsScreen() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <ActivityIndicator
+            size="large"
+            color={colors.text}
+          />
         </View>
       );
     }
 
-    if (!item) {
-      return (
-        <View className="flex-1 items-center justify-center p-4">
-          <Text className="text-2xl font-bold">Item not found</Text>
-          <Link
-            href="/"
-            replace
-            asChild
-          >
-            <Button
-              variant="outline"
-              className="mt-4"
-            >
-              <Text>Go to home screen</Text>
-            </Button>
-          </Link>
-        </View>
-      );
+    if (item) {
+      return <ItemDetails item={item} />;
+    } else {
+      return <FullScreenErrorView />;
     }
-
-    return <ItemDetails item={item} />;
   };
 
   const headerTitle = isLoading ? "Loading..." : item ? item.name : "Not Found";
@@ -82,12 +69,12 @@ export default function DetailsScreen() {
       ? () => (
           <TouchableOpacity
             onPress={handleShare}
-            className="p-2"
+            style={{ padding: 8 }}
           >
             <Ionicons
               name="share-outline"
               size={24}
-              className="text-foreground"
+              color={colors.text}
             />
           </TouchableOpacity>
         )
@@ -96,12 +83,7 @@ export default function DetailsScreen() {
   return (
     <>
       <Stack.Screen options={{ title: headerTitle, headerRight }} />
-      <SafeAreaView
-        edges={["left", "right"]}
-        className="flex-1"
-      >
-        {renderContent()}
-      </SafeAreaView>
+      <View style={{ flex: 1 }}>{renderContent()}</View>
     </>
   );
 }

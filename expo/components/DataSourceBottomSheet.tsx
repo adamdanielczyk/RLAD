@@ -1,9 +1,8 @@
 import { DATA_SOURCES } from "@/lib/services/dataSources";
 import { DataSourceType } from "@/lib/types/uiModelTypes";
-import { cn } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
-import { cssInterop } from "nativewind";
+import { useTheme } from "@react-navigation/native";
 import React, { useCallback, useEffect, useRef } from "react";
 import { FlatList, Text, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,6 +22,7 @@ export const DataSourceBottomSheet = ({
 }: DataSourceBottomSheetProps) => {
   const bottomSheetRef = useRef<BottomSheet | null>(null);
   const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
 
   useEffect(() => {
     if (isOpen) {
@@ -62,25 +62,23 @@ export const DataSourceBottomSheet = ({
   const renderItem = useCallback(
     ({ item }: { item: (typeof DATA_SOURCES)[number] }) => (
       <TouchableOpacity
-        className="flex-row items-center py-4"
+        style={{ flexDirection: "row", alignItems: "center", paddingVertical: 16, gap: 8 }}
         onPress={() => handleDataSourceSelected(item.type)}
       >
         <Ionicons
           name="checkmark"
-          className={cn(
-            "text-foreground",
-            item.type === selectedDataSource ? "visible" : "invisible",
-          )}
+          color={colors.text}
+          style={{ opacity: item.type === selectedDataSource ? 1 : 0 }}
           size={24}
         />
-        <Text className="ms-2 text-base text-foreground">{item.name}</Text>
+        <Text style={{ color: colors.text }}>{item.name}</Text>
       </TouchableOpacity>
     ),
-    [handleDataSourceSelected, selectedDataSource],
+    [handleDataSourceSelected, selectedDataSource, colors],
   );
 
   return (
-    <StyledBottomSheet
+    <BottomSheet
       ref={bottomSheetRef}
       index={-1}
       enableDynamicSizing
@@ -88,29 +86,22 @@ export const DataSourceBottomSheet = ({
       enableOverDrag={false}
       backdropComponent={renderBackdrop}
       onChange={handleSheetChanges}
-      className="bg-background"
-      handleIndicatorClassName="bg-foreground"
-      style={{
-        marginLeft: insets.left,
-        marginRight: insets.right,
-      }}
+      backgroundStyle={{ backgroundColor: colors.background }}
+      handleIndicatorStyle={{ backgroundColor: colors.text }}
+      style={{ marginLeft: insets.left, marginRight: insets.right }}
     >
       <BottomSheetView
-        className="p-8"
-        style={{ paddingBottom: insets.bottom }}
+        style={{ paddingHorizontal: 32, paddingTop: 32, paddingBottom: insets.bottom }}
       >
-        <Text className="mb-4 text-xl font-bold text-foreground">Pick data source</Text>
+        <Text style={{ marginBottom: 16, fontSize: 18, fontWeight: "bold", color: colors.text }}>
+          Pick data source
+        </Text>
         <FlatList
           data={DATA_SOURCES}
           renderItem={renderItem}
           keyExtractor={(item) => item.name}
         />
       </BottomSheetView>
-    </StyledBottomSheet>
+    </BottomSheet>
   );
 };
-
-const StyledBottomSheet = cssInterop(BottomSheet, {
-  className: "backgroundStyle",
-  handleIndicatorClassName: "handleIndicatorStyle",
-});
