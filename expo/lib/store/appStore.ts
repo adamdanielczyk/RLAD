@@ -65,8 +65,12 @@ export const useAppStore = create<AppState>((set, get) => {
       nextOffset = result.nextOffset;
       hasMorePages = result.hasMorePages;
 
-      const { items: currentItems } = get();
-      set({ items: [...currentItems, ...result.items] });
+      if (isForceRefresh) {
+        set({ items: result.items });
+      } else {
+        const { items: currentItems } = get();
+        set({ items: [...currentItems, ...result.items] });
+      }
     } catch (error) {
       console.error(`Failed to load items:`, error);
     } finally {
