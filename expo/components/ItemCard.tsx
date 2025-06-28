@@ -52,13 +52,13 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
           <Text
             numberOfLines={1}
             style={{
-              fontSize: 14,
+              fontSize: 12,
               textOverflow: "ellipsis",
               color: colors.text,
-              marginTop: 8,
+              marginTop: 4,
             }}
           >
-            {item.cardCaption}
+            {item.cardCaption?.replace("\n", " ")}
           </Text>
         </View>
       </View>
