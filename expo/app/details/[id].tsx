@@ -1,30 +1,20 @@
 import { FullScreenErrorView } from "@/components/FullScreenErrorView";
 import { ItemDetails } from "@/components/ItemDetails";
+import { useItemByIdQuery } from "@/lib/queries/useItemsQuery";
 import { useAppStore } from "@/lib/store/appStore";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
-import React, { useEffect } from "react";
+import React from "react";
 import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
 
-  const item = useAppStore((state) => state.detailedItem);
-  const isLoading = useAppStore((state) => state.isDetailedItemLoading);
-  const loadItemById = useAppStore((state) => state.loadItemById);
-  const clearDetailedItem = useAppStore((state) => state.clearDetailedItem);
-
-  useEffect(() => {
-    if (id) {
-      loadItemById(id);
-    }
-    return () => {
-      clearDetailedItem();
-    };
-  }, [id, loadItemById, clearDetailedItem]);
+  const selectedDataSource = useAppStore((state) => state.selectedDataSource);
+  const { item, isLoading } = useItemByIdQuery(id, selectedDataSource);
 
   const handleShare = async () => {
     if (!item) return;

@@ -1,5 +1,6 @@
+import { useItemsQuery } from "@/lib/queries/useItemsQuery";
 import { useAppStore } from "@/lib/store/appStore";
-import { ItemUiModel } from "@/lib/types/uiModelTypes";
+import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo } from "react";
 import {
@@ -24,9 +25,6 @@ export default function HomeScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
-  const items = useAppStore((state) => state.items);
-  const isLoading = useAppStore((state) => state.isLoading);
-
   const searchQuery = useAppStore((state) => state.searchQuery);
   const isSearchFocused = useAppStore((state) => state.isSearchFocused);
   const onSearchQueryChanged = useAppStore((state) => state.onSearchQueryChanged);
@@ -34,13 +32,13 @@ export default function HomeScreen() {
   const onClearButtonClicked = useAppStore((state) => state.onClearButtonClicked);
   const onFilterButtonClicked = useAppStore((state) => state.onFilterButtonClicked);
 
-  const onPullToRefresh = useAppStore((state) => state.onPullToRefresh);
-  const onLoadMoreItems = useAppStore((state) => state.onLoadMoreItems);
-
   const isBottomSheetOpen = useAppStore((state) => state.isBottomSheetOpen);
   const selectedDataSource = useAppStore((state) => state.selectedDataSource);
   const onDataSourceSelected = useAppStore((state) => state.onDataSourceSelected);
   const onBottomSheetClosed = useAppStore((state) => state.onBottomSheetClosed);
+
+  const { items, isLoading, isRefetching, isFetching, isFetchingNextPage, loadMoreItems, refetch } =
+    useItemsQuery(selectedDataSource, searchQuery);
 
   const { width } = useWindowDimensions();
   const numColumns = useMemo(() => {
@@ -60,7 +58,7 @@ export default function HomeScreen() {
         }
       />
     ),
-    [],
+    [router],
   );
 
   return (
@@ -89,14 +87,14 @@ export default function HomeScreen() {
             tintColor={colors.text}
             progressBackgroundColor={colors.card}
             colors={[colors.text]}
-            refreshing={isLoading && items.length === 0}
-            onRefresh={onPullToRefresh}
+            refreshing={isRefetching}
+            onRefresh={refetch}
           />
         }
-        onEndReached={onLoadMoreItems}
-        onEndReachedThreshold={0.1}
+        onEndReached={loadMoreItems}
+        onEndReachedThreshold={2}
         ListFooterComponent={
-          isLoading && items.length > 0 ? (
+          isLoading || isFetchingNextPage ? (
             <View style={{ padding: 16 }}>
               <ActivityIndicator
                 size="large"
@@ -106,7 +104,7 @@ export default function HomeScreen() {
           ) : null
         }
         ListEmptyComponent={
-          !isLoading ? (
+          !isFetching ? (
             <View style={{ padding: 16 }}>
               <Text
                 style={{

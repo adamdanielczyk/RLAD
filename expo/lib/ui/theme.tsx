@@ -1,4 +1,21 @@
-export const NAV_THEME = {
+import { useColorScheme } from "@/lib/ui/useColorScheme";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider as ReactThemeProvider,
+  Theme,
+} from "@react-navigation/native";
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const { isDarkColorScheme } = useColorScheme();
+  return (
+    <ReactThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+      {children}
+    </ReactThemeProvider>
+  );
+}
+
+const NAV_THEME = {
   light: {
     background: "hsl(0 0% 97.65%)", // --background
     border: "hsl(0 0% 84.71%)", // --border
@@ -15,4 +32,13 @@ export const NAV_THEME = {
     primary: "hsl(22.93 92.59% 52.35%)", // --primary
     text: "hsl(0 0% 93.33%)", // --foreground
   },
+};
+
+const LIGHT_THEME: Theme = {
+  ...DefaultTheme,
+  colors: NAV_THEME.light,
+};
+const DARK_THEME: Theme = {
+  ...DarkTheme,
+  colors: NAV_THEME.dark,
 };

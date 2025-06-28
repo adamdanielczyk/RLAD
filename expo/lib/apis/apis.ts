@@ -1,10 +1,7 @@
-import { fetchArticItemById, fetchArticItems } from "@/lib/services/artic/data";
-import { fetchGiphyItemById, fetchGiphyItems } from "@/lib/services/giphy/data";
-import {
-  fetchRickAndMortyItemById,
-  fetchRickAndMortyItems,
-} from "@/lib/services/rick-and-morty/data";
-import { DataSourceType, ItemUiModel } from "@/lib/types/uiModelTypes";
+import { fetchArticItemById, fetchArticItems } from "@/lib/apis/artic/data";
+import { fetchGiphyItemById, fetchGiphyItems } from "@/lib/apis/giphy/data";
+import { fetchRickAndMortyItemById, fetchRickAndMortyItems } from "@/lib/apis/rick-and-morty/data";
+import { DataSourceType, ItemUiModel } from "@/lib/ui/uiModelTypes";
 
 export interface FetchItemsParams {
   dataSource: DataSourceType;

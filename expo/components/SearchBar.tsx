@@ -5,10 +5,10 @@ import { TextInput, TouchableOpacity, View } from "react-native";
 
 interface SearchBarProps {
   query: string;
-  onQueryChanged: (text: string) => Promise<void>;
+  onQueryChanged: (text: string) => void;
   isFocused: boolean;
   onFocused: (isFocused: boolean) => void;
-  onClearButtonClicked: () => Promise<void>;
+  onClearButtonClicked: () => void;
   onFilterButtonClicked: () => void;
 }
 

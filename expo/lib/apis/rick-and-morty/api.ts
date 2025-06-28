@@ -1,8 +1,8 @@
-import { fetchJson } from "@/lib/services/apiClient";
+import { fetchJson } from "@/lib/apis/apiClient";
 import {
   RickAndMortyCharacter,
   RickAndMortyCharactersResponse,
-} from "@/lib/services/rick-and-morty/types";
+} from "@/lib/apis/rick-and-morty/types";
 
 const RICK_AND_MORTY_BASE_URL = "https://rickandmortyapi.com/api";
 

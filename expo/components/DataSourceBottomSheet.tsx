@@ -1,5 +1,5 @@
-import { DATA_SOURCES } from "@/lib/services/dataSources";
-import { DataSourceType } from "@/lib/types/uiModelTypes";
+import { DATA_SOURCES } from "@/lib/apis/dataSources";
+import { DataSourceType } from "@/lib/ui/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
 import { useTheme } from "@react-navigation/native";

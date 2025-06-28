@@ -1,8 +1,6 @@
-import { NAV_THEME } from "@/lib/constants";
+import { QueryProvider } from "@/lib/queries/QueryProvider";
 import { useAppStore } from "@/lib/store/appStore";
-import { useColorScheme } from "@/lib/useColorScheme";
-import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from "@react-navigation/native";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "@/lib/ui/theme";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
@@ -11,29 +9,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export { ErrorBoundary } from "expo-router";
 
-const LIGHT_THEME: Theme = {
-  ...DefaultTheme,
-  colors: NAV_THEME.light,
-};
-const DARK_THEME: Theme = {
-  ...DarkTheme,
-  colors: NAV_THEME.dark,
-};
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 2,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    },
-  },
-});
-
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { isDarkColorScheme } = useColorScheme();
-
   useEffect(() => {
     const initializeApp = async () => {
       await useAppStore.getState().initialize();
@@ -44,9 +22,9 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryProvider>
       <GestureHandlerRootView>
-        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <ThemeProvider>
           <StatusBar style="auto" />
           <Stack>
             <Stack.Screen
@@ -66,6 +44,6 @@ export default function RootLayout() {
           </Stack>
         </ThemeProvider>
       </GestureHandlerRootView>
-    </QueryClientProvider>
+    </QueryProvider>
   );
 }

@@ -1,7 +1,7 @@
-import { articApi } from "@/lib/services/artic/api";
-import { ArticArtwork } from "@/lib/services/artic/types";
-import { FetchItemsResult } from "@/lib/services/dataService";
-import { ItemUiModel } from "@/lib/types/uiModelTypes";
+import { articApi } from "@/lib/apis/artic/api";
+import { ArticArtwork } from "@/lib/apis/artic/types";
+import { FetchItemsResult } from "@/lib/apis/dataService";
+import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 
 const INITIAL_OFFSET = 0;
 

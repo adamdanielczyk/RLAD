@@ -1,4 +1,4 @@
-import { ItemUiModel } from "@/lib/types/uiModelTypes";
+import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 import { useTheme } from "@react-navigation/native";
 import { Image } from "expo-image";
 import React from "react";

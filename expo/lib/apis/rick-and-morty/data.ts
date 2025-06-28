@@ -1,7 +1,7 @@
-import { FetchItemsResult } from "@/lib/services/dataService";
-import { rickAndMortyApi } from "@/lib/services/rick-and-morty/api";
-import { RickAndMortyCharacter } from "@/lib/services/rick-and-morty/types";
-import { ItemUiModel } from "@/lib/types/uiModelTypes";
+import { FetchItemsResult } from "@/lib/apis/apis";
+import { rickAndMortyApi } from "@/lib/apis/rick-and-morty/api";
+import { RickAndMortyCharacter } from "@/lib/apis/rick-and-morty/types";
+import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 
 const INITIAL_OFFSET = 1;
 

@@ -1,7 +1,7 @@
-import { FetchItemsResult } from "@/lib/services/dataService";
-import { giphyApi } from "@/lib/services/giphy/api";
-import { GiphyGif } from "@/lib/services/giphy/types";
-import { ItemUiModel } from "@/lib/types/uiModelTypes";
+import { FetchItemsResult } from "@/lib/apis/dataService";
+import { giphyApi } from "@/lib/apis/giphy/api";
+import { GiphyGif } from "@/lib/apis/giphy/types";
+import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 
 const INITIAL_OFFSET = 0;
 

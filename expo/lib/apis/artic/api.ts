@@ -1,5 +1,5 @@
-import { fetchJson } from "@/lib/services/apiClient";
-import { ArticArtwork, ArticResponse } from "@/lib/services/artic/types";
+import { fetchJson } from "@/lib/apis/apiClient";
+import { ArticArtwork, ArticResponse } from "@/lib/apis/artic/types";
 
 const ARTIC_BASE_URL = "https://api.artic.edu/api/v1";
 const FIELDS =

@@ -1,4 +1,4 @@
-import { DataSourceType } from "@/lib/types/uiModelTypes";
+import { DataSourceType } from "@/lib/ui/uiModelTypes";
 
 export const DATA_SOURCES = [
   {

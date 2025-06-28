@@ -1,5 +1,5 @@
-import { fetchJson } from "@/lib/services/apiClient";
-import { GiphyGif, GiphyResponse } from "@/lib/services/giphy/types";
+import { fetchJson } from "@/lib/apis/apiClient";
+import { GiphyGif, GiphyResponse } from "@/lib/apis/giphy/types";
 
 const GIPHY_BASE_URL = "https://api.giphy.com/v1/gifs";
 const BUNDLE = "clips_grid_picker";
