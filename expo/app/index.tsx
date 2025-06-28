@@ -44,7 +44,10 @@ export default function HomeScreen() {
   const numColumns = useMemo(() => {
     return Math.max(1, Math.floor(width / ITEM_MIN_WIDTH));
   }, [width]);
-  const listKey = useMemo(() => `flatlist-${numColumns}-columns`, [numColumns]);
+  const listKey = useMemo(
+    () => `flatlist-${numColumns}-columns-${selectedDataSource}`,
+    [numColumns, selectedDataSource],
+  );
 
   const renderItem = useCallback(
     ({ item }: { item: ItemUiModel }) => (
