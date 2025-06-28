@@ -51,11 +51,20 @@ export const SearchBar = ({
           backgroundColor: colors.card,
           paddingHorizontal: 16,
           paddingVertical: 8,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 2,
         }}
       >
         <TextInput
           ref={textInputRef}
-          style={{ flex: 1, color: colors.text }}
+          style={{
+            flex: 1,
+            color: colors.text,
+            textAlignVertical: "center",
+            padding: 0,
+          }}
           placeholder="Search..."
           placeholderTextColor={colors.text}
           value={query}
@@ -77,6 +86,7 @@ export const SearchBar = ({
           />
         </TouchableOpacity>
       </View>
+
       <TouchableOpacity
         onPress={onFilterButtonClicked}
         style={{
@@ -87,10 +97,14 @@ export const SearchBar = ({
           borderColor: colors.border,
           backgroundColor: colors.card,
           aspectRatio: 1,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 2,
         }}
       >
         <Ionicons
-          name="filter"
+          name="options-outline"
           size={16}
           color={colors.text}
         />

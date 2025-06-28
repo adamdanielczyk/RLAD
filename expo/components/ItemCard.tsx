@@ -20,7 +20,6 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
         margin: 8,
         backgroundColor: colors.card,
         borderRadius: 16,
-        shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
