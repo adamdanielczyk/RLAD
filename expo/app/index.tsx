@@ -1,6 +1,7 @@
 import { useItemsQuery } from "@/lib/queries/useItemsQuery";
 import { useAppStore } from "@/lib/store/appStore";
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo } from "react";
 import {
@@ -108,16 +109,41 @@ export default function HomeScreen() {
         }
         ListEmptyComponent={
           !isFetching ? (
-            <View style={{ padding: 16 }}>
+            <View
+              style={{
+                padding: 32,
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 200,
+              }}
+            >
+              <Ionicons
+                name="search-outline"
+                size={64}
+                color={colors.text}
+                style={{ opacity: 0.3, marginBottom: 16 }}
+              />
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: 16,
-                  fontWeight: "bold",
+                  fontSize: 18,
+                  fontWeight: "600",
                   color: colors.text,
+                  marginBottom: 8,
+                  letterSpacing: 0.3,
                 }}
               >
                 No items found
+              </Text>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: 14,
+                  color: colors.text,
+                  opacity: 0.6,
+                }}
+              >
+                Try adjusting your search or data source
               </Text>
             </View>
           ) : null

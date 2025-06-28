@@ -1,10 +1,9 @@
 import { DATA_SOURCES } from "@/lib/apis/dataSources";
 import { DataSourceType } from "@/lib/ui/uiModelTypes";
-import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
 import { useTheme } from "@react-navigation/native";
 import React, { useCallback, useEffect, useRef } from "react";
-import { FlatList, Text, TouchableOpacity } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface DataSourceBottomSheetProps {
@@ -62,16 +61,50 @@ export const DataSourceBottomSheet = ({
   const renderItem = useCallback(
     ({ item }: { item: (typeof DATA_SOURCES)[number] }) => (
       <TouchableOpacity
-        style={{ flexDirection: "row", alignItems: "center", paddingVertical: 16, gap: 8 }}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          paddingVertical: 18,
+          gap: 16,
+          paddingHorizontal: 16,
+          marginBottom: 4,
+        }}
         onPress={() => handleDataSourceSelected(item.type)}
       >
-        <Ionicons
-          name="checkmark"
-          color={colors.text}
-          style={{ opacity: item.type === selectedDataSource ? 1 : 0 }}
-          size={24}
-        />
-        <Text style={{ color: colors.text }}>{item.name}</Text>
+        <Text
+          style={{
+            color: colors.text,
+            fontSize: 16,
+            fontWeight: item.type === selectedDataSource ? "600" : "400",
+            letterSpacing: 0.3,
+            flex: 1,
+          }}
+        >
+          {item.name}
+        </Text>
+        <View
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+            borderWidth: 2,
+            borderColor: item.type === selectedDataSource ? colors.primary : colors.border,
+            backgroundColor: item.type === selectedDataSource ? colors.primary : "transparent",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {item.type === selectedDataSource && (
+            <View
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: "white",
+              }}
+            />
+          )}
+        </View>
       </TouchableOpacity>
     ),
     [handleDataSourceSelected, selectedDataSource, colors],
@@ -93,7 +126,15 @@ export const DataSourceBottomSheet = ({
       <BottomSheetView
         style={{ paddingHorizontal: 32, paddingTop: 32, paddingBottom: insets.bottom }}
       >
-        <Text style={{ marginBottom: 16, fontSize: 18, fontWeight: "bold", color: colors.text }}>
+        <Text
+          style={{
+            marginBottom: 24,
+            fontSize: 22,
+            fontWeight: "700",
+            color: colors.text,
+            letterSpacing: 0.5,
+          }}
+        >
           Pick data source
         </Text>
         <FlatList

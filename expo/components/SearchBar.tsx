@@ -36,8 +36,8 @@ export const SearchBar = ({
       style={{
         margin: 16,
         flexDirection: "row",
-        alignItems: "stretch",
-        gap: 8,
+        alignItems: "center",
+        gap: 12,
       }}
     >
       <View
@@ -45,16 +45,16 @@ export const SearchBar = ({
           flex: 1,
           flexDirection: "row",
           alignItems: "center",
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor: colors.border,
+          borderRadius: 16,
           backgroundColor: colors.card,
-          paddingHorizontal: 16,
-          paddingVertical: 8,
-          shadowOffset: { width: 0, height: 2 },
+          paddingHorizontal: 20,
+          paddingVertical: 14,
+          shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 2,
+          shadowRadius: 8,
+          elevation: 4,
+          borderWidth: 2,
+          borderColor: isFocused ? colors.primary : "transparent",
         }}
       >
         <TextInput
@@ -64,9 +64,10 @@ export const SearchBar = ({
             color: colors.text,
             textAlignVertical: "center",
             padding: 0,
+            fontSize: 16,
           }}
           placeholder="Search..."
-          placeholderTextColor={colors.text}
+          placeholderTextColor="rgba(128, 128, 128, 0.7)"
           value={query}
           onChangeText={onQueryChanged}
           autoCorrect={false}
@@ -77,11 +78,14 @@ export const SearchBar = ({
         <TouchableOpacity
           onPress={onClearButtonClicked}
           disabled={!query}
-          style={{ opacity: query ? 1 : 0 }}
+          style={{
+            opacity: query ? 1 : 0,
+            padding: 4,
+          }}
         >
           <Ionicons
             name="close"
-            size={16}
+            size={18}
             color={colors.text}
           />
         </TouchableOpacity>
@@ -92,21 +96,20 @@ export const SearchBar = ({
         style={{
           alignItems: "center",
           justifyContent: "center",
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor: colors.border,
-          backgroundColor: colors.card,
-          aspectRatio: 1,
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 2,
+          borderRadius: 50,
+          backgroundColor: colors.primary,
+          width: 52,
+          height: 52,
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+          elevation: 5,
         }}
       >
         <Ionicons
           name="options-outline"
-          size={16}
-          color={colors.text}
+          size={20}
+          color="white"
         />
       </TouchableOpacity>
     </View>

@@ -14,7 +14,10 @@ const HERO_HEIGHT = width * 0.75;
 export function ItemDetails({ item, onShare }: { item: ItemUiModel; onShare: () => void }) {
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView 
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
         <HeroImage item={item} />
         <MainContent item={item} />
       </ScrollView>
@@ -32,17 +35,17 @@ function HeaderButtons({ onShare }: { onShare: () => void }) {
       <TouchableOpacity
         onPress={onPress}
         style={{
-          backgroundColor: "rgba(0,0,0,0.5)",
-          borderRadius: 20,
-          width: 40,
-          height: 40,
+          backgroundColor: "rgba(0,0,0,0.6)",
+          borderRadius: 24,
+          width: 48,
+          height: 48,
           justifyContent: "center",
           alignItems: "center",
         }}
       >
         <Ionicons
           name={icon}
-          size={24}
+          size={26}
           color="white"
         />
       </TouchableOpacity>
@@ -91,15 +94,16 @@ function MainContent({ item }: { item: ItemUiModel }) {
   return (
     <View
       style={{
-        marginTop: -24,
-        borderTopLeftRadius: 24,
-        borderTopRightRadius: 24,
+        marginTop: -32,
+        borderTopLeftRadius: 32,
+        borderTopRightRadius: 32,
         backgroundColor: colors.background,
+        flex: 1,
       }}
     >
       <View
         style={{
-          padding: 24,
+          padding: 32,
           marginLeft: insets.left,
           marginRight: insets.right,
           marginBottom: insets.bottom,
@@ -107,31 +111,49 @@ function MainContent({ item }: { item: ItemUiModel }) {
       >
         <Text
           style={{
-            fontSize: 28,
-            fontWeight: "bold",
+            fontSize: 32,
+            fontWeight: "700",
             color: colors.text,
-            marginBottom: 24,
+            marginBottom: 32,
+            letterSpacing: 0.5,
+            lineHeight: 38,
           }}
         >
           {item.name}
         </Text>
 
         {item.detailsKeyValues.map((detail, index) => (
-          <View
-            key={index}
-            style={{ marginBottom: 16 }}
-          >
-            <Text
+          <View key={index}>
+            <View
               style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: colors.text,
-                marginBottom: 4,
+                marginBottom: 20,
+                paddingBottom: index < item.detailsKeyValues.length - 1 ? 20 : 0,
+                borderBottomWidth: index < item.detailsKeyValues.length - 1 ? 1 : 0,
+                borderBottomColor: colors.border,
               }}
             >
-              {detail.key}
-            </Text>
-            <Text style={{ fontSize: 14, color: colors.text }}>{detail.value}</Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "600",
+                  color: colors.text,
+                  marginBottom: 8,
+                  letterSpacing: 0.3,
+                }}
+              >
+                {detail.key}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: colors.text,
+                  lineHeight: 22,
+                  opacity: 0.9,
+                }}
+              >
+                {detail.value}
+              </Text>
+            </View>
           </View>
         ))}
       </View>
