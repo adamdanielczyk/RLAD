@@ -12,6 +12,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -92,19 +93,17 @@ internal fun SearchBar(
                 keyboardController?.hide()
             },
             focused,
-            Modifier.weight(1f),
         )
     }
 }
 
 @Composable
-private fun SearchTextField(
+private fun RowScope.SearchTextField(
     query: String,
     onQueryChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit,
     onClearQueryClicked: () -> Unit,
     focused: Boolean,
-    modifier: Modifier,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -119,14 +118,12 @@ private fun SearchTextField(
     )
 
     Surface(
-        modifier = modifier
-            .then(
-                Modifier
-                    .height(56.dp)
-                    .padding(
-                        vertical = 8.dp,
-                        horizontal = 16.dp,
-                    ),
+        modifier = Modifier
+            .weight(1f)
+            .height(56.dp)
+            .padding(
+                vertical = 8.dp,
+                horizontal = 16.dp,
             ),
         shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surfaceContainer,
@@ -138,11 +135,10 @@ private fun SearchTextField(
     ) {
         Box(
             contentAlignment = Alignment.CenterStart,
-            modifier = modifier,
         ) {
             val isQueryEmpty = query.isEmpty()
             if (isQueryEmpty) {
-                SearchHint(modifier.padding(start = 20.dp, end = 8.dp))
+                SearchHint(Modifier.padding(start = 20.dp, end = 8.dp))
             }
 
             val focusManager = LocalFocusManager.current
