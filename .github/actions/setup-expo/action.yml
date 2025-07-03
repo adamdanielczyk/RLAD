@@ -1,0 +1,30 @@
+name: "setup-expo"
+description: "Setup Expo builds"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-java@v4.7.1
+      with:
+        distribution: temurin
+        java-version: 17
+
+    - uses: gradle/actions/setup-gradle@v4
+
+    - uses: expo/expo-github-action@v8
+      with:
+        expo-version: latest
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: npm
+        cache-dependency-path: expo/package-lock.json
+
+    - run: npm ci
+      shell: bash
+      working-directory: expo
+
+    - run: npx expo export --platform android
+      shell: bash
+      working-directory: expo

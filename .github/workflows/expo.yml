@@ -18,31 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: expo/package-lock.json
+      - uses: ./.github/actions/setup-expo
 
-      - uses: actions/setup-java@v4.7.1
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - uses: expo/expo-github-action@v8
-        with:
-          expo-version: latest
-
-      - run: npm ci
-        working-directory: expo
-
-      - working-directory: expo
-        run: npx expo export --platform android
-
-      - uses: gradle/gradle-build-action@v3.5.0
-        with:
-          arguments: assembleDebug --stacktrace
-          build-root-directory: expo/android
+      - run: ./gradlew assembleDebug --stacktrace
+        working-directory: expo/android
 
       - uses: actions/upload-artifact@v4.6.2
         with:
@@ -54,31 +33,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: expo/package-lock.json
+      - uses: ./.github/actions/setup-expo
 
-      - uses: actions/setup-java@v4.7.1
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - uses: expo/expo-github-action@v8
-        with:
-          expo-version: latest
-
-      - run: npm ci
-        working-directory: expo
-
-      - working-directory: expo
-        run: npx expo export --platform android
-
-      - uses: gradle/gradle-build-action@v3.5.0
-        with:
-          arguments: assembleRelease --stacktrace
-          build-root-directory: expo/android
+      - run: ./gradlew assembleRelease --stacktrace
+        working-directory: expo/android
 
       - uses: ilharp/sign-android-release@v2.0.0
         id: sign_app
@@ -101,24 +59,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: expo/package-lock.json
-
-      - uses: actions/setup-java@v4.7.1
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - uses: expo/expo-github-action@v8
-        with:
-          expo-version: latest
-
-      - run: npm ci
-        working-directory: expo
-
       - name: Update app version
         working-directory: expo
         run: |
@@ -131,13 +71,10 @@ jobs:
             fs.writeFileSync('app.json', JSON.stringify(config, null, 2));
           "
 
-      - working-directory: expo
-        run: npx expo export --platform android
+      - uses: ./.github/actions/setup-expo
 
-      - uses: gradle/gradle-build-action@v3.5.0
-        with:
-          arguments: bundleRelease --stacktrace
-          build-root-directory: expo/android
+      - run: ./gradlew bundleRelease --stacktrace
+        working-directory: expo/android
 
       - uses: ilharp/sign-android-release@v2.0.0
         id: sign_app
