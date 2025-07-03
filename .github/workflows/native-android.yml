@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  ORG_GRADLE_PROJECT_GIPHY_API_KEY: ${{ secrets.ORG_GRADLE_PROJECT_GIPHY_API_KEY }}
+  ORG_GRADLE_PROJECT_GIPHY_API_KEY: ${{ secrets.GIPHY_API_KEY }}
 
 jobs:
   test:
