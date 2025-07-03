@@ -13,8 +13,90 @@ env:
   EXPO_PUBLIC_GIPHY_API_KEY: ${{ secrets.GIPHY_API_KEY }}
 
 jobs:
+  assembleDebug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
+
+      - uses: actions/setup-java@v4.7.1
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+
+      - run: npm ci
+        working-directory: expo
+
+      - working-directory: expo
+        run: npx expo export --platform android
+
+      - uses: gradle/gradle-build-action@v3.5.0
+        with:
+          arguments: assembleDebug --stacktrace
+          build-root-directory: expo/android
+
+      - uses: actions/upload-artifact@v4.6.2
+        with:
+          name: rlad-expo-debug-apk
+          path: expo/android/app/build/outputs/apk/debug/*debug*.apk
+
+  assembleRelease:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
+
+      - uses: actions/setup-java@v4.7.1
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+
+      - run: npm ci
+        working-directory: expo
+
+      - working-directory: expo
+        run: npx expo export --platform android
+
+      - uses: gradle/gradle-build-action@v3.5.0
+        with:
+          arguments: assembleRelease --stacktrace
+          build-root-directory: expo/android
+
+      - uses: ilharp/sign-android-release@v2.0.0
+        id: sign_app
+        with:
+          releaseDir: expo/android/app/build/outputs/apk/release
+          signingKey: ${{ secrets.RELEASE_SIGNING_KEY }}
+          keyAlias: ${{ secrets.RELEASE_ALIAS }}
+          keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
+
+      - uses: actions/upload-artifact@v4.6.2
+        with:
+          name: rlad-expo-release-apk
+          path: ${{steps.sign_app.outputs.signedFile}}
+
   bundleRelease:
     if: github.ref == 'refs/heads/master'
+    needs: [assembleDebug, assembleRelease]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
