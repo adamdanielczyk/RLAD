@@ -14,7 +14,7 @@ const HERO_HEIGHT = width * 0.75;
 export function ItemDetails({ item, onShare }: { item: ItemUiModel; onShare: () => void }) {
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >
@@ -29,24 +29,30 @@ export function ItemDetails({ item, onShare }: { item: ItemUiModel; onShare: () 
 function HeaderButtons({ onShare }: { onShare: () => void }) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { colors } = useTheme();
 
   const button = (icon: keyof typeof Ionicons.glyphMap, onPress: () => void) => {
     return (
       <TouchableOpacity
         onPress={onPress}
         style={{
-          backgroundColor: "rgba(0,0,0,0.6)",
+          backgroundColor: colors.card,
           borderRadius: 24,
           width: 48,
           height: 48,
           justifyContent: "center",
           alignItems: "center",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+          elevation: 8,
+          opacity: 0.9,
         }}
       >
         <Ionicons
           name={icon}
-          size={26}
-          color="white"
+          size={24}
+          color={colors.text}
         />
       </TouchableOpacity>
     );
@@ -56,7 +62,7 @@ function HeaderButtons({ onShare }: { onShare: () => void }) {
     <View
       style={{
         position: "absolute",
-        top: 8 + insets.top,
+        top: 16 + insets.top,
         left: 16 + insets.left,
         right: 16 + insets.right,
         flexDirection: "row",
