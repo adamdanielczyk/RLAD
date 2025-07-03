@@ -19,6 +19,7 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.rlad.expo",
+      "permissions": ["INTERNET"],
       "enableProguardInReleaseBuilds": true,
       "enableShrinkResourcesInReleaseBuilds": true,
       "enableDangerousExperimentalLeanBuilds": true,
