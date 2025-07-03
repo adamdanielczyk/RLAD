@@ -1,33 +1,112 @@
 # RLAD - Random List And Details
 
-RLAD is a playground for trying out mobile development patterns in both native Android and React Native. This repository contains two separate apps:
+RLAD is a playground for exploring mobile development patterns across different platforms. This repository contains two implementations of the same app:
 
-- **native-android/** – the original Android application written in Kotlin using Jetpack Compose and other modern libraries.
-- **expo/** – a cross‑platform app built with React Native via Expo.
+- **[expo](expo)** – Cross-platform React Native app built with Expo
+- **[native-android](native-android)** – Native Android app built with Kotlin, Jetpack Compose, and modern Android libraries
 
-Both apps use public APIs to display lists of items and their details. The Android version is available on [Google Play](https://play.google.com/store/apps/details?id=com.rlad).
+Both apps demonstrate fetching data from public APIs, displaying lists with search functionality, and navigating to detailed views.
+
+## Download Links
+
+- **Expo:** [Google Play](https://play.google.com/store/apps/details?id=com.rlad.expo)
+- **Native Android:** [Google Play](https://play.google.com/store/apps/details?id=com.rlad)
+
+## Architecture Overview
+
+### Expo
+
+- **Architecture:** Component-based with custom hooks
+- **UI:** React Native with Expo Router for navigation
+- **State Management:** Zustand + TanStack Query for server state
+- **Networking:** Fetch API with TanStack Query
+- **Storage:** AsyncStorage for local data persistence
+
+### Native Android
+
+- **Architecture:** MVVM with Clean Architecture principles
+- **UI:** Jetpack Compose with Material Design 3
+- **Dependency Injection:** Dagger Hilt
+- **Networking:** Retrofit + OkHttp
+- **State Management:** StateFlow + Compose State
+- **Modularization:** Feature-based modules with shared core libraries
 
 ## APIs
 
-- [Art Institute of Chicago](https://api.artic.edu)
-- [Giphy](https://developers.giphy.com/docs/api/endpoint)
-- [Rick And Morty](https://rickandmortyapi.com/documentation)
+- **[Art Institute of Chicago](https://api.artic.edu)** - Museum artwork and artifacts
+- **[GIPHY](https://developers.giphy.com)** - GIF search and trending content
+- **[Rick and Morty](https://rickandmortyapi.com)** - Character and episode data
 
-## Running the native Android app
+## Setup Requirements
 
-1. Clone the repository.
-2. Generate a Giphy API key on [developers.giphy.com](https://developers.giphy.com).
-3. Add the key to `~/.gradle/gradle.properties` as `GIPHY_API_KEY=YOUR_KEY`.
-4. Open the `native-android` project in Android Studio and build/run it.
+### API Key Configuration
 
-The Android app is modularized into feature and core modules. The dependency graph below illustrates the relationships between modules.
+Get a GIPHY API key from [developers.giphy.com](https://developers.giphy.com), then configure it for your target platform:
 
-![dependency-graph](docs/dependency-graph.png)
+#### For Expo
 
-## Running the Expo app
+Create a `.env.local` file in the `expo/` directory:
 
-1. Navigate to the `expo` directory.
-2. Install dependencies with `npm install`.
-3. Start the app with `npx expo start`.
+```bash
+EXPO_PUBLIC_GIPHY_API_KEY=your_api_key_here
+```
 
+#### For Native Android
 
+Add to `~/.gradle/gradle.properties`:
+
+```bash
+GIPHY_API_KEY=your_api_key_here
+```
+
+## Running the Apps
+
+### Debug builds
+
+#### Expo
+
+```bash
+# Navigate to expo directory
+cd expo
+
+# Install dependencies
+npm install
+
+# Run on specific platforms
+# Launch on Android device/emulator
+npm run android
+# Launch on iOS device/simulator
+npm run ios
+# Launch in web browser
+npm run web
+```
+
+#### Native Android
+
+```bash
+# Open in Android Studio
+# File → Open → Select 'native-android' folder
+# Build and run the project
+```
+
+### Production builds
+
+#### Expo
+
+```bash
+cd expo
+npx expo run:android --variant release
+
+# OR
+
+npx expo export --platform android
+cd android
+./gradlew assembleRelease
+```
+
+#### Native Android
+
+```bash
+cd native-android
+./gradlew assembleRelease
+```
