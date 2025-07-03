@@ -1,6 +1,6 @@
+import { FetchItemsResult } from "@/lib/apis/apis";
 import { articApi } from "@/lib/apis/artic/api";
 import { ArticArtwork } from "@/lib/apis/artic/types";
-import { FetchItemsResult } from "@/lib/apis/dataService";
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 
 const INITIAL_OFFSET = 0;
@@ -14,7 +14,7 @@ export const fetchArticItems = async (
   const items = response.data.map(mapArticArtworkToItem);
 
   const hasMorePages = items.length !== 0;
-  const nextOffset = response.pagination.offset + response.pagination.limit + 1;
+  const nextOffset = response.pagination.offset + response.pagination.limit;
 
   return {
     items,

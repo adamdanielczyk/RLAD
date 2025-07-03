@@ -1,23 +1,17 @@
 import { useItemsQuery } from "@/lib/queries/useItemsQuery";
 import { useAppStore } from "@/lib/store/appStore";
-import { ItemUiModel } from "@/lib/ui/uiModelTypes";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { ActivityIndicator, RefreshControl, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
 import { ItemCard } from "@/components/ItemCard";
 import { SearchBar } from "@/components/SearchBar";
+import { ItemUiModel } from "@/lib/ui/uiModelTypes";
+import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { useTheme } from "@react-navigation/native";
+import { FlashList } from "@shopify/flash-list";
 
 const ITEM_MIN_WIDTH = 150;
 
@@ -45,10 +39,7 @@ export default function HomeScreen() {
   const numColumns = useMemo(() => {
     return Math.max(1, Math.floor(width / ITEM_MIN_WIDTH));
   }, [width]);
-  const listKey = useMemo(
-    () => `flatlist-${numColumns}-columns-${selectedDataSource}`,
-    [numColumns, selectedDataSource],
-  );
+  const listKey = useMemo(() => `list-${selectedDataSource}`, [selectedDataSource]);
 
   const renderItem = useCallback(
     ({ item }: { item: ItemUiModel }) => (
@@ -79,76 +70,35 @@ export default function HomeScreen() {
         onFilterButtonClicked={onFilterButtonClicked}
       />
 
-      <FlatList
-        data={items}
-        renderItem={renderItem}
-        key={listKey}
-        keyExtractor={(item) => item.id}
-        numColumns={numColumns}
-        contentContainerStyle={{ marginHorizontal: 8, paddingBottom: insets.bottom }}
-        refreshControl={
-          <RefreshControl
-            tintColor={colors.text}
-            progressBackgroundColor={colors.card}
-            colors={[colors.text]}
-            refreshing={isRefetching}
-            onRefresh={refetch}
-          />
-        }
-        onEndReached={loadMoreItems}
-        onEndReachedThreshold={2}
-        ListFooterComponent={
-          isLoading || isFetchingNextPage ? (
-            <View style={{ padding: 16 }}>
-              <ActivityIndicator
-                size="large"
-                color={colors.text}
-              />
-            </View>
-          ) : null
-        }
-        ListEmptyComponent={
-          !isFetching ? (
-            <View
-              style={{
-                padding: 32,
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: 200,
-              }}
-            >
-              <Ionicons
-                name="search-outline"
-                size={64}
-                color={colors.text}
-                style={{ opacity: 0.3, marginBottom: 16 }}
-              />
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 18,
-                  fontWeight: "600",
-                  color: colors.text,
-                  marginBottom: 8,
-                  letterSpacing: 0.3,
-                }}
-              >
-                No items found
-              </Text>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 14,
-                  color: colors.text,
-                  opacity: 0.6,
-                }}
-              >
-                Try adjusting your search or data source
-              </Text>
-            </View>
-          ) : null
-        }
-      />
+      {isLoading && items.length === 0 ? (
+        <FullscreenLoader />
+      ) : (
+        <FlashList
+          key={listKey}
+          data={items}
+          renderItem={renderItem}
+          numColumns={numColumns}
+          contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: insets.bottom }}
+          estimatedItemSize={200}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              tintColor={colors.text}
+              progressBackgroundColor={colors.card}
+              colors={[colors.text]}
+              refreshing={isRefetching}
+              onRefresh={refetch}
+            />
+          }
+          onEndReached={loadMoreItems}
+          onEndReachedThreshold={2}
+          ListFooterComponent={isFetchingNextPage ? <FooterLoader /> : null}
+          ListEmptyComponent={!isFetching ? <EmptyStateView /> : null}
+          removeClippedSubviews
+          drawDistance={500}
+          keyboardDismissMode="on-drag"
+        />
+      )}
 
       <DataSourceBottomSheet
         isOpen={isBottomSheetOpen}
@@ -157,5 +107,73 @@ export default function HomeScreen() {
         onDataSourceSelected={onDataSourceSelected}
       />
     </SafeAreaView>
+  );
+}
+
+function EmptyStateView() {
+  const { colors } = useTheme();
+  return (
+    <View
+      style={{
+        flex: 1,
+        padding: 32,
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: 200,
+      }}
+    >
+      <Ionicons
+        name="search-outline"
+        size={64}
+        color={colors.text}
+        style={{ opacity: 0.3, marginBottom: 16 }}
+      />
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: 18,
+          fontWeight: "600",
+          color: colors.text,
+          marginBottom: 8,
+          letterSpacing: 0.3,
+        }}
+      >
+        No items found
+      </Text>
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: 14,
+          color: colors.text,
+          opacity: 0.6,
+        }}
+      >
+        Try adjusting your search or data source
+      </Text>
+    </View>
+  );
+}
+
+function FullscreenLoader() {
+  const { colors } = useTheme();
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <ActivityIndicator
+        size="large"
+        color={colors.text}
+      />
+    </View>
+  );
+}
+
+function FooterLoader() {
+  const { colors } = useTheme();
+  return (
+    <View style={{ padding: 16, alignItems: "center" }}>
+      <ActivityIndicator
+        size="large"
+        color={colors.text}
+      />
+    </View>
   );
 }
