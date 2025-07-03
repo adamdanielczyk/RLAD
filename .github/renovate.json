@@ -2,22 +2,22 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "matchPackagePrefixes": [
-        "com.google.devtools.ksp",
-        "androidx.compose.compiler"
-      ],
-      "matchPackagePatterns": [
-        "^org\\.jetbrains\\.kotlin[.:]"
-      ],
-      "groupName": "Kotlin & Compose Compiler"
+      "groupName": "Kotlin & Compose Compiler",
+      "matchPackageNames": [
+        "com.google.devtools.ksp{/,}**",
+        "androidx.compose.compiler{/,}**",
+        "/^org\\.jetbrains\\.kotlin[.:]/"
+      ]
     },
     {
-      "matchManagers": ["npm"],
+      "matchManagers": [
+        "npm"
+      ],
       "automerge": false
     }
   ],
   "extends": [
-    "config:base",
+    "config:recommended",
     ":automergeAll",
     ":automergeBranch",
     ":prConcurrentLimitNone",
