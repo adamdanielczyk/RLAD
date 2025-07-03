@@ -59,19 +59,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - name: Update app version
-        working-directory: expo
-        run: |
-          node -e "
-            const fs = require('fs');
-            const config = JSON.parse(fs.readFileSync('app.json', 'utf8'));
-            const versionCode = ${{ github.run_number }};
-            config.expo.version = '1.0.' + versionCode;
-            config.expo.android.versionCode = versionCode;
-            fs.writeFileSync('app.json', JSON.stringify(config, null, 2));
-          "
-
       - uses: ./.github/actions/setup-expo
+
+      - uses: chkfung/android-version-actions@v1.2.3
+        with:
+          gradlePath: expo/android/app/build.gradle
+          versionCode: ${{ github.run_number }}
+          versionName: "1.0.${{ github.run_number }}"
 
       - run: ./gradlew bundleRelease --stacktrace
         working-directory: expo/android
