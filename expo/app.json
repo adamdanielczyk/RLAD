@@ -21,6 +21,7 @@
       "package": "com.rlad.expo",
       "enableProguardInReleaseBuilds": true,
       "enableShrinkResourcesInReleaseBuilds": true,
+      "enableDangerousExperimentalLeanBuilds": true,
       "minSdkVersion": 30,
       "targetSdkVersion": 36,
       "versionCode": 1
