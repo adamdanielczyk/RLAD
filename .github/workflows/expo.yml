@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "expo/**"
+      - ".github/workflows/expo.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
