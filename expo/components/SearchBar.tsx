@@ -10,6 +10,7 @@ interface SearchBarProps {
   onFocused: (isFocused: boolean) => void;
   onClearButtonClicked: () => void;
   onFilterButtonClicked: () => void;
+  isTextInputEditable: boolean;
 }
 
 export const SearchBar = ({
@@ -19,6 +20,7 @@ export const SearchBar = ({
   onFocused,
   onClearButtonClicked,
   onFilterButtonClicked,
+  isTextInputEditable,
 }: SearchBarProps) => {
   const textInputRef = useRef<TextInput | null>(null);
   const { colors } = useTheme();
@@ -43,16 +45,16 @@ export const SearchBar = ({
       <View
         style={{
           flex: 1,
+          height: 48,
+          marginHorizontal: 16,
           flexDirection: "row",
           alignItems: "center",
-          borderRadius: 16,
+          borderRadius: 24,
           backgroundColor: colors.card,
-          paddingHorizontal: 20,
-          paddingVertical: 14,
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.1,
-          shadowRadius: 8,
-          elevation: 4,
+          shadowOffset: { width: 0, height: isFocused ? 8 : 4 },
+          shadowOpacity: isFocused ? 0.15 : 0.08,
+          shadowRadius: isFocused ? 12 : 8,
+          elevation: isFocused ? 8 : 4,
           borderWidth: 2,
           borderColor: isFocused ? colors.primary : "transparent",
         }}
@@ -62,30 +64,31 @@ export const SearchBar = ({
           style={{
             flex: 1,
             color: colors.text,
-            textAlignVertical: "center",
-            padding: 0,
             fontSize: 16,
+            paddingStart: 20,
           }}
           placeholder="Search..."
-          placeholderTextColor="rgba(128, 128, 128, 0.7)"
+          placeholderTextColor={colors.text}
           value={query}
           onChangeText={onQueryChanged}
           autoCorrect={false}
           autoCapitalize="none"
           onFocus={() => onFocused(true)}
           onBlur={() => onFocused(false)}
+          editable={isTextInputEditable}
         />
         <TouchableOpacity
           onPress={onClearButtonClicked}
           disabled={!query}
           style={{
             opacity: query ? 1 : 0,
-            padding: 4,
+            padding: 6,
+            marginEnd: 8,
           }}
         >
           <Ionicons
             name="close"
-            size={18}
+            size={20}
             color={colors.text}
           />
         </TouchableOpacity>
@@ -96,10 +99,10 @@ export const SearchBar = ({
         style={{
           alignItems: "center",
           justifyContent: "center",
-          borderRadius: 50,
+          borderRadius: 16,
           backgroundColor: colors.primary,
-          width: 52,
-          height: 52,
+          width: 48,
+          height: 48,
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.2,
           shadowRadius: 8,

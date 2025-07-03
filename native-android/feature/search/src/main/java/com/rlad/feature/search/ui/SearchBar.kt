@@ -1,6 +1,14 @@
 package com.rlad.feature.search.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,14 +17,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,9 +38,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -40,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rlad.feature.search.R
 
 /**
@@ -51,7 +62,6 @@ internal fun SearchBar(
     onQueryChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit = {},
     onClearQueryClicked: () -> Unit,
-    onBackClicked: () -> Unit,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     var focused by rememberSaveable { mutableStateOf(false) }
@@ -65,20 +75,6 @@ internal fun SearchBar(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AnimatedVisibility(visible = focused) {
-            IconButton(
-                modifier = Modifier.padding(start = 2.dp),
-                onClick = {
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
-                    query = ""
-                    onBackClicked()
-                },
-            ) {
-                Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
-            }
-        }
-
         SearchTextField(
             query,
             { newQuery ->
@@ -92,6 +88,8 @@ internal fun SearchBar(
             {
                 query = ""
                 onClearQueryClicked()
+                focusManager.clearFocus()
+                keyboardController?.hide()
             },
             focused,
             Modifier.weight(1f),
@@ -110,20 +108,33 @@ private fun SearchTextField(
 ) {
     val focusRequester = remember { FocusRequester() }
 
+    val borderColor by animateColorAsState(
+        targetValue = if (focused) MaterialTheme.colorScheme.primary else Color.Transparent,
+        animationSpec = tween(300),
+    )
+
+    val clearButtonAlpha by animateFloatAsState(
+        targetValue = if (query.isNotEmpty()) 1f else 0f,
+        animationSpec = tween(200),
+    )
+
     Surface(
         modifier = modifier
             .then(
                 Modifier
                     .height(56.dp)
                     .padding(
-                        top = 8.dp,
-                        bottom = 8.dp,
-                        start = if (focused) 0.dp else 16.dp,
-                        end = 16.dp,
+                        vertical = 8.dp,
+                        horizontal = 16.dp,
                     ),
             ),
-        shape = CircleShape,
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        border = BorderStroke(
+            width = 2.dp,
+            color = borderColor,
+        ),
+        shadowElevation = if (focused) 8.dp else 4.dp,
     ) {
         Box(
             contentAlignment = Alignment.CenterStart,
@@ -131,7 +142,7 @@ private fun SearchTextField(
         ) {
             val isQueryEmpty = query.isEmpty()
             if (isQueryEmpty) {
-                SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
+                SearchHint(modifier.padding(start = 20.dp, end = 8.dp))
             }
 
             val focusManager = LocalFocusManager.current
@@ -147,20 +158,32 @@ private fun SearchTextField(
                             onSearchFocusChanged(it.isFocused)
                         }
                         .focusRequester(focusRequester)
-                        .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp),
+                        .padding(top = 9.dp, bottom = 8.dp, start = 20.dp, end = 8.dp),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search,
                     ),
                     keyboardActions = KeyboardActions { focusManager.clearFocus() },
-                    textStyle = TextStyle(MaterialTheme.colorScheme.onSurface),
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 16.sp,
+                    ),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                 )
 
-                if (!isQueryEmpty) {
-                    IconButton(onClick = onClearQueryClicked) {
+                AnimatedVisibility(
+                    visible = query.isNotEmpty(),
+                    enter = fadeIn() + scaleIn(),
+                    exit = fadeOut() + scaleOut(),
+                ) {
+                    IconButton(
+                        onClick = onClearQueryClicked,
+                        modifier = Modifier.alpha(clearButtonAlpha),
+                    ) {
                         Icon(
-                            imageVector = Icons.Default.Cancel,
+                            imageVector = Icons.Default.Close,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp),
                             contentDescription = null,
                         )
                     }
@@ -180,6 +203,7 @@ private fun SearchHint(modifier: Modifier) {
     ) {
         Text(
             text = stringResource(R.string.search_hint),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

@@ -68,6 +68,7 @@ export default function HomeScreen() {
         onFocused={onSearchFocused}
         onClearButtonClicked={onClearButtonClicked}
         onFilterButtonClicked={onFilterButtonClicked}
+        isTextInputEditable={!isBottomSheetOpen}
       />
 
       {isLoading && items.length === 0 ? (

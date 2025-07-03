@@ -4,7 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,24 +18,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -57,9 +57,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,7 +77,6 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.rlad.core.domain.model.DataSourceUiModel
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.feature.search.R
 import kotlinx.coroutines.flow.collectLatest
@@ -104,33 +107,42 @@ private fun SearchScreenContent(
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
-            SearchBar(
+            Row(
                 modifier = Modifier
                     .statusBarsPadding()
-                    .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)),
-                onQueryTextChanged = viewModel::onQueryTextChanged,
-                onClearSearchClicked = viewModel::onClearSearchClicked,
-            )
-        },
-        floatingActionButton = {
-            Column(
-                modifier = Modifier.systemBarsPadding(),
+                    .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                AnimatedVisibility(
-                    visible = isScrollToTopButtonVisible,
-                    enter = fadeIn(),
-                    exit = fadeOut(),
-                    modifier = Modifier.padding(bottom = 8.dp),
-                ) {
-                    FloatingActionButton(onClick = viewModel::onScrollToTopClicked) {
-                        Icon(imageVector = Icons.Default.ArrowUpward, contentDescription = null)
-                    }
-                }
+                SearchBar(
+                    modifier = Modifier.weight(1f),
+                    onQueryTextChanged = viewModel::onQueryTextChanged,
+                    onClearSearchClicked = viewModel::onClearSearchClicked,
+                )
 
                 FloatingActionButton(
                     onClick = { openBottomSheet = true },
+                    modifier = Modifier.size(52.dp),
+                    containerColor = MaterialTheme.colorScheme.primary,
                 ) {
-                    Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
+                    Icon(
+                        imageVector = Icons.Outlined.Tune,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        contentDescription = null,
+                    )
+                }
+            }
+        },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = isScrollToTopButtonVisible,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.systemBarsPadding(),
+            ) {
+                FloatingActionButton(onClick = viewModel::onScrollToTopClicked) {
+                    Icon(imageVector = Icons.Default.ArrowUpward, contentDescription = null)
                 }
             }
         },
@@ -154,7 +166,7 @@ private fun SearchScreenContent(
             onDismissRequest = { openBottomSheet = false },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         ) {
-            SheetContent(
+            DataSourceBottomSheetContent(
                 availableDataSources = viewModel.getAvailableDataSourcesUseCase().collectAsState(initial = emptyList()).value,
                 onDataSourceClicked = { dataSource ->
                     viewModel.onDataSourceClicked(dataSource)
@@ -162,61 +174,6 @@ private fun SearchScreenContent(
                 },
             )
         }
-    }
-}
-
-@Composable
-private fun SheetContent(
-    availableDataSources: List<DataSourceUiModel>,
-    onDataSourceClicked: (DataSourceUiModel) -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .navigationBarsPadding()
-            .padding(vertical = 16.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.data_source_picker_title),
-            modifier = Modifier.padding(
-                start = 24.dp,
-                end = 24.dp,
-                bottom = 16.dp,
-            ),
-            style = MaterialTheme.typography.titleLarge,
-        )
-
-        availableDataSources.forEach { uiDataSource ->
-            SheetItem(
-                text = uiDataSource.pickerText,
-                isSelected = uiDataSource.isSelected,
-                onSheetItemClicked = { onDataSourceClicked(uiDataSource) },
-            )
-        }
-    }
-}
-
-@Composable
-private fun SheetItem(
-    text: String,
-    isSelected: Boolean,
-    onSheetItemClicked: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .clickable(onClick = onSheetItemClicked)
-            .padding(horizontal = 24.dp, vertical = 16.dp)
-            .fillMaxWidth(),
-    ) {
-        if (isSelected) {
-            Icon(imageVector = Icons.Default.Check, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
-        } else {
-            Spacer(modifier = Modifier.width(32.dp))
-        }
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyLarge,
-        )
     }
 }
 
@@ -230,7 +187,6 @@ private fun SearchBar(
         modifier = modifier,
         onQueryChanged = onQueryTextChanged,
         onClearQueryClicked = onClearSearchClicked,
-        onBackClicked = onClearSearchClicked,
     )
 }
 
@@ -264,7 +220,7 @@ private fun EmptyState() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(horizontal = 32.dp, vertical = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.search_empty))
@@ -273,10 +229,25 @@ private fun EmptyState() {
             iterations = LottieConstants.IterateForever,
             modifier = Modifier.size(120.dp),
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
-            text = stringResource(R.string.search_no_results),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(top = 8.dp),
+            text = stringResource(R.string.search_no_results_title),
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Medium,
+            ),
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = stringResource(R.string.search_no_results_description),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -370,32 +341,64 @@ private fun ItemCard(item: ItemUiModel, onItemCardClicked: (String) -> Unit) {
     Card(
         onClick = { onItemCardClicked(item.id) },
         modifier = Modifier.padding(8.dp),
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 5.dp,
+            pressedElevation = 8.dp,
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        ),
     ) {
         Column {
-            AsyncImage(
-                model = item.imageUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(150.dp)
-                    .fillMaxWidth(),
-            )
+            Box {
+                AsyncImage(
+                    model = item.imageUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .height(150.dp)
+                        .fillMaxWidth(),
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Color.Black.copy(alpha = 0.2f),
+                                ),
+                            ),
+                        ),
+                )
+            }
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontSize = 16.sp,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        letterSpacing = 0.3.sp,
+                    ),
+                    fontSize = 17.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
 
                 Text(
                     text = item.cardCaption?.replace("\n", " ").orEmpty(),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 8.dp),
-                    maxLines = 1,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        lineHeight = 18.sp,
+                    ),
+                    modifier = Modifier.padding(top = 4.dp),
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
