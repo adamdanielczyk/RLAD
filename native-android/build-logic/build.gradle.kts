@@ -4,9 +4,11 @@ plugins {
 
 dependencies {
     implementation(libs.gradlePlugin.android)
+    implementation(libs.gradlePlugin.compose.multiplatform)
     implementation(libs.gradlePlugin.hilt)
     implementation(libs.gradlePlugin.kotlin)
     implementation(libs.gradlePlugin.kotlin.compose)
+    implementation(libs.gradlePlugin.kotlin.multiplatform)
     implementation(libs.gradlePlugin.kotlin.serialization)
     implementation(libs.gradlePlugin.ksp)
     implementation(libs.gradlePlugin.room)

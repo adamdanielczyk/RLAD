@@ -1,0 +1,244 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "c6e3fdabdb10d068697a2445e9f805d9",
+    "entities": [
+      {
+        "tableName": "rickandmorty_character",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `status` INTEGER NOT NULL, `species` TEXT NOT NULL, `type` TEXT, `gender` INTEGER NOT NULL, `image` TEXT NOT NULL, `created` TEXT NOT NULL, `location_name` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "species",
+            "columnName": "species",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created",
+            "columnName": "created",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location.name",
+            "columnName": "location_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "giphy_gif",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `giphy_id` TEXT NOT NULL, `title` TEXT NOT NULL, `image` TEXT NOT NULL, `username` TEXT NOT NULL, `import_datetime` TEXT NOT NULL, `trending_datetime` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "giphyId",
+            "columnName": "giphy_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "importDatetime",
+            "columnName": "import_datetime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trendingDatetime",
+            "columnName": "trending_datetime",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_giphy_gif_giphy_id",
+            "unique": true,
+            "columnNames": [
+              "giphy_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_giphy_gif_giphy_id` ON `${TABLE_NAME}` (`giphy_id`)"
+          }
+        ]
+      },
+      {
+        "tableName": "artic_artwork",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `artic_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `image_id` TEXT NOT NULL, `artist_title` TEXT, `artist_display` TEXT, `department_title` TEXT, `place_of_origin` TEXT, `alt_text` TEXT, `date_display` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "articId",
+            "columnName": "artic_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageId",
+            "columnName": "image_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "artistTitle",
+            "columnName": "artist_title",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "artistDisplay",
+            "columnName": "artist_display",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "departmentTitle",
+            "columnName": "department_title",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeOfOrigin",
+            "columnName": "place_of_origin",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "altText",
+            "columnName": "alt_text",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dateDisplay",
+            "columnName": "date_display",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_artic_artwork_artic_id",
+            "unique": true,
+            "columnNames": [
+              "artic_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_artic_artwork_artic_id` ON `${TABLE_NAME}` (`artic_id`)"
+          }
+        ]
+      },
+      {
+        "tableName": "app_preferences",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`preference_key` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`preference_key`))",
+        "fields": [
+          {
+            "fieldPath": "key",
+            "columnName": "preference_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "preference_key"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c6e3fdabdb10d068697a2445e9f805d9')"
+    ]
+  }
+}

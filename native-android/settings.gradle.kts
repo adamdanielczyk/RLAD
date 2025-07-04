@@ -29,6 +29,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "rlad"
 include(":app")
+include(":shared")
+include(":composeApp")
+include(":androidApp")
 includeAll(directory = "feature")
 includeAll(directory = "core")
 

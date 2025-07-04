@@ -6,6 +6,11 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.the
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
+object GradleConfiguration {
+    const val compileSdk = 36
+    const val minSdk = 26
+}
+
 internal val Project.libs
     get() = the<LibrariesForLibs>()
 
