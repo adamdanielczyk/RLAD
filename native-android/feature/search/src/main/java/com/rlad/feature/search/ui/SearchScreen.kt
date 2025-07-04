@@ -302,7 +302,7 @@ private fun PullRefreshWithGrid(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter,
         onRefresh = lazyPagingItems::refresh,
-        isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading,
+        isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading && lazyPagingItems.itemCount > 0,
     ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 150.dp),
