@@ -79,6 +79,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.feature.search.R
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
@@ -119,6 +120,7 @@ private fun SearchScreenContent(
                     modifier = Modifier.weight(1f),
                     onQueryTextChanged = viewModel::onQueryTextChanged,
                     onClearSearchClicked = viewModel::onClearSearchClicked,
+                    clearSearch = viewModel.clearSearch,
                 )
 
                 FloatingActionButton(
@@ -182,11 +184,13 @@ private fun SearchBar(
     modifier: Modifier,
     onQueryTextChanged: (String) -> Unit,
     onClearSearchClicked: () -> Unit,
+    clearSearch: Flow<Unit>,
 ) {
     SearchBar(
         modifier = modifier,
         onQueryChanged = onQueryTextChanged,
         onClearQueryClicked = onClearSearchClicked,
+        clearSearch = clearSearch,
     )
 }
 
@@ -302,7 +306,7 @@ private fun PullRefreshWithGrid(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter,
         onRefresh = lazyPagingItems::refresh,
-        isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading,
+        isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading && lazyPagingItems.itemCount > 0,
     ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 150.dp),

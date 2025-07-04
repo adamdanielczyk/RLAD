@@ -1,55 +1,56 @@
 package com.rlad.core.infrastructure.rickandmorty.remote
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 internal data class ServerGetCharacters(
-    @Json(name = "results") val results: List<ServerCharacter>,
+    @SerialName("results") val results: List<ServerCharacter> = emptyList(),
+    @SerialName("error") val error: String? = null,
 )
 
-@JsonClass(generateAdapter = true)
+@Serializable
 internal data class ServerCharacter(
-    @Json(name = "id") val id: Int,
-    @Json(name = "name") val name: String,
-    @Json(name = "status") val status: Status,
-    @Json(name = "species") val species: String,
-    @Json(name = "type") val type: String,
-    @Json(name = "gender") val gender: Gender,
-    @Json(name = "location") val location: Location,
-    @Json(name = "image") val imageUrl: String,
-    @Json(name = "created") val created: String,
+    @SerialName("id") val id: Int,
+    @SerialName("name") val name: String,
+    @SerialName("status") val status: Status,
+    @SerialName("species") val species: String,
+    @SerialName("type") val type: String,
+    @SerialName("gender") val gender: Gender,
+    @SerialName("location") val location: Location,
+    @SerialName("image") val imageUrl: String,
+    @SerialName("created") val created: String,
 ) {
 
-    @JsonClass(generateAdapter = false)
+    @Serializable
     enum class Status {
-        @Json(name = "Alive")
+        @SerialName("Alive")
         ALIVE,
 
-        @Json(name = "Dead")
+        @SerialName("Dead")
         DEAD,
 
-        @Json(name = "unknown")
+        @SerialName("unknown")
         UNKNOWN
     }
 
-    @JsonClass(generateAdapter = false)
+    @Serializable
     enum class Gender {
-        @Json(name = "Female")
+        @SerialName("Female")
         FEMALE,
 
-        @Json(name = "Male")
+        @SerialName("Male")
         MALE,
 
-        @Json(name = "Genderless")
+        @SerialName("Genderless")
         GENDERLESS,
 
-        @Json(name = "unknown")
+        @SerialName("unknown")
         UNKNOWN
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class Location(
-        @Json(name = "name") val name: String,
+        @SerialName("name") val name: String,
     )
 }

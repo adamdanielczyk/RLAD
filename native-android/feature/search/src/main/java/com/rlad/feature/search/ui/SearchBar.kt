@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +54,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rlad.feature.search.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Simplified version of SearchBar implemented in https://github.com/SmartToolFactory/Jetpack-Compose-Tutorials
@@ -63,12 +66,25 @@ internal fun SearchBar(
     onQueryChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit = {},
     onClearQueryClicked: () -> Unit,
+    clearSearch: Flow<Unit>,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     var focused by rememberSaveable { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    fun clearQuery() {
+        query = ""
+        focusManager.clearFocus()
+        keyboardController?.hide()
+    }
+
+    LaunchedEffect(clearSearch) {
+        clearSearch.collectLatest {
+            clearQuery()
+        }
+    }
 
     Row(
         modifier = modifier
@@ -87,10 +103,8 @@ internal fun SearchBar(
                 onSearchFocusChanged(newFocused)
             },
             {
-                query = ""
+                clearQuery()
                 onClearQueryClicked()
-                focusManager.clearFocus()
-                keyboardController?.hide()
             },
             focused,
         )
@@ -154,7 +168,7 @@ private fun RowScope.SearchTextField(
                             onSearchFocusChanged(it.isFocused)
                         }
                         .focusRequester(focusRequester)
-                        .padding(top = 9.dp, bottom = 8.dp, start = 20.dp, end = 8.dp),
+                        .padding(top = 8.dp, bottom = 8.dp, start = 20.dp, end = 8.dp),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search,
