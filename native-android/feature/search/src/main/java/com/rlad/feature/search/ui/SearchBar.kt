@@ -154,7 +154,7 @@ private fun RowScope.SearchTextField(
                             onSearchFocusChanged(it.isFocused)
                         }
                         .focusRequester(focusRequester)
-                        .padding(top = 9.dp, bottom = 8.dp, start = 20.dp, end = 8.dp),
+                        .padding(top = 8.dp, bottom = 8.dp, start = 20.dp, end = 8.dp),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search,
