@@ -8,6 +8,7 @@ internal class ArticRemoteDataSource @Inject constructor(
 ) : CommonRemoteDataSource<ServerArtworksRoot, ServerArtwork> {
 
     override suspend fun getRootData(offset: Int, pageSize: Int): ServerArtworksRoot = articApi.artworks(
+        query = null,
         from = offset,
         size = pageSize,
     )
@@ -23,7 +24,7 @@ internal class ArticRemoteDataSource @Inject constructor(
 
     override fun getInitialPagingOffset(): Int = 0
 
-    override suspend fun search(query: String, offset: Int, pageSize: Int): ServerArtworksRoot = articApi.search(
+    override suspend fun search(query: String, offset: Int, pageSize: Int): ServerArtworksRoot = articApi.artworks(
         query = query,
         from = offset,
         size = pageSize,

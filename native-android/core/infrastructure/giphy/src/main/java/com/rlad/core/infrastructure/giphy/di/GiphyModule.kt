@@ -26,8 +26,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -36,7 +40,7 @@ import javax.inject.Singleton
 internal interface GiphyModule {
 
     @Qualifier
-    annotation class GiphyRetrofit
+    annotation class GiphyHttpClient
 
     companion object {
 
@@ -53,15 +57,23 @@ internal interface GiphyModule {
 
         @Provides
         @Singleton
-        @GiphyRetrofit
-        fun retrofit(): Retrofit = Retrofit.Builder()
-            .baseUrl("https://api.giphy.com")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
+        @GiphyHttpClient
+        fun httpClient(): HttpClient = HttpClient(Android) {
+            defaultRequest {
+                url("https://api.giphy.com")
+            }
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                    },
+                )
+            }
+        }
 
         @Provides
         @Singleton
-        fun api(@GiphyRetrofit retrofit: Retrofit): GiphyApi = retrofit.create(GiphyApi::class.java)
+        fun api(@GiphyHttpClient httpClient: HttpClient): GiphyApi = GiphyApi(httpClient)
     }
 
     @Binds
