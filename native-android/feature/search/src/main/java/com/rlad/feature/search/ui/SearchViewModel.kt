@@ -32,6 +32,9 @@ internal class SearchViewModel @Inject constructor(
     private val _scrollToTop = Channel<Unit>(Channel.BUFFERED)
     val scrollToTop = _scrollToTop.receiveAsFlow()
 
+    private val _clearSearch = Channel<Unit>(Channel.BUFFERED)
+    val clearSearch = _clearSearch.receiveAsFlow()
+
     private var debounceJob: Job? = null
 
     init {
@@ -79,6 +82,7 @@ internal class SearchViewModel @Inject constructor(
 
     fun onDataSourceClicked(dataSource: DataSourceUiModel) {
         viewModelScope.launch {
+            _clearSearch.send(Unit)
             appSettingsRepository.saveSelectedDataSourceName(dataSource.name)
             displayAllItems()
         }
