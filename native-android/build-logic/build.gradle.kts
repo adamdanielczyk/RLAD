@@ -3,12 +3,13 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.android.gradlePlugin)
-    implementation(libs.hilt.gradlePlugin)
-    implementation(libs.kotlin.compose.gradlePlugin)
-    implementation(libs.kotlin.gradlePlugin)
-    implementation(libs.ksp.gradlePlugin)
-    implementation(libs.room.gradlePlugin)
+    implementation(libs.gradlePlugin.android)
+    implementation(libs.gradlePlugin.hilt)
+    implementation(libs.gradlePlugin.kotlin)
+    implementation(libs.gradlePlugin.kotlin.compose)
+    implementation(libs.gradlePlugin.kotlin.serialization)
+    implementation(libs.gradlePlugin.ksp)
+    implementation(libs.gradlePlugin.room)
 
     // workaround to enable version catalog in build-logic
     // see https://github.com/gradle/gradle/issues/15383

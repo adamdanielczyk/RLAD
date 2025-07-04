@@ -1,19 +1,28 @@
 package com.rlad.core.infrastructure.rickandmorty.remote
 
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import javax.inject.Inject
 
-internal interface RickAndMortyApi {
+internal class RickAndMortyApi @Inject constructor(
+    private val httpClient: HttpClient,
+) {
 
-    @GET("/api/character/")
     suspend fun getCharacters(
-        @Query("page") page: Int,
-        @Query("name") name: String?,
-    ): ServerGetCharacters
+        page: Int,
+        name: String?,
+    ): ServerGetCharacters = httpClient.get("/api/character/") {
+        parameter("page", page)
+        if (name != null) {
+            parameter("name", name)
+        }
+    }.body()
 
-    @GET("/api/character/{id}")
     suspend fun getCharacter(
-        @Path("id") id: Int,
-    ): ServerCharacter
+        id: Int,
+    ): ServerCharacter {
+        return httpClient.get("/api/character/$id").body()
+    }
 }

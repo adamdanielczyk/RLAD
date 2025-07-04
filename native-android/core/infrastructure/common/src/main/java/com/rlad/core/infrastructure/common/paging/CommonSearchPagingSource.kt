@@ -6,9 +6,10 @@ import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import retrofit2.HttpException
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.ServerResponseException
+import io.ktor.http.HttpStatusCode
 import java.io.IOException
-import java.net.HttpURLConnection
 
 class CommonSearchPagingSource<RemoteModel : Any, RootRemoteData : Any> @AssistedInject constructor(
     private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
@@ -36,8 +37,8 @@ class CommonSearchPagingSource<RemoteModel : Any, RootRemoteData : Any> @Assiste
         )
     } catch (exception: IOException) {
         LoadResult.Error(exception)
-    } catch (exception: HttpException) {
-        if (exception.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+    } catch (exception: ClientRequestException) {
+        if (exception.response.status == HttpStatusCode.NotFound) {
             LoadResult.Page(
                 data = emptyList(),
                 prevKey = null,
@@ -46,6 +47,8 @@ class CommonSearchPagingSource<RemoteModel : Any, RootRemoteData : Any> @Assiste
         } else {
             LoadResult.Error(exception)
         }
+    } catch (exception: ServerResponseException) {
+        LoadResult.Error(exception)
     }
 
     override fun getRefreshKey(state: PagingState<Int, RemoteModel>): Int = remoteDataSource.getInitialPagingOffset()

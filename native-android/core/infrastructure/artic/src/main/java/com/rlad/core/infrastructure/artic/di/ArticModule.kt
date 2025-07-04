@@ -26,8 +26,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -36,7 +40,7 @@ import javax.inject.Singleton
 internal interface ArticModule {
 
     @Qualifier
-    annotation class ArticRetrofit
+    annotation class ArticHttpClient
 
     companion object {
 
@@ -53,15 +57,24 @@ internal interface ArticModule {
 
         @Provides
         @Singleton
-        @ArticRetrofit
-        fun retrofit(): Retrofit = Retrofit.Builder()
-            .baseUrl("https://api.artic.edu")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
+        @ArticHttpClient
+        fun httpClient(): HttpClient = HttpClient(Android) {
+            defaultRequest {
+                url("https://api.artic.edu")
+            }
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        coerceInputValues = true
+                    },
+                )
+            }
+        }
 
         @Provides
         @Singleton
-        fun api(@ArticRetrofit retrofit: Retrofit): ArticApi = retrofit.create(ArticApi::class.java)
+        fun api(@ArticHttpClient httpClient: HttpClient): ArticApi = ArticApi(httpClient)
     }
 
     @Binds

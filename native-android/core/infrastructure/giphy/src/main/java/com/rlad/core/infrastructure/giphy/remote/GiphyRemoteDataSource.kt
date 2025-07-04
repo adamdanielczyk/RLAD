@@ -1,7 +1,6 @@
 package com.rlad.core.infrastructure.giphy.remote
 
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
-import com.rlad.core.infrastructure.giphy.BuildConfig
 import javax.inject.Inject
 
 internal class GiphyRemoteDataSource @Inject constructor(
@@ -9,7 +8,6 @@ internal class GiphyRemoteDataSource @Inject constructor(
 ) : CommonRemoteDataSource<ServerGifsRoot, ServerGif> {
 
     override suspend fun getRootData(offset: Int, pageSize: Int): ServerGifsRoot = giphyApi.trendingGifs(
-        apiKey = BuildConfig.GIPHY_API_KEY,
         offset = offset,
         limit = pageSize,
     )
@@ -18,7 +16,6 @@ internal class GiphyRemoteDataSource @Inject constructor(
 
     override suspend fun getItem(id: String): ServerGif = giphyApi.getGif(
         gifId = id,
-        apiKey = BuildConfig.GIPHY_API_KEY,
     ).data
 
     override fun getNextPagingOffset(rootData: ServerGifsRoot, currentlyLoadedPage: Int): Int {
@@ -29,7 +26,6 @@ internal class GiphyRemoteDataSource @Inject constructor(
     override fun getInitialPagingOffset(): Int = 0
 
     override suspend fun search(query: String, offset: Int, pageSize: Int): ServerGifsRoot = giphyApi.searchGifs(
-        apiKey = BuildConfig.GIPHY_API_KEY,
         offset = offset,
         limit = pageSize,
         query = query,

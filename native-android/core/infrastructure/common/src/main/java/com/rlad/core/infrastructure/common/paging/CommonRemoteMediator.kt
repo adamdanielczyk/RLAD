@@ -7,7 +7,8 @@ import androidx.paging.RemoteMediator
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
-import retrofit2.HttpException
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.ServerResponseException
 import java.io.IOException
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
@@ -49,7 +50,9 @@ class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData :
             )
         } catch (exception: IOException) {
             MediatorResult.Error(exception)
-        } catch (exception: HttpException) {
+        } catch (exception: ClientRequestException) {
+            MediatorResult.Error(exception)
+        } catch (exception: ServerResponseException) {
             MediatorResult.Error(exception)
         }
     }
