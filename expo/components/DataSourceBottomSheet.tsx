@@ -4,14 +4,19 @@ import { DataSourceType } from "@/lib/ui/uiModelTypes";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
 import { useTheme } from "@react-navigation/native";
 import React, { useCallback, useEffect, useRef } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export const DataSourceBottomSheet = () => {
   const bottomSheetRef = useRef<BottomSheet | null>(null);
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
-  
+
+  const { width } = useWindowDimensions();
+  const maxWidth = Math.min(width - 32, 480);
+  const isWide = width > 768;
+  const sideMargin = isWide ? (width - maxWidth) / 2 : 0;
+
   const isBottomSheetOpen = useAppStore((state) => state.isBottomSheetOpen);
   const selectedDataSource = useAppStore((state) => state.selectedDataSource);
   const onDataSourceSelected = useAppStore((state) => state.onDataSourceSelected);
@@ -56,49 +61,30 @@ export const DataSourceBottomSheet = () => {
     ({ item }: { item: (typeof DATA_SOURCES)[number] }) => (
       <TouchableOpacity
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          paddingVertical: 18,
-          gap: 16,
-          paddingHorizontal: 16,
-          marginBottom: 4,
+          backgroundColor: item.type === selectedDataSource ? colors.primary : colors.card,
+          borderRadius: 16,
+          padding: 20,
+          marginBottom: 12,
+          borderWidth: 2,
+          borderColor: item.type === selectedDataSource ? colors.primary : "transparent",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 2,
         }}
         onPress={() => handleDataSourceSelected(item.type)}
       >
         <Text
           style={{
-            color: colors.text,
+            color: item.type === selectedDataSource ? "white" : colors.text,
             fontSize: 16,
-            fontWeight: item.type === selectedDataSource ? "600" : "400",
+            fontWeight: "600",
+            textAlign: "center",
             letterSpacing: 0.3,
-            flex: 1,
           }}
         >
           {item.name}
         </Text>
-        <View
-          style={{
-            width: 20,
-            height: 20,
-            borderRadius: 10,
-            borderWidth: 2,
-            borderColor: item.type === selectedDataSource ? colors.primary : colors.border,
-            backgroundColor: item.type === selectedDataSource ? colors.primary : "transparent",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {item.type === selectedDataSource && (
-            <View
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                backgroundColor: "white",
-              }}
-            />
-          )}
-        </View>
       </TouchableOpacity>
     ),
     [handleDataSourceSelected, selectedDataSource, colors],
@@ -115,7 +101,10 @@ export const DataSourceBottomSheet = () => {
       onChange={handleSheetChanges}
       backgroundStyle={{ backgroundColor: colors.background }}
       handleIndicatorStyle={{ backgroundColor: colors.text }}
-      style={{ marginLeft: insets.left, marginRight: insets.right }}
+      style={{
+        marginLeft: sideMargin || insets.left,
+        marginRight: sideMargin || insets.right,
+      }}
     >
       <BottomSheetView
         style={{ paddingHorizontal: 32, paddingTop: 32, paddingBottom: insets.bottom }}
