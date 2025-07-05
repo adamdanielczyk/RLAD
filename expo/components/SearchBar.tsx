@@ -95,7 +95,7 @@ export const SearchBar = ({ hasItems }: { hasItems: boolean }) => {
       />
       <ActionButton
         onPress={toggleViewMode}
-        icon="apps"
+        icon="reorder-four"
         isPrimary={false}
         enabled={hasItems}
       />
