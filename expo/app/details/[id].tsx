@@ -1,7 +1,6 @@
 import { FullScreenErrorView } from "@/components/FullScreenErrorView";
 import { ItemDetails } from "@/components/ItemDetails";
 import { useItemByIdQuery } from "@/lib/queries/useItemsQuery";
-import { shareItem } from "@/lib/services/shareService";
 import { DataSourceType } from "@/lib/ui/uiModelTypes";
 import { useTheme } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
@@ -27,12 +26,7 @@ export default function DetailsScreen() {
     }
 
     if (item) {
-      return (
-        <ItemDetails
-          item={item}
-          onShare={() => shareItem(item.imageUrl, item.name)}
-        />
-      );
+      return <ItemDetails item={item} />;
     } else {
       return <FullScreenErrorView />;
     }

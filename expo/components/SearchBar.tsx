@@ -5,11 +5,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
-interface SearchBarProps {
-  hasItems?: boolean;
-}
-
-export const SearchBar = ({ hasItems = true }: SearchBarProps) => {
+export const SearchBar = ({ hasItems }: { hasItems: boolean }) => {
   const router = useRouter();
   const textInputRef = useRef<TextInput | null>(null);
   const { colors } = useTheme();

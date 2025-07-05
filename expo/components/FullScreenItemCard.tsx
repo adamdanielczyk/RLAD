@@ -1,4 +1,5 @@
 import { IconButton } from "@/components/IconButton";
+import { shareItem } from "@/lib/services/shareService";
 import { useAppStore } from "@/lib/store/appStore";
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 import { useTheme } from "@react-navigation/native";
@@ -9,18 +10,8 @@ import React from "react";
 import { Dimensions, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-interface FullScreenItemCardProps {
-  item: ItemUiModel;
-}
-
-export function FullScreenItemCard({ item }: FullScreenItemCardProps) {
-  const router = useRouter();
-  const { colors } = useTheme();
-  const insets = useSafeAreaInsets();
+export function FullScreenItemCard({ item }: { item: ItemUiModel }) {
   const { width, height } = Dimensions.get("window");
-
-  const isFavoriteItem = useAppStore((state) => state.isFavorite(item.id));
-  const toggleFavorite = useAppStore((state) => state.toggleFavorite);
 
   return (
     <View
@@ -51,40 +42,19 @@ export function FullScreenItemCard({ item }: FullScreenItemCardProps) {
         }}
       />
 
-      <SideControls
-        insets={insets}
-        isFavoriteItem={isFavoriteItem}
-        colors={colors}
-        handleFavoritePress={() => toggleFavorite(item)}
-        handlePress={() =>
-          router.push({
-            pathname: "/details/[id]",
-            params: { id: item.id, dataSource: item.dataSource },
-          })
-        }
-      />
-
-      <ItemInfo
-        item={item}
-        insets={insets}
-      />
+      <SideControls item={item} />
+      <ItemInfo item={item} />
     </View>
   );
 }
 
-function SideControls({
-  insets,
-  isFavoriteItem,
-  colors,
-  handleFavoritePress,
-  handlePress,
-}: {
-  insets: { bottom: number };
-  isFavoriteItem: boolean;
-  colors: { primary: string };
-  handleFavoritePress: () => void;
-  handlePress: () => void;
-}) {
+function SideControls({ item }: { item: ItemUiModel }) {
+  const router = useRouter();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
+  const isFavoriteItem = useAppStore((state) => state.isFavorite(item.id));
+  const toggleFavorite = useAppStore((state) => state.toggleFavorite);
+
   return (
     <View
       style={{
@@ -96,20 +66,32 @@ function SideControls({
       }}
     >
       <IconButton
-        onPress={handleFavoritePress}
+        onPress={() => toggleFavorite(item)}
         iconName={isFavoriteItem ? "heart" : "heart-outline"}
         color={isFavoriteItem ? colors.primary : "white"}
       />
 
       <IconButton
-        onPress={handlePress}
+        onPress={() => shareItem(item)}
+        iconName="share-social-outline"
+      />
+
+      <IconButton
+        onPress={() =>
+          router.push({
+            pathname: "/details/[id]",
+            params: { id: item.id, dataSource: item.dataSource },
+          })
+        }
         iconName="open-outline"
       />
     </View>
   );
 }
 
-function ItemInfo({ item, insets }: { item: ItemUiModel; insets: { bottom: number } }) {
+function ItemInfo({ item }: { item: ItemUiModel }) {
+  const insets = useSafeAreaInsets();
+
   return (
     <View
       style={{
