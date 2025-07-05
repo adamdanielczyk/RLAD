@@ -40,6 +40,7 @@ const mapGiphyGifToItem = (gif: GiphyGif): ItemUiModel => {
     imageUrl: gif.images.fixed_width.url,
     name: gif.title || "Untitled GIF",
     cardCaption: username !== "Unknown" ? `by ${username}` : undefined,
+    dataSource: "giphy",
     detailsKeyValues: [
       { key: "Title", value: gif.title || "Untitled" },
       { key: "Creator", value: username },

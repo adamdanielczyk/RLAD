@@ -1,3 +1,4 @@
+import { useAppStore } from "@/lib/store/appStore";
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
@@ -5,7 +6,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Dimensions, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
@@ -21,17 +22,22 @@ export function ItemDetails({ item, onShare }: { item: ItemUiModel; onShare: () 
         <HeroImage item={item} />
         <MainContent item={item} />
       </ScrollView>
-      <HeaderButtons onShare={onShare} />
+      <HeaderButtons
+        item={item}
+        onShare={onShare}
+      />
     </View>
   );
 }
 
-function HeaderButtons({ onShare }: { onShare: () => void }) {
+function HeaderButtons({ item, onShare }: { item: ItemUiModel; onShare: () => void }) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { colors } = useTheme();
+  const isFavoriteItem = useAppStore((state) => state.isFavorite(item.id));
+  const toggleFavorite = useAppStore((state) => state.toggleFavorite);
 
-  const button = (icon: keyof typeof Ionicons.glyphMap, onPress: () => void) => {
+  const button = (icon: keyof typeof Ionicons.glyphMap, color: string, onPress: () => void) => {
     return (
       <TouchableOpacity
         onPress={onPress}
@@ -52,7 +58,7 @@ function HeaderButtons({ onShare }: { onShare: () => void }) {
         <Ionicons
           name={icon}
           size={24}
-          color={colors.text}
+          color={color}
         />
       </TouchableOpacity>
     );
@@ -62,7 +68,7 @@ function HeaderButtons({ onShare }: { onShare: () => void }) {
     <View
       style={{
         position: "absolute",
-        top: 16 + insets.top,
+        top: Platform.OS === "ios" ? 32 : 16 + insets.top,
         left: 16 + insets.left,
         right: 16 + insets.right,
         flexDirection: "row",
@@ -70,8 +76,15 @@ function HeaderButtons({ onShare }: { onShare: () => void }) {
         alignItems: "center",
       }}
     >
-      {button("close", () => router.back())}
-      {button("share-outline", onShare)}
+      {button("close", colors.text, () => router.back())}
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        {button(
+          isFavoriteItem ? "heart" : "heart-outline",
+          isFavoriteItem ? colors.primary : colors.text,
+          () => toggleFavorite(item),
+        )}
+        {button("share-outline", colors.text, onShare)}
+      </View>
     </View>
   );
 }

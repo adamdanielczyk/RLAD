@@ -1,8 +1,9 @@
-import { DataSourceType } from "@/lib/ui/uiModelTypes";
+import { DataSourceType, ItemUiModel } from "@/lib/ui/uiModelTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 
 const DATA_SOURCE_STORAGE_KEY = "selected_data_source";
+const FAVORITES_STORAGE_KEY = "favorites";
 const DEFAULT_DATA_SOURCE: DataSourceType = "giphy";
 
 interface AppState {
@@ -20,6 +21,10 @@ interface AppState {
 
   isBottomSheetOpen: boolean;
   onBottomSheetClosed: () => void;
+
+  favorites: ItemUiModel[];
+  isFavorite: (itemId: string) => boolean;
+  toggleFavorite: (item: ItemUiModel) => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set, get) => {
@@ -28,18 +33,27 @@ export const useAppStore = create<AppState>((set, get) => {
     searchQuery: "",
     isSearchFocused: false,
     isBottomSheetOpen: false,
+    favorites: [],
 
     initialize: async () => {
       try {
-        const savedDataSource = await AsyncStorage.getItem(DATA_SOURCE_STORAGE_KEY);
+        const [savedDataSource, savedFavorites] = await Promise.all([
+          AsyncStorage.getItem(DATA_SOURCE_STORAGE_KEY),
+          AsyncStorage.getItem(FAVORITES_STORAGE_KEY),
+        ]);
+
         set({
           selectedDataSource: savedDataSource
             ? (savedDataSource as DataSourceType)
             : DEFAULT_DATA_SOURCE,
+          favorites: savedFavorites ? JSON.parse(savedFavorites) : [],
         });
       } catch (error) {
-        console.error("Failed to load selected data source:", error);
-        set({ selectedDataSource: DEFAULT_DATA_SOURCE });
+        console.error("Failed to load app data:", error);
+        set({
+          selectedDataSource: DEFAULT_DATA_SOURCE,
+          favorites: [],
+        });
       }
     },
 
@@ -84,6 +98,30 @@ export const useAppStore = create<AppState>((set, get) => {
       set({
         isBottomSheetOpen: false,
       });
+    },
+
+    isFavorite: (itemId: string) => {
+      const { favorites } = get();
+      return favorites.some((item) => item.id === itemId);
+    },
+
+    toggleFavorite: async (item: ItemUiModel) => {
+      const { favorites } = get();
+      const isFavorited = favorites.some((fav) => fav.id === item.id);
+
+      let newFavorites: ItemUiModel[];
+      if (isFavorited) {
+        newFavorites = favorites.filter((fav) => fav.id !== item.id);
+      } else {
+        newFavorites = [...favorites, item];
+      }
+
+      try {
+        await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(newFavorites));
+        set({ favorites: newFavorites });
+      } catch (error) {
+        console.error("Failed to save favorites:", error);
+      }
     },
   };
 });

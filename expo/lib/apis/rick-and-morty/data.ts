@@ -46,6 +46,7 @@ const mapRickAndMortyCharacterToItem = (character: RickAndMortyCharacter): ItemU
     imageUrl: character.image,
     name: character.name,
     cardCaption: `${character.species}`,
+    dataSource: "rick-and-morty",
     detailsKeyValues: [
       { key: "Name", value: character.name },
       { key: "Status", value: character.status },

@@ -2,18 +2,17 @@ import { useItemsQuery } from "@/lib/queries/useItemsQuery";
 import { useAppStore } from "@/lib/store/appStore";
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo } from "react";
-import { ActivityIndicator, RefreshControl, Text, useWindowDimensions, View } from "react-native";
+import { ActivityIndicator, RefreshControl, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { DataSourceBottomSheet } from "@/components/DataSourceBottomSheet";
+import { EmptyView } from "@/components/EmptyView";
 import { ItemCard } from "@/components/ItemCard";
 import { SearchBar } from "@/components/SearchBar";
+import { useColumns } from "@/lib/hooks/useColumns";
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
-import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { useTheme } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
-
-const ITEM_MIN_WIDTH = 150;
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -35,10 +34,7 @@ export default function HomeScreen() {
   const { items, isLoading, isRefetching, isFetching, isFetchingNextPage, loadMoreItems, refetch } =
     useItemsQuery(selectedDataSource, searchQuery);
 
-  const { width } = useWindowDimensions();
-  const numColumns = useMemo(() => {
-    return Math.max(1, Math.floor(width / ITEM_MIN_WIDTH));
-  }, [width]);
+  const numColumns = useColumns();
   const listKey = useMemo(() => `list-${selectedDataSource}`, [selectedDataSource]);
 
   const renderItem = useCallback(
@@ -48,7 +44,7 @@ export default function HomeScreen() {
         onPress={(item) =>
           router.push({
             pathname: "/details/[id]",
-            params: { id: item.id },
+            params: { id: item.id, dataSource: item.dataSource },
           })
         }
       />
@@ -68,6 +64,7 @@ export default function HomeScreen() {
         onFocused={onSearchFocused}
         onClearButtonClicked={onClearButtonClicked}
         onFilterButtonClicked={onFilterButtonClicked}
+        onFavoritesButtonClicked={() => router.push("/favorites")}
         isTextInputEditable={!isBottomSheetOpen}
       />
 
@@ -94,9 +91,16 @@ export default function HomeScreen() {
           onEndReached={loadMoreItems}
           onEndReachedThreshold={2}
           ListFooterComponent={isFetchingNextPage ? <FooterLoader /> : null}
-          ListEmptyComponent={!isFetching ? <EmptyStateView /> : null}
+          ListEmptyComponent={
+            !isFetching ? (
+              <EmptyView
+                icon="search-outline"
+                title="No items found"
+                description="Try adjusting your search or data source"
+              />
+            ) : null
+          }
           removeClippedSubviews
-          drawDistance={500}
           keyboardDismissMode="on-drag"
         />
       )}
@@ -108,50 +112,6 @@ export default function HomeScreen() {
         onDataSourceSelected={onDataSourceSelected}
       />
     </SafeAreaView>
-  );
-}
-
-function EmptyStateView() {
-  const { colors } = useTheme();
-  return (
-    <View
-      style={{
-        flex: 1,
-        padding: 32,
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: 200,
-      }}
-    >
-      <Ionicons
-        name="search-outline"
-        size={64}
-        color={colors.text}
-        style={{ opacity: 0.3, marginBottom: 16 }}
-      />
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: 18,
-          fontWeight: "600",
-          color: colors.text,
-          marginBottom: 8,
-          letterSpacing: 0.3,
-        }}
-      >
-        No items found
-      </Text>
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: 14,
-          color: colors.text,
-          opacity: 0.6,
-        }}
-      >
-        Try adjusting your search or data source
-      </Text>
-    </View>
   );
 }
 

@@ -10,6 +10,7 @@ interface SearchBarProps {
   onFocused: (isFocused: boolean) => void;
   onClearButtonClicked: () => void;
   onFilterButtonClicked: () => void;
+  onFavoritesButtonClicked: () => void;
   isTextInputEditable: boolean;
 }
 
@@ -20,10 +21,41 @@ export const SearchBar = ({
   onFocused,
   onClearButtonClicked,
   onFilterButtonClicked,
+  onFavoritesButtonClicked,
   isTextInputEditable,
 }: SearchBarProps) => {
   const textInputRef = useRef<TextInput | null>(null);
   const { colors } = useTheme();
+
+  const createActionButton = (
+    onPress: () => void,
+    icon: keyof typeof Ionicons.glyphMap,
+    isPrimary: boolean,
+  ) => (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        {
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 16,
+          backgroundColor: isPrimary ? colors.primary : colors.card,
+          width: 48,
+          height: 48,
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+          elevation: 5,
+        },
+      ]}
+    >
+      <Ionicons
+        name={icon}
+        size={20}
+        color={isPrimary ? "white" : colors.primary}
+      />
+    </TouchableOpacity>
+  );
 
   useEffect(() => {
     if (isFocused) {
@@ -37,16 +69,15 @@ export const SearchBar = ({
     <View
       style={{
         margin: 16,
+        gap: 16,
         flexDirection: "row",
         alignItems: "center",
-        gap: 12,
       }}
     >
       <View
         style={{
           flex: 1,
           height: 48,
-          marginHorizontal: 16,
           flexDirection: "row",
           alignItems: "center",
           borderRadius: 24,
@@ -94,27 +125,8 @@ export const SearchBar = ({
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        onPress={onFilterButtonClicked}
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 16,
-          backgroundColor: colors.primary,
-          width: 48,
-          height: 48,
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.2,
-          shadowRadius: 8,
-          elevation: 5,
-        }}
-      >
-        <Ionicons
-          name="options-outline"
-          size={20}
-          color="white"
-        />
-      </TouchableOpacity>
+      {createActionButton(onFavoritesButtonClicked, "heart", false)}
+      {createActionButton(onFilterButtonClicked, "options-outline", true)}
     </View>
   );
 };

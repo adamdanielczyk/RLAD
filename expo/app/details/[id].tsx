@@ -1,8 +1,7 @@
 import { FullScreenErrorView } from "@/components/FullScreenErrorView";
 import { ItemDetails } from "@/components/ItemDetails";
 import { useItemByIdQuery } from "@/lib/queries/useItemsQuery";
-import { useAppStore } from "@/lib/store/appStore";
-import { ItemUiModel } from "@/lib/ui/uiModelTypes";
+import { DataSourceType, ItemUiModel } from "@/lib/ui/uiModelTypes";
 import { useTheme } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
 import { useLocalSearchParams } from "expo-router";
@@ -12,11 +11,9 @@ import React from "react";
 import { ActivityIndicator, Alert, Platform, View } from "react-native";
 
 export default function DetailsScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, dataSource } = useLocalSearchParams<{ id: string; dataSource: string }>();
   const { colors } = useTheme();
-
-  const selectedDataSource = useAppStore((state) => state.selectedDataSource);
-  const { item, isLoading } = useItemByIdQuery(id, selectedDataSource);
+  const { item, isLoading } = useItemByIdQuery(id, dataSource as DataSourceType);
 
   const renderContent = () => {
     if (isLoading) {

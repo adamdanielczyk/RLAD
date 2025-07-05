@@ -1,4 +1,6 @@
+import { useAppStore } from "@/lib/store/appStore";
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
+import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -13,6 +15,9 @@ interface ItemCardProps {
 
 export function ItemCard({ item, onPress }: ItemCardProps) {
   const { colors } = useTheme();
+  const isFavoriteItem = useAppStore((state) => state.isFavorite(item.id));
+  const toggleFavorite = useAppStore((state) => state.toggleFavorite);
+
   const scale = useSharedValue(1);
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
@@ -21,18 +26,17 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
     };
   });
 
+  const springConfig = {
+    damping: 20,
+    stiffness: 400,
+  };
+
   const handlePressIn = () => {
-    scale.value = withSpring(0.96, {
-      damping: 20,
-      stiffness: 400,
-    });
+    scale.value = withSpring(0.96, springConfig);
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, {
-      damping: 20,
-      stiffness: 400,
-    });
+    scale.value = withSpring(1, springConfig);
   };
 
   return (
@@ -78,6 +82,33 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
                 height: 60,
               }}
             />
+
+            {isFavoriteItem && (
+              <View
+                style={[
+                  {
+                    position: "absolute",
+                    top: 12,
+                    end: 12,
+                    backgroundColor: colors.card,
+                    borderRadius: 20,
+                    padding: 8,
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 4,
+                    elevation: 3,
+                  },
+                ]}
+              >
+                <TouchableOpacity onPress={() => toggleFavorite(item)}>
+                  <Ionicons
+                    name="heart"
+                    size={20}
+                    color={colors.primary}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
           <View style={{ padding: 16 }}>
             <Text
@@ -93,14 +124,13 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
               {item.name}
             </Text>
             <Text
-              numberOfLines={2}
+              numberOfLines={1}
               style={{
                 fontSize: 13,
                 textOverflow: "ellipsis",
                 color: colors.text,
                 opacity: 0.7,
                 marginTop: 4,
-                lineHeight: 18,
               }}
             >
               {item.cardCaption?.replace("\n", " ")}

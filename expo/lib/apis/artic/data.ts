@@ -34,6 +34,7 @@ const mapArticArtworkToItem = (artwork: ArticArtwork): ItemUiModel => {
     imageUrl: `https://artic.edu/iiif/2/${artwork.image_id}/full/200,/0/default.jpg`,
     name: artwork.title,
     cardCaption: artwork.artist_display || artwork.date_display,
+    dataSource: "artic",
     detailsKeyValues: [
       { key: "Title", value: artwork.title },
       { key: "Artist", value: artwork.artist_title || "" },

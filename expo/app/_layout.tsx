@@ -32,6 +32,10 @@ export default function RootLayout() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="favorites/index"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="details/[id]"
               options={{
                 headerShown: false,

@@ -6,4 +6,5 @@ export interface ItemUiModel {
   name: string;
   cardCaption?: string;
   detailsKeyValues: Array<{ key: string; value: string }>;
+  dataSource: DataSourceType;
 }
