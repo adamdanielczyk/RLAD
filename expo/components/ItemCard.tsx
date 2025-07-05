@@ -65,6 +65,7 @@ export function ItemCard({ item }: { item: ItemUiModel }) {
         >
           <View style={{ position: "relative" }}>
             <Image
+              key={item.id}
               source={item.imageUrl}
               style={{
                 width: "100%",
