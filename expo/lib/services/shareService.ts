@@ -1,8 +1,12 @@
+import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { Alert, Platform } from "react-native";
 
-export async function shareItem(imageUrl: string, title: string): Promise<void> {
+export async function shareItem(item: ItemUiModel): Promise<void> {
+  const title = item.name;
+  const imageUrl = item.highResImageUrl;
+
   try {
     if (!(await Sharing.isAvailableAsync())) {
       Alert.alert("Sharing not available", "Sharing is not available on this device.");

@@ -38,6 +38,7 @@ const mapGiphyGifToItem = (gif: GiphyGif): ItemUiModel => {
   return {
     id: gif.id,
     imageUrl: gif.images.fixed_width.url,
+    highResImageUrl: gif.images.downsized?.url || gif.images.fixed_width.url,
     name: gif.title || "Untitled GIF",
     cardCaption: username !== "Unknown" ? `by ${username}` : undefined,
     dataSource: "giphy",

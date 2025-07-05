@@ -1,3 +1,4 @@
+import { shareItem } from "@/lib/services/shareService";
 import { useAppStore } from "@/lib/store/appStore";
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,7 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const { width } = Dimensions.get("window");
 const HERO_HEIGHT = width * 0.75;
 
-export function ItemDetails({ item, onShare }: { item: ItemUiModel; onShare: () => void }) {
+export function ItemDetails({ item }: { item: ItemUiModel }) {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -22,22 +23,27 @@ export function ItemDetails({ item, onShare }: { item: ItemUiModel; onShare: () 
         <HeroImage item={item} />
         <MainContent item={item} />
       </ScrollView>
-      <HeaderButtons
-        item={item}
-        onShare={onShare}
-      />
+      <HeaderButtons item={item} />
     </View>
   );
 }
 
-function HeaderButtons({ item, onShare }: { item: ItemUiModel; onShare: () => void }) {
+function HeaderButtons({ item }: { item: ItemUiModel }) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { colors } = useTheme();
   const isFavoriteItem = useAppStore((state) => state.isFavorite(item.id));
   const toggleFavorite = useAppStore((state) => state.toggleFavorite);
 
-  const button = (icon: keyof typeof Ionicons.glyphMap, color: string, onPress: () => void) => {
+  const button = ({
+    icon,
+    color,
+    onPress,
+  }: {
+    icon: keyof typeof Ionicons.glyphMap;
+    color: string;
+    onPress: () => void;
+  }) => {
     return (
       <TouchableOpacity
         onPress={onPress}
@@ -76,14 +82,22 @@ function HeaderButtons({ item, onShare }: { item: ItemUiModel; onShare: () => vo
         alignItems: "center",
       }}
     >
-      {button("close", colors.text, () => router.back())}
+      {button({
+        icon: "close",
+        color: colors.text,
+        onPress: () => router.back(),
+      })}
       <View style={{ flexDirection: "row", gap: 12 }}>
-        {button(
-          isFavoriteItem ? "heart" : "heart-outline",
-          isFavoriteItem ? colors.primary : colors.text,
-          () => toggleFavorite(item),
-        )}
-        {button("share-outline", colors.text, onShare)}
+        {button({
+          icon: isFavoriteItem ? "heart" : "heart-outline",
+          color: isFavoriteItem ? colors.primary : colors.text,
+          onPress: () => toggleFavorite(item),
+        })}
+        {button({
+          icon: "share-social-outline",
+          color: colors.text,
+          onPress: () => shareItem(item),
+        })}
       </View>
     </View>
   );

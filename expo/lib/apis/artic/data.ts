@@ -32,6 +32,7 @@ const mapArticArtworkToItem = (artwork: ArticArtwork): ItemUiModel => {
   return {
     id: artwork.id.toString(),
     imageUrl: `https://artic.edu/iiif/2/${artwork.image_id}/full/200,/0/default.jpg`,
+    highResImageUrl: `https://artic.edu/iiif/2/${artwork.image_id}/full/800,/0/default.jpg`,
     name: artwork.title,
     cardCaption: artwork.artist_display || artwork.date_display,
     dataSource: "artic",
