@@ -19,7 +19,7 @@ interface AppState {
   onSearchFocused: (isFocused: boolean) => void;
   onSearchQueryChanged: (query: string) => void;
   onClearButtonClicked: () => void;
-  onFilterButtonClicked: () => void;
+  onDataSourceButtonClicked: () => void;
 
   viewMode: ViewMode;
   toggleViewMode: () => void;
@@ -93,7 +93,7 @@ export const useAppStore = create<AppState>((set, get) => {
       set({ searchQuery: "", isSearchFocused: false });
     },
 
-    onFilterButtonClicked: () => {
+    onDataSourceButtonClicked: () => {
       set({
         isBottomSheetOpen: true,
         isSearchFocused: false,

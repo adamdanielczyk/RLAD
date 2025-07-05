@@ -22,7 +22,7 @@ export function FullScreenItemCard({ item }: FullScreenItemCardProps) {
   const isFavoriteItem = useAppStore((state) => state.isFavorite(item.id));
   const toggleFavorite = useAppStore((state) => state.toggleFavorite);
   const toggleViewMode = useAppStore((state) => state.toggleViewMode);
-  const onFilterButtonClicked = useAppStore((state) => state.onFilterButtonClicked);
+  const onDataSourceButtonClicked = useAppStore((state) => state.onDataSourceButtonClicked);
 
   return (
     <View
@@ -56,7 +56,7 @@ export function FullScreenItemCard({ item }: FullScreenItemCardProps) {
       <TopControls
         insets={insets}
         toggleViewMode={toggleViewMode}
-        onFilterButtonClicked={onFilterButtonClicked}
+        onDataSourceButtonClicked={onDataSourceButtonClicked}
       />
 
       <SideControls
@@ -83,11 +83,11 @@ export function FullScreenItemCard({ item }: FullScreenItemCardProps) {
 function TopControls({
   insets,
   toggleViewMode,
-  onFilterButtonClicked,
+  onDataSourceButtonClicked,
 }: {
   insets: { top: number };
   toggleViewMode: () => void;
-  onFilterButtonClicked: () => void;
+  onDataSourceButtonClicked: () => void;
 }) {
   return (
     <View
@@ -107,7 +107,7 @@ function TopControls({
       />
 
       <IconButton
-        onPress={onFilterButtonClicked}
+        onPress={onDataSourceButtonClicked}
         iconName="options-outline"
       />
     </View>

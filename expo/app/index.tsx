@@ -48,7 +48,7 @@ export default function HomeScreen() {
       style={{ flex: 1 }}
       edges={viewMode === "grid" ? ["top", "left", "right"] : []}
     >
-      {viewMode === "grid" && <SearchBar />}
+      {viewMode === "grid" && <SearchBar hasItems={items.length > 0} />}
 
       {isLoading && items.length === 0 ? (
         <FullscreenLoader />
