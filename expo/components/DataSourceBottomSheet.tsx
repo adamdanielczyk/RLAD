@@ -1,4 +1,5 @@
 import { DATA_SOURCES } from "@/lib/apis/dataSources";
+import { useAppStore } from "@/lib/store/appStore";
 import { DataSourceType } from "@/lib/ui/uiModelTypes";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
 import { useTheme } from "@react-navigation/native";
@@ -6,30 +7,23 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-interface DataSourceBottomSheetProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedDataSource: DataSourceType;
-  onDataSourceSelected: (dataSource: DataSourceType) => Promise<void>;
-}
-
-export const DataSourceBottomSheet = ({
-  isOpen,
-  onClose,
-  selectedDataSource,
-  onDataSourceSelected,
-}: DataSourceBottomSheetProps) => {
+export const DataSourceBottomSheet = () => {
   const bottomSheetRef = useRef<BottomSheet | null>(null);
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
+  
+  const isBottomSheetOpen = useAppStore((state) => state.isBottomSheetOpen);
+  const selectedDataSource = useAppStore((state) => state.selectedDataSource);
+  const onDataSourceSelected = useAppStore((state) => state.onDataSourceSelected);
+  const onBottomSheetClosed = useAppStore((state) => state.onBottomSheetClosed);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isBottomSheetOpen) {
       bottomSheetRef.current?.expand();
     } else {
       bottomSheetRef.current?.close();
     }
-  }, [isOpen]);
+  }, [isBottomSheetOpen]);
 
   const handleDataSourceSelected = useCallback(
     async (dataSource: DataSourceType) => {
@@ -41,10 +35,10 @@ export const DataSourceBottomSheet = ({
   const handleSheetChanges = useCallback(
     (index: number) => {
       if (index === -1) {
-        onClose();
+        onBottomSheetClosed();
       }
     },
-    [onClose],
+    [onBottomSheetClosed],
   );
 
   const renderBackdrop = useCallback(

@@ -4,16 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 
-interface ItemCardProps {
-  item: ItemUiModel;
-  onPress: (item: ItemUiModel) => void;
-}
-
-export function ItemCard({ item, onPress }: ItemCardProps) {
+export function ItemCard({ item }: { item: ItemUiModel }) {
+  const router = useRouter();
   const { colors } = useTheme();
   const isFavoriteItem = useAppStore((state) => state.isFavorite(item.id));
   const toggleFavorite = useAppStore((state) => state.toggleFavorite);
@@ -42,7 +39,12 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
   return (
     <Animated.View style={[cardAnimatedStyle, { flex: 1, margin: 8 }]}>
       <TouchableOpacity
-        onPress={() => onPress(item)}
+        onPress={() =>
+          router.push({
+            pathname: "/details/[id]",
+            params: { id: item.id, dataSource: item.dataSource },
+          })
+        }
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         activeOpacity={0.8}

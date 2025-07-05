@@ -2,36 +2,18 @@ import { EmptyView } from "@/components/EmptyView";
 import { ItemCard } from "@/components/ItemCard";
 import { useColumns } from "@/lib/hooks/useColumns";
 import { useAppStore } from "@/lib/store/appStore";
-import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import React, { useCallback } from "react";
+import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function FavoritesScreen() {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
-  const favorites = useAppStore((state) => state.favorites);
-
   const numColumns = useColumns();
-
-  const renderItem = useCallback(
-    ({ item }: { item: ItemUiModel }) => (
-      <ItemCard
-        item={item}
-        onPress={(item) =>
-          router.push({
-            pathname: "/details/[id]",
-            params: { id: item.id, dataSource: item.dataSource },
-          })
-        }
-      />
-    ),
-    [router],
-  );
+  const favorites = useAppStore((state) => state.favorites);
 
   return (
     <SafeAreaView
@@ -49,7 +31,7 @@ export default function FavoritesScreen() {
       ) : (
         <FlashList
           data={favorites}
-          renderItem={renderItem}
+          renderItem={({ item }) => <ItemCard item={item} />}
           numColumns={numColumns}
           contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: insets.bottom }}
           estimatedItemSize={200}

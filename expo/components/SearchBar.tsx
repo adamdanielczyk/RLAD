@@ -1,31 +1,22 @@
+import { useAppStore } from "@/lib/store/appStore";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
-interface SearchBarProps {
-  query: string;
-  onQueryChanged: (text: string) => void;
-  isFocused: boolean;
-  onFocused: (isFocused: boolean) => void;
-  onClearButtonClicked: () => void;
-  onFilterButtonClicked: () => void;
-  onFavoritesButtonClicked: () => void;
-  isTextInputEditable: boolean;
-}
-
-export const SearchBar = ({
-  query,
-  onQueryChanged,
-  isFocused,
-  onFocused,
-  onClearButtonClicked,
-  onFilterButtonClicked,
-  onFavoritesButtonClicked,
-  isTextInputEditable,
-}: SearchBarProps) => {
+export const SearchBar = () => {
+  const router = useRouter();
   const textInputRef = useRef<TextInput | null>(null);
   const { colors } = useTheme();
+  
+  const searchQuery = useAppStore((state) => state.searchQuery);
+  const isSearchFocused = useAppStore((state) => state.isSearchFocused);
+  const onSearchQueryChanged = useAppStore((state) => state.onSearchQueryChanged);
+  const onSearchFocused = useAppStore((state) => state.onSearchFocused);
+  const onClearButtonClicked = useAppStore((state) => state.onClearButtonClicked);
+  const onFilterButtonClicked = useAppStore((state) => state.onFilterButtonClicked);
+  const isBottomSheetOpen = useAppStore((state) => state.isBottomSheetOpen);
 
   const createActionButton = (
     onPress: () => void,
@@ -58,12 +49,12 @@ export const SearchBar = ({
   );
 
   useEffect(() => {
-    if (isFocused) {
+    if (isSearchFocused) {
       textInputRef.current?.focus();
     } else {
       textInputRef.current?.blur();
     }
-  }, [isFocused]);
+  }, [isSearchFocused]);
 
   return (
     <View
@@ -82,12 +73,12 @@ export const SearchBar = ({
           alignItems: "center",
           borderRadius: 24,
           backgroundColor: colors.card,
-          shadowOffset: { width: 0, height: isFocused ? 8 : 4 },
-          shadowOpacity: isFocused ? 0.15 : 0.08,
-          shadowRadius: isFocused ? 12 : 8,
-          elevation: isFocused ? 8 : 4,
+          shadowOffset: { width: 0, height: isSearchFocused ? 8 : 4 },
+          shadowOpacity: isSearchFocused ? 0.15 : 0.08,
+          shadowRadius: isSearchFocused ? 12 : 8,
+          elevation: isSearchFocused ? 8 : 4,
           borderWidth: 2,
-          borderColor: isFocused ? colors.primary : "transparent",
+          borderColor: isSearchFocused ? colors.primary : "transparent",
         }}
       >
         <TextInput
@@ -100,19 +91,19 @@ export const SearchBar = ({
           }}
           placeholder="Search..."
           placeholderTextColor={colors.text}
-          value={query}
-          onChangeText={onQueryChanged}
+          value={searchQuery}
+          onChangeText={onSearchQueryChanged}
           autoCorrect={false}
           autoCapitalize="none"
-          onFocus={() => onFocused(true)}
-          onBlur={() => onFocused(false)}
-          editable={isTextInputEditable}
+          onFocus={() => onSearchFocused(true)}
+          onBlur={() => onSearchFocused(false)}
+          editable={!isBottomSheetOpen}
         />
         <TouchableOpacity
           onPress={onClearButtonClicked}
-          disabled={!query}
+          disabled={!searchQuery}
           style={{
-            opacity: query ? 1 : 0,
+            opacity: searchQuery ? 1 : 0,
             padding: 6,
             marginEnd: 8,
           }}
@@ -125,7 +116,7 @@ export const SearchBar = ({
         </TouchableOpacity>
       </View>
 
-      {createActionButton(onFavoritesButtonClicked, "heart", false)}
+      {createActionButton(() => router.push("/favorites"), "heart", false)}
       {createActionButton(onFilterButtonClicked, "options-outline", true)}
     </View>
   );
