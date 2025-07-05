@@ -6,6 +6,8 @@ const DATA_SOURCE_STORAGE_KEY = "selected_data_source";
 const FAVORITES_STORAGE_KEY = "favorites";
 const DEFAULT_DATA_SOURCE: DataSourceType = "giphy";
 
+export type ViewMode = "grid" | "feed";
+
 interface AppState {
   initialize: () => Promise<void>;
 
@@ -18,6 +20,9 @@ interface AppState {
   onSearchQueryChanged: (query: string) => void;
   onClearButtonClicked: () => void;
   onFilterButtonClicked: () => void;
+
+  viewMode: ViewMode;
+  toggleViewMode: () => void;
 
   isBottomSheetOpen: boolean;
   onBottomSheetClosed: () => void;
@@ -32,6 +37,7 @@ export const useAppStore = create<AppState>((set, get) => {
     selectedDataSource: DEFAULT_DATA_SOURCE,
     searchQuery: "",
     isSearchFocused: false,
+    viewMode: "grid" as ViewMode,
     isBottomSheetOpen: false,
     favorites: [],
 
@@ -92,6 +98,11 @@ export const useAppStore = create<AppState>((set, get) => {
         isBottomSheetOpen: true,
         isSearchFocused: false,
       });
+    },
+
+    toggleViewMode: () => {
+      const { viewMode } = get();
+      set({ viewMode: viewMode === "grid" ? "feed" : "grid" });
     },
 
     onBottomSheetClosed: () => {

@@ -9,7 +9,7 @@ export const SearchBar = () => {
   const router = useRouter();
   const textInputRef = useRef<TextInput | null>(null);
   const { colors } = useTheme();
-  
+
   const searchQuery = useAppStore((state) => state.searchQuery);
   const isSearchFocused = useAppStore((state) => state.isSearchFocused);
   const onSearchQueryChanged = useAppStore((state) => state.onSearchQueryChanged);
@@ -17,6 +17,7 @@ export const SearchBar = () => {
   const onClearButtonClicked = useAppStore((state) => state.onClearButtonClicked);
   const onFilterButtonClicked = useAppStore((state) => state.onFilterButtonClicked);
   const isBottomSheetOpen = useAppStore((state) => state.isBottomSheetOpen);
+  const toggleViewMode = useAppStore((state) => state.toggleViewMode);
 
   const createActionButton = (
     onPress: () => void,
@@ -117,6 +118,7 @@ export const SearchBar = () => {
       </View>
 
       {createActionButton(() => router.push("/favorites"), "heart", false)}
+      {createActionButton(toggleViewMode, "apps", false)}
       {createActionButton(onFilterButtonClicked, "options-outline", true)}
     </View>
   );

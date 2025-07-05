@@ -19,6 +19,11 @@ export interface GiphyGif {
       width: string;
       height: string;
     };
+    downsized: {
+      url: string;
+      width: string;
+      height: string;
+    };
     original: {
       url: string;
       width: string;
