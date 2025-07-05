@@ -1,12 +1,12 @@
+import { IconButton } from "@/components/IconButton";
 import { useAppStore } from "@/lib/store/appStore";
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
-import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface FullScreenItemCardProps {
@@ -21,8 +21,6 @@ export function FullScreenItemCard({ item }: FullScreenItemCardProps) {
 
   const isFavoriteItem = useAppStore((state) => state.isFavorite(item.id));
   const toggleFavorite = useAppStore((state) => state.toggleFavorite);
-  const toggleViewMode = useAppStore((state) => state.toggleViewMode);
-  const onDataSourceButtonClicked = useAppStore((state) => state.onDataSourceButtonClicked);
 
   return (
     <View
@@ -53,12 +51,6 @@ export function FullScreenItemCard({ item }: FullScreenItemCardProps) {
         }}
       />
 
-      <TopControls
-        insets={insets}
-        toggleViewMode={toggleViewMode}
-        onDataSourceButtonClicked={onDataSourceButtonClicked}
-      />
-
       <SideControls
         insets={insets}
         isFavoriteItem={isFavoriteItem}
@@ -75,40 +67,6 @@ export function FullScreenItemCard({ item }: FullScreenItemCardProps) {
       <ItemInfo
         item={item}
         insets={insets}
-      />
-    </View>
-  );
-}
-
-function TopControls({
-  insets,
-  toggleViewMode,
-  onDataSourceButtonClicked,
-}: {
-  insets: { top: number };
-  toggleViewMode: () => void;
-  onDataSourceButtonClicked: () => void;
-}) {
-  return (
-    <View
-      style={{
-        position: "absolute",
-        top: insets.top + 16,
-        left: 16,
-        right: 16,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <IconButton
-        onPress={toggleViewMode}
-        iconName="apps"
-      />
-
-      <IconButton
-        onPress={onDataSourceButtonClicked}
-        iconName="options-outline"
       />
     </View>
   );
@@ -187,35 +145,5 @@ function ItemInfo({ item, insets }: { item: ItemUiModel; insets: { bottom: numbe
         </Text>
       )}
     </View>
-  );
-}
-
-function IconButton({
-  onPress,
-  iconName,
-  color = "white",
-}: {
-  onPress: () => void;
-  iconName: keyof typeof Ionicons.glyphMap;
-  color?: string;
-}) {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        backgroundColor: "rgba(0,0,0,0.3)",
-        borderRadius: 25,
-        width: 50,
-        height: 50,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Ionicons
-        name={iconName}
-        size={24}
-        color={color}
-      />
-    </TouchableOpacity>
   );
 }

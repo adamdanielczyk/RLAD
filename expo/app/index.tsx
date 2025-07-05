@@ -100,6 +100,7 @@ export default function HomeScreen() {
           exiting={fadeOutAnimation}
         >
           <VerticalFeed
+            listKey={listKey}
             items={items}
             onEndReached={loadMoreItems}
             ListFooterComponent={isFetchingNextPage ? <FooterLoader /> : null}
