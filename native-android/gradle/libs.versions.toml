@@ -45,7 +45,7 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 lottie = { module = "com.airbnb.android:lottie-compose", version = "6.6.7" }
 
 test-junit = { module = "junit:junit", version = "4.13.2" }
-test-mockk = { module = "io.mockk:mockk", version = "1.14.4" }
+test-mockk = { module = "io.mockk:mockk", version = "1.14.5" }
 test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 test-androidx-runner = { module = "androidx.test:runner", version = "1.6.2" }
 test-androidx-core = { module = "androidx.test:core", version = "1.6.1" }
