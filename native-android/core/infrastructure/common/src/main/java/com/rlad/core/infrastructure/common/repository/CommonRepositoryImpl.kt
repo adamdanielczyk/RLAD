@@ -12,7 +12,6 @@ import com.rlad.core.infrastructure.common.paging.CommonSearchPagingSource
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 interface CommonRepository {
     fun getItemById(id: String): Flow<ItemUiModel>
@@ -20,7 +19,7 @@ interface CommonRepository {
     fun getSearchItems(query: String): Flow<PagingData<ItemUiModel>>
 }
 
-class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData : Any> @Inject constructor(
+class CommonRepositoryImpl<LocalModel : Any, RemoteModel : Any, RootRemoteData : Any>(
     private val localDataSource: CommonLocalDataSource<LocalModel>,
     private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
     private val remoteMediator: CommonRemoteMediator<LocalModel, RemoteModel, RootRemoteData>,

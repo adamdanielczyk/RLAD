@@ -12,13 +12,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rlad.core.domain.navigation.Navigator
 import com.rlad.core.ui.RladTheme
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import com.rlad.core.ui.viewmodel.MetroViewModelFactory
+import androidx.lifecycle.ViewModelProvider
 
-@AndroidEntryPoint
-internal class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
-    @Inject lateinit var navigators: Set<@JvmSuppressWildcards Navigator>
+    private val navigators: Set<Navigator> by lazy { 
+        (application as RladApplication).appGraph.navigators 
+    }
+    
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = MetroViewModelFactory((application as RladApplication).appGraph)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

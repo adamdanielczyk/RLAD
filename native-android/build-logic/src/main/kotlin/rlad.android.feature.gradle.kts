@@ -2,7 +2,8 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("rlad.android.library.compose")
-    id("rlad.android.hilt")
+    id("dev.zacsweers.metro")
+//    id("rlad.android.metro")
 }
 
 android {

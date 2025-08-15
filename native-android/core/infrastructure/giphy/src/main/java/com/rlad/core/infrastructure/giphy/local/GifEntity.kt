@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
         Index(value = ["giphy_id"], unique = true),
     ],
 )
-internal data class GifEntity(
+data class GifEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "giphy_id") val giphyId: String,
     @ColumnInfo(name = "title") val title: String,

@@ -9,7 +9,6 @@ internal fun Project.shared() {
         add("implementation", libs.androidx.paging.runtime)
         add("implementation", libs.androidx.paging.compose)
 
-        add("implementation", libs.androidx.hilt.navigation.compose)
         add("implementation", libs.androidx.navigation.compose)
 
         add("implementation", libs.androidx.activity)
@@ -30,6 +29,8 @@ internal fun Project.shared() {
         add("implementation", libs.coil.gif)
 
         add("implementation", libs.lottie)
+        
+//        add("implementation", libs.metro.runtime)
 
         add("testImplementation", project(":core:testing"))
         add("androidTestImplementation", project(":core:testing"))

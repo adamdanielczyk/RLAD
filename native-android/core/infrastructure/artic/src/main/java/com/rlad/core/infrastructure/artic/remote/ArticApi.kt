@@ -1,13 +1,14 @@
 package com.rlad.core.infrastructure.artic.remote
 
+import dev.zacsweers.metro.Inject
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import javax.inject.Inject
 
-internal class ArticApi @Inject constructor(
+@Inject
+class ArticApi(
     private val httpClient: HttpClient,
 ) {
 

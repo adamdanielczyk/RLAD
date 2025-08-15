@@ -8,10 +8,16 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
-import dagger.hilt.android.HiltAndroidApp
+import com.rlad.core.ui.di.AppGraph
+import dev.zacsweers.metro.createGraph
 
-@HiltAndroidApp
 internal class RladApplication : Application(), ImageLoaderFactory {
+    
+    val appGraph by lazy { createGraph<AppGraph>() }
+
+    override fun onCreate() {
+        super.onCreate()
+    }
 
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(this)

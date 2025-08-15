@@ -8,7 +8,6 @@ import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.domain.repository.AppSettingsRepository
 import com.rlad.core.domain.usecase.GetAvailableDataSourcesUseCase
 import com.rlad.core.domain.usecase.GetItemsUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -17,10 +16,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import com.rlad.core.ui.viewmodel.ViewModelKey
+import com.rlad.core.ui.viewmodel.ViewModelScope
 
-@HiltViewModel
-internal class SearchViewModel @Inject constructor(
+@ContributesIntoMap(ViewModelScope::class)
+@ViewModelKey(SearchViewModel::class)
+@Inject
+class SearchViewModel(
     val getAvailableDataSourcesUseCase: GetAvailableDataSourcesUseCase,
     private val getItemsUseCase: GetItemsUseCase,
     private val appSettingsRepository: AppSettingsRepository,

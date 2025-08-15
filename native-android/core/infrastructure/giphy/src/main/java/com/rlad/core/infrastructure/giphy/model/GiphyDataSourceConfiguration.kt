@@ -1,11 +1,18 @@
 package com.rlad.core.infrastructure.giphy.model
 
 import android.app.Application
+import com.rlad.core.infrastructure.common.model.DataSource
 import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
+import com.rlad.core.infrastructure.common.model.DataSourceKey
 import com.rlad.core.infrastructure.giphy.R
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
 
-internal class GiphyDataSourceConfiguration @Inject constructor(
+@ContributesIntoMap(AppScope::class)
+@DataSourceKey(DataSource.GIPHY)
+@Inject
+class GiphyDataSourceConfiguration(
     private val application: Application,
 ) : DataSourceConfiguration {
 

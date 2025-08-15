@@ -67,7 +67,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.rlad.core.ui.viewmodel.metroViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -87,7 +87,7 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 internal fun SearchScreen(onItemCardClicked: (String) -> Unit) {
-    val viewModel = hiltViewModel<SearchViewModel>()
+    val viewModel = metroViewModel<SearchViewModel>()
     SearchScreenContent(viewModel, onItemCardClicked)
 }
 

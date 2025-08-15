@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
     ],
     version = 1,
 )
-internal abstract class CommonDatabase : RoomDatabase() {
+abstract class CommonDatabase : RoomDatabase() {
 
     abstract fun appPreferencesDao(): AppPreferencesDao
 }

@@ -4,12 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class ServerArtworkRoot(
+data class ServerArtworkRoot(
     @SerialName("data") val data: ServerArtwork,
 )
 
 @Serializable
-internal data class ServerArtworksRoot(
+data class ServerArtworksRoot(
     @SerialName("pagination") val pagination: ServerPagination,
     @SerialName("data") val data: List<ServerArtwork>,
 ) {
@@ -22,7 +22,7 @@ internal data class ServerArtworksRoot(
 }
 
 @Serializable
-internal data class ServerArtwork(
+data class ServerArtwork(
     @SerialName("id") val id: Int,
     @SerialName("title") val title: String,
     @SerialName("image_id") val imageId: String,

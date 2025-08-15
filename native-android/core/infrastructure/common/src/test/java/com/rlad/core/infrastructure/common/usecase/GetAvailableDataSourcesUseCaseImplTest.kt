@@ -15,7 +15,7 @@ class GetAvailableDataSourcesUseCaseImplTest {
     @Test
     fun repositoriesAreMappedToUiModelsAndSelectedRepositoryIsMarked() = runTest {
         val useCase = GetAvailableDataSourcesUseCaseImpl(
-            getAllDataSourcesUseCase = GetAllDataSourcesUseCaseImpl(),
+            getAllDataSourcesUseCase = GetAllDataSourcesUseCase(),
             getSelectedDataSourceUseCase = object : GetSelectedDataSourceUseCase {
                 override fun invoke(): Flow<DataSource> = flowOf(DataSource.RICKANDMORTY)
             },

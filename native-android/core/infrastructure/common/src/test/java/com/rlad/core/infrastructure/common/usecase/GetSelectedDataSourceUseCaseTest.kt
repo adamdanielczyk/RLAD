@@ -10,12 +10,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class GetSelectedDataSourceUseCaseImplTest {
+class GetSelectedDataSourceUseCaseTest {
 
     private val appSettingsRepository: AppSettingsRepositoryImpl = mockk()
 
-    private val useCase = GetSelectedDataSourceUseCaseImpl(
-        getAllDataSourcesUseCase = GetAllDataSourcesUseCaseImpl(),
+    private val useCase = GetSelectedDataSourceUseCase(
+        getAllDataSourcesUseCase = GetAllDataSourcesUseCase(),
         appSettingsRepository = appSettingsRepository,
     )
 

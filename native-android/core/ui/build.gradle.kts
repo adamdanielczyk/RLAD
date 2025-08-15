@@ -8,6 +8,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
 }

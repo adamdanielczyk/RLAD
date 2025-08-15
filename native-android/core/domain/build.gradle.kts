@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.rlad.core.domain"
 }
+
+dependencies {
+    implementation(libs.androidx.navigation.compose)
+}

@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.rlad.core.ui.viewmodel.metroViewModel
 import coil.compose.AsyncImage
 import com.rlad.core.domain.model.ItemUiModel
 
@@ -54,7 +54,7 @@ import com.rlad.core.domain.model.ItemUiModel
 internal fun DetailsScreen() {
     val context = LocalContext.current
 
-    val viewModel = hiltViewModel<DetailsViewModel>()
+    val viewModel = metroViewModel<DetailsViewModel>()
     val item = viewModel.item.collectAsState(initial = null).value ?: return
 
     val view = LocalView.current
