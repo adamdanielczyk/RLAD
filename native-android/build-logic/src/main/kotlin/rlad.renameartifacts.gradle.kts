@@ -1,7 +1,6 @@
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.VariantOutputConfiguration
-import org.gradle.configurationcache.extensions.capitalized
 import tasks.RenameApkTask
 import tasks.RenameBundleTask
 
@@ -11,7 +10,7 @@ plugins.withId("com.android.application") {
     project.extensions.configure<ApplicationAndroidComponentsExtension> {
         onVariants { variant ->
             val variantName = variant.name
-            val variantNameCapitalized = variantName.capitalized()
+            val variantNameCapitalized = variant.name.replaceFirstChar { it.uppercase() }
 
             val mainOutput = variant.outputs.single { it.outputType == VariantOutputConfiguration.OutputType.SINGLE }
 
