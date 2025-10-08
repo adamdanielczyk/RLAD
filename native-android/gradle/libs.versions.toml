@@ -9,7 +9,7 @@ hilt = "2.57.2"
 kotlin = "2.2.20"
 kotlinxCoroutines = "1.10.2"
 ksp = "2.2.20-2.0.4"
-ktor = "3.3.0"
+ktor = "3.3.1"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
