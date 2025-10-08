@@ -8,7 +8,7 @@ coil = "2.7.0"
 hilt = "2.57.2"
 kotlin = "2.2.20"
 kotlinxCoroutines = "1.10.2"
-ksp = "2.2.20-2.0.3"
+ksp = "2.2.20-2.0.4"
 ktor = "3.3.0"
 
 [libraries]
