@@ -1,14 +1,20 @@
 import { DATA_SOURCES } from "@/lib/apis/dataSources";
 import { useAppStore } from "@/lib/store/appStore";
 import { DataSourceType } from "@/lib/ui/uiModelTypes";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetView,
+  type BottomSheetBackdropProps,
+} from "@gorhom/bottom-sheet";
 import { useTheme } from "@react-navigation/native";
 import React, { useCallback, useEffect, useRef } from "react";
 import { FlatList, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export const DataSourceBottomSheet = () => {
-  const bottomSheetRef = useRef<BottomSheet | null>(null);
+  const bottomSheetRef = useRef<BottomSheetModal | null>(null);
+  const isSheetPresentedRef = useRef(false);
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
 
@@ -23,10 +29,18 @@ export const DataSourceBottomSheet = () => {
   const onBottomSheetClosed = useAppStore((state) => state.onBottomSheetClosed);
 
   useEffect(() => {
-    if (isBottomSheetOpen) {
-      bottomSheetRef.current?.expand();
-    } else {
-      bottomSheetRef.current?.close();
+    const sheet = bottomSheetRef.current;
+
+    if (!sheet) {
+      return;
+    }
+
+    if (isBottomSheetOpen && !isSheetPresentedRef.current) {
+      sheet.present();
+      isSheetPresentedRef.current = true;
+    } else if (!isBottomSheetOpen && isSheetPresentedRef.current) {
+      sheet.dismiss();
+      isSheetPresentedRef.current = false;
     }
   }, [isBottomSheetOpen]);
 
@@ -37,17 +51,8 @@ export const DataSourceBottomSheet = () => {
     [onDataSourceSelected],
   );
 
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index === -1) {
-        onBottomSheetClosed();
-      }
-    },
-    [onBottomSheetClosed],
-  );
-
   const renderBackdrop = useCallback(
-    (props: any) => (
+    (props: BottomSheetBackdropProps) => (
       <BottomSheetBackdrop
         {...props}
         disappearsOnIndex={-1}
@@ -56,6 +61,11 @@ export const DataSourceBottomSheet = () => {
     ),
     [],
   );
+
+  const handleDismiss = useCallback(() => {
+    isSheetPresentedRef.current = false;
+    onBottomSheetClosed();
+  }, [onBottomSheetClosed]);
 
   const renderItem = useCallback(
     ({ item }: { item: (typeof DATA_SOURCES)[number] }) => (
@@ -91,14 +101,13 @@ export const DataSourceBottomSheet = () => {
   );
 
   return (
-    <BottomSheet
+    <BottomSheetModal
       ref={bottomSheetRef}
-      index={-1}
       enableDynamicSizing
       enablePanDownToClose
       enableOverDrag={false}
       backdropComponent={renderBackdrop}
-      onChange={handleSheetChanges}
+      onDismiss={handleDismiss}
       backgroundStyle={{ backgroundColor: colors.background }}
       handleIndicatorStyle={{ backgroundColor: colors.text }}
       style={{
@@ -126,6 +135,6 @@ export const DataSourceBottomSheet = () => {
           keyExtractor={(item) => item.name}
         />
       </BottomSheetView>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 };

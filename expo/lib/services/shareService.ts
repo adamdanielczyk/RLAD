@@ -1,7 +1,7 @@
 import { ItemUiModel } from "@/lib/ui/uiModelTypes";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
-import { Alert, Platform } from "react-native";
+import { Alert } from "react-native";
 
 export async function shareItem(item: ItemUiModel): Promise<void> {
   const title = item.name;
@@ -13,17 +13,10 @@ export async function shareItem(item: ItemUiModel): Promise<void> {
       return;
     }
 
-    // Android doesn't support sharing images directly so it needs to be downloaded first
-    if (Platform.OS === "android") {
-      const localUri = await downloadImageForSharing(imageUrl);
-      await Sharing.shareAsync(localUri, {
-        dialogTitle: title,
-      });
-    } else {
-      await Sharing.shareAsync(imageUrl, {
-        dialogTitle: title,
-      });
-    }
+    const localUri = await downloadImageForSharing(imageUrl);
+    await Sharing.shareAsync(localUri, {
+      dialogTitle: title,
+    });
   } catch (error) {
     console.error("Failed to share:", error);
     Alert.alert("Error", "Failed to share item.");
@@ -36,15 +29,9 @@ const downloadImageForSharing = async (imageUrl: string): Promise<string> => {
 
   const fileExtension = getExtensionFromMimeType(contentType);
   const fileName = `shared_image_${Date.now()}.${fileExtension}`;
-  const localUri = `${FileSystem.cacheDirectory}${fileName}`;
-
-  const downloadResult = await FileSystem.downloadAsync(imageUrl, localUri);
-
-  if (downloadResult.status === 200) {
-    return downloadResult.uri;
-  } else {
-    throw new Error("Failed to download image");
-  }
+  const file = new FileSystem.File(FileSystem.Paths.cache, fileName);
+  const downloadedFile = await FileSystem.File.downloadFileAsync(imageUrl, file);
+  return downloadedFile.uri;
 };
 
 const getExtensionFromMimeType = (mimeType: string): string => {

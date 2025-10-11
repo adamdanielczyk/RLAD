@@ -1,6 +1,7 @@
 import { QueryProvider } from "@/lib/queries/QueryProvider";
 import { useAppStore } from "@/lib/store/appStore";
 import { ThemeProvider } from "@/lib/ui/theme";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
@@ -23,31 +24,33 @@ export default function RootLayout() {
 
   return (
     <QueryProvider>
-      <GestureHandlerRootView>
-        <ThemeProvider>
-          <StatusBar style="auto" />
-          <Stack>
-            <Stack.Screen
-              name="index"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="favorites/index"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="details/[id]"
-              options={{
-                headerShown: false,
-                presentation: "modal",
-              }}
-            />
-            <Stack.Screen
-              name="+not-found"
-              options={{ headerShown: false }}
-            />
-          </Stack>
-        </ThemeProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <ThemeProvider>
+            <StatusBar style="auto" />
+            <Stack>
+              <Stack.Screen
+                name="index"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="favorites/index"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="details/[id]"
+                options={{
+                  headerShown: false,
+                  presentation: "modal",
+                }}
+              />
+              <Stack.Screen
+                name="+not-found"
+                options={{ headerShown: false }}
+              />
+            </Stack>
+          </ThemeProvider>
+        </BottomSheetModalProvider>
       </GestureHandlerRootView>
     </QueryProvider>
   );
