@@ -6,8 +6,12 @@
       "matchPackageNames": ["com.google.devtools.ksp**", "/^org\\.jetbrains\\.kotlin[.:]/"]
     },
     {
-      "matchManagers": ["npm"],
+      "matchPaths": ["expo/**"],
       "automerge": false
+    },
+    {
+      "matchPaths": ["**"],
+      "additionalBranchPrefix": "{{parentDir}}/"
     }
   ],
   "extends": [
