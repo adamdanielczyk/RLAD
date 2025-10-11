@@ -34,7 +34,6 @@ export default function FavoritesScreen() {
           renderItem={({ item }) => <ItemCard item={item} />}
           numColumns={numColumns}
           contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: insets.bottom }}
-          estimatedItemSize={200}
           showsVerticalScrollIndicator={false}
         />
       )}

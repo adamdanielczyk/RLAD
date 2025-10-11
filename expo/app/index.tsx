@@ -65,7 +65,6 @@ export default function HomeScreen() {
             renderItem={({ item }) => <ItemCard item={item} />}
             numColumns={numColumns}
             contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: insets.bottom }}
-            estimatedItemSize={200}
             showsVerticalScrollIndicator={false}
             refreshControl={
               <RefreshControl
