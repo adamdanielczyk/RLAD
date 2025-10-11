@@ -6,15 +6,15 @@
       "matchPackageNames": ["com.google.devtools.ksp**", "/^org\\.jetbrains\\.kotlin[.:]/"]
     },
     {
-      "matchPaths": ["native-android/**"],
+      "matchFileNames": ["native-android/**"],
       "additionalBranchPrefix": "native-android/"
     },
     {
-      "matchPaths": ["expo/**"],
+      "matchFileNames": ["expo/**"],
       "additionalBranchPrefix": "expo/"
     },
     {
-      "matchPaths": ["expo/**"],
+      "matchFileNames": ["expo/**"],
       "automerge": false
     }
   ],
