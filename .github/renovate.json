@@ -2,10 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "groupName": "Kotlin & Compose Compiler",
-      "matchPackageNames": ["com.google.devtools.ksp**", "/^org\\.jetbrains\\.kotlin[.:]/"]
-    },
-    {
       "matchFileNames": ["native-android/**"],
       "additionalBranchPrefix": "native-android/"
     },
