@@ -24,7 +24,7 @@ jobs:
       - run: ./gradlew assembleDebug --stacktrace
         working-directory: expo/android
 
-      - uses: actions/upload-artifact@v4.6.2
+      - uses: actions/upload-artifact@v5.0.0
         with:
           name: rlad-expo-debug-apk
           path: expo/android/app/build/outputs/apk/debug/*debug*.apk
@@ -48,7 +48,7 @@ jobs:
           keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
-      - uses: actions/upload-artifact@v4.6.2
+      - uses: actions/upload-artifact@v5.0.0
         with:
           name: rlad-expo-release-apk
           path: ${{steps.sign_app.outputs.signedFile}}
@@ -80,7 +80,7 @@ jobs:
           keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
-      - uses: actions/upload-artifact@v4.6.2
+      - uses: actions/upload-artifact@v5.0.0
         with:
           name: rlad-expo-release-bundle
           path: ${{steps.sign_app.outputs.signedFile}}
