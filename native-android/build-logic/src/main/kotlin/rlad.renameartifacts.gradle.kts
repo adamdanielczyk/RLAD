@@ -29,10 +29,13 @@ plugins.withId("com.android.application") {
                 this.artifactName.set(artifactName)
             }
 
-            project.afterEvaluate {
-                project.tasks.findByName("bundle$variantNameCapitalized")?.finalizedBy(renameBundleTask)
-                project.tasks.findByName("assemble$variantNameCapitalized")?.finalizedBy(renameApkTask)
-            }
+            project.tasks
+                .matching { it.name == "assemble$variantNameCapitalized" }
+                .configureEach { finalizedBy(renameApkTask) }
+
+            project.tasks
+                .matching { it.name == "bundle$variantNameCapitalized" }
+                .configureEach { finalizedBy(renameBundleTask) }
         }
     }
 }
