@@ -5,9 +5,13 @@ import androidx.navigation.NavHostController
 import com.rlad.core.domain.navigation.DetailsNavigator
 import com.rlad.core.domain.navigation.Navigator
 import com.rlad.feature.search.ui.SearchScreen
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 
-internal class SearchNavigatorImpl @Inject constructor(
+@Inject
+@ContributesIntoSet(AppScope::class)
+class SearchNavigatorImpl(
     private val detailsNavigator: DetailsNavigator,
 ) : Navigator {
 

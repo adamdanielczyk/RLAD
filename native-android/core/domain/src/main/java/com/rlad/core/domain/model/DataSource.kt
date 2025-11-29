@@ -1,6 +1,6 @@
-package com.rlad.core.infrastructure.common.model
+package com.rlad.core.domain.model
 
-import dagger.MapKey
+import dev.zacsweers.metro.MapKey
 
 enum class DataSource(val dataSourceName: String) {
     ARTIC("ARTIC"),

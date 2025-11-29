@@ -1,6 +1,6 @@
 package com.rlad.core.infrastructure.common.usecase
 
-import com.rlad.core.infrastructure.common.model.DataSource
+import com.rlad.core.domain.model.DataSource
 import com.rlad.core.infrastructure.common.repository.AppSettingsRepositoryImpl
 import io.mockk.every
 import io.mockk.mockk
@@ -10,12 +10,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class GetSelectedDataSourceUseCaseImplTest {
+class GetSelectedDataSourceUseCaseTest {
 
     private val appSettingsRepository: AppSettingsRepositoryImpl = mockk()
 
     private val useCase = GetSelectedDataSourceUseCaseImpl(
-        getAllDataSourcesUseCase = GetAllDataSourcesUseCaseImpl(),
+        getAllDataSourcesUseCase = GetAllDataSourcesUseCase(),
         appSettingsRepository = appSettingsRepository,
     )
 

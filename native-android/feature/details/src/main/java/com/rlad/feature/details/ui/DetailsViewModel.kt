@@ -11,14 +11,13 @@ import coil.disk.DiskCache
 import coil.imageLoader
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.domain.usecase.GetItemByIdUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
 @OptIn(ExperimentalCoilApi::class)
-internal class DetailsViewModel @Inject constructor(
+class DetailsViewModel(
     getItemByIdUseCase: GetItemByIdUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

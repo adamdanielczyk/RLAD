@@ -8,7 +8,7 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-internal interface CharacterDao {
+interface CharacterDao {
 
     @Query(
         """

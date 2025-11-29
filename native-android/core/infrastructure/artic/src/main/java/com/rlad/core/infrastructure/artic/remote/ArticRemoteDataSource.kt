@@ -1,9 +1,13 @@
 package com.rlad.core.infrastructure.artic.remote
 
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 
-internal class ArticRemoteDataSource @Inject constructor(
+@Inject
+@ContributesBinding(AppScope::class)
+class ArticRemoteDataSource(
     private val articApi: ArticApi,
 ) : CommonRemoteDataSource<ServerArtworksRoot, ServerArtwork> {
 

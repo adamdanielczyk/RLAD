@@ -6,9 +6,13 @@ import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.rickandmorty.R
 import com.rlad.core.infrastructure.rickandmorty.local.CharacterEntity
 import com.rlad.core.infrastructure.rickandmorty.remote.ServerCharacter
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 
-internal class RickAndMortyModelMapper @Inject constructor(
+@Inject
+@ContributesBinding(AppScope::class)
+class RickAndMortyModelMapper(
     private val application: Application,
 ) : ModelMapper<CharacterEntity, ServerCharacter> {
 

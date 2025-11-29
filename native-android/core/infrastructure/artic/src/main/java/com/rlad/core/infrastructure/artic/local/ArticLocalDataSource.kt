@@ -2,10 +2,14 @@ package com.rlad.core.infrastructure.artic.local
 
 import androidx.paging.PagingSource
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-internal class ArticLocalDataSource @Inject constructor(
+@Inject
+@ContributesBinding(AppScope::class)
+class ArticLocalDataSource(
     private val artworkDao: ArtworkDao,
 ) : CommonLocalDataSource<ArtworkEntity> {
 

@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
     entities = [GifEntity::class],
     version = 1,
 )
-internal abstract class GiphyDatabase : RoomDatabase() {
+abstract class GiphyDatabase : RoomDatabase() {
 
     abstract fun gifDao(): GifDao
 }
