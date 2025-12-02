@@ -17,7 +17,7 @@ jobs:
   assembleDebug:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
 
       - uses: ./.github/actions/setup-expo
 
@@ -32,7 +32,7 @@ jobs:
   assembleRelease:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
 
       - uses: ./.github/actions/setup-expo
 
@@ -58,7 +58,7 @@ jobs:
     needs: [assembleDebug, assembleRelease]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
 
       - uses: ./.github/actions/setup-expo
 
