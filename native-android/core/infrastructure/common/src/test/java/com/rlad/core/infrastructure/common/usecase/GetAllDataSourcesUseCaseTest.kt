@@ -1,14 +1,14 @@
 package com.rlad.core.infrastructure.common.usecase
 
-import com.rlad.core.infrastructure.common.model.DataSource
+import com.rlad.core.domain.model.DataSource
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class GetAllDataSourcesUseCaseImplTest {
+class GetAllDataSourcesUseCaseTest {
 
     @Test
     fun repositoriesAreSortedByDataSourceName() {
-        val useCase = GetAllDataSourcesUseCaseImpl()
+        val useCase = GetAllDataSourcesUseCase()
 
         assertEquals(
             DataSource.entries.sortedBy { it.dataSourceName },

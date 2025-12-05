@@ -67,7 +67,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -79,6 +78,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.feature.search.R
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -87,7 +87,7 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 internal fun SearchScreen(onItemCardClicked: (String) -> Unit) {
-    val viewModel = hiltViewModel<SearchViewModel>()
+    val viewModel = metroViewModel<SearchViewModel>()
     SearchScreenContent(viewModel, onItemCardClicked)
 }
 

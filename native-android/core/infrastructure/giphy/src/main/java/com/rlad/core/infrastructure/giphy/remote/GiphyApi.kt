@@ -1,15 +1,17 @@
 package com.rlad.core.infrastructure.giphy.remote
 
 import com.rlad.core.infrastructure.giphy.BuildConfig
+import com.rlad.core.infrastructure.giphy.di.GiphyBindingContainer.GiphyHttpClient
+import dev.zacsweers.metro.Inject
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import javax.inject.Inject
 
-internal class GiphyApi @Inject constructor(
-    private val httpClient: HttpClient,
+@Inject
+class GiphyApi(
+    @GiphyHttpClient private val httpClient: HttpClient,
 ) {
 
     suspend fun trendingGifs(

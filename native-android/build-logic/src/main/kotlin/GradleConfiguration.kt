@@ -21,6 +21,7 @@ internal fun Project.configureKotlinAndroid() {
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 "-opt-in=androidx.paging.ExperimentalPagingApi",
+                "-Xannotation-default-target=param-property",
             )
         }
     }
@@ -29,7 +30,7 @@ internal fun Project.configureKotlinAndroid() {
         compileSdkVersion(36)
 
         defaultConfig {
-            minSdk = 26
+            minSdk = 28
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             testInstrumentationRunnerArguments["clearPackageData"] = "true"
         }

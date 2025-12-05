@@ -7,13 +7,14 @@ import androidx.paging.RemoteMediator
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
+import dev.zacsweers.metro.Inject
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import java.io.IOException
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData : Any> @Inject constructor(
+@Inject
+class CommonRemoteMediator<LocalModel : Any, RemoteModel : Any, RootRemoteData : Any>(
     private val localDataSource: CommonLocalDataSource<LocalModel>,
     private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
     private val modelMapper: ModelMapper<LocalModel, RemoteModel>,

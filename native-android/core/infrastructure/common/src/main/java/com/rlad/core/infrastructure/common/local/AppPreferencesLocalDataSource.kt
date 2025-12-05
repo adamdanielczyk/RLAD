@@ -1,10 +1,11 @@
 package com.rlad.core.infrastructure.common.local
 
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-internal class AppPreferencesLocalDataSource @Inject constructor(
+@Inject
+class AppPreferencesLocalDataSource(
     private val preferencesDao: AppPreferencesDao,
 ) {
 
