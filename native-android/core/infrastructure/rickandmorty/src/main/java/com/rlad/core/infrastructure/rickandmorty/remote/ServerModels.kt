@@ -4,13 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class ServerGetCharacters(
+data class ServerGetCharacters(
     @SerialName("results") val results: List<ServerCharacter> = emptyList(),
     @SerialName("error") val error: String? = null,
 )
 
 @Serializable
-internal data class ServerCharacter(
+data class ServerCharacter(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("status") val status: Status,

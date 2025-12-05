@@ -3,22 +3,24 @@ package com.rlad.core.infrastructure.common.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Inject
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode
 import java.io.IOException
 
-class CommonSearchPagingSource<RemoteModel : Any, RootRemoteData : Any> @AssistedInject constructor(
+class CommonSearchPagingSource<RemoteModel : Any, RootRemoteData : Any>(
     private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
-    @Assisted private val query: String,
+    private val query: String,
 ) : PagingSource<Int, RemoteModel>() {
 
-    @AssistedFactory
-    interface Factory<RemoteModel : Any, RootRemoteData : Any> {
-        fun create(query: String): CommonSearchPagingSource<RemoteModel, RootRemoteData>
+    @Inject
+    class Factory<RemoteModel : Any, RootRemoteData : Any>(
+        private val remoteDataSource: CommonRemoteDataSource<RootRemoteData, RemoteModel>,
+    ) {
+        fun create(query: String): CommonSearchPagingSource<RemoteModel, RootRemoteData> {
+            return CommonSearchPagingSource(remoteDataSource, query)
+        }
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RemoteModel> = try {

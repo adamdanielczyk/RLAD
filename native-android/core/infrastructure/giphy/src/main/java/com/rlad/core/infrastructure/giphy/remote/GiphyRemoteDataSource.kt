@@ -1,9 +1,13 @@
 package com.rlad.core.infrastructure.giphy.remote
 
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 
-internal class GiphyRemoteDataSource @Inject constructor(
+@Inject
+@ContributesBinding(AppScope::class)
+class GiphyRemoteDataSource(
     private val giphyApi: GiphyApi,
 ) : CommonRemoteDataSource<ServerGifsRoot, ServerGif> {
 

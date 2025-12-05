@@ -4,31 +4,37 @@ import android.content.Context
 import android.content.Intent
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.disk.DiskCache
 import coil.imageLoader
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.domain.usecase.GetItemByIdUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.Flow
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
+@AssistedInject
 @OptIn(ExperimentalCoilApi::class)
-internal class DetailsViewModel @Inject constructor(
+class DetailsViewModel(
     getItemByIdUseCase: GetItemByIdUseCase,
-    savedStateHandle: SavedStateHandle,
+    @Assisted id: String,
 ) : ViewModel() {
 
-    val item: Flow<ItemUiModel>
-
-    init {
-        val id = savedStateHandle.get<String>("id")!!
-        item = getItemByIdUseCase(id)
+    @AssistedFactory
+    @ManualViewModelAssistedFactoryKey(Factory::class)
+    @ContributesIntoMap(AppScope::class)
+    interface Factory : ManualViewModelAssistedFactory {
+        fun create(id: String): DetailsViewModel
     }
+
+    val item: Flow<ItemUiModel> = getItemByIdUseCase(id)
 
     fun onShareItemClicked(context: Context, item: ItemUiModel) {
         context.imageLoader.diskCache?.openSnapshot(item.imageUrl)?.use { snapshot ->

@@ -4,24 +4,24 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class ServerGifRoot(
+data class ServerGifRoot(
     @SerialName("data") val data: ServerGif,
 )
 
 @Serializable
-internal data class ServerGifsRoot(
+data class ServerGifsRoot(
     @SerialName("data") val data: List<ServerGif>,
     @SerialName("pagination") val pagination: ServerPagination,
 )
 
 @Serializable
-internal data class ServerPagination(
+data class ServerPagination(
     @SerialName("offset") val offset: Int,
     @SerialName("count") val count: Int,
 )
 
 @Serializable
-internal data class ServerGif(
+data class ServerGif(
     @SerialName("id") val id: String,
     @SerialName("url") val url: String,
     @SerialName("username") val username: String,
@@ -42,4 +42,3 @@ internal data class ServerGif(
         )
     }
 }
-

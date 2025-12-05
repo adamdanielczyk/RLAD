@@ -42,7 +42,7 @@ class RickAndMortyRemoteDataSourceTest {
     @Test
     fun getCharacters_allApiItemsAreReturned() = runTest {
         coEvery { mockRickAndMortyApi.getCharacters(page = 0, name = null) } returns ServerGetCharacters(characters)
-        
+
         assertEquals(
             ServerGetCharacters(characters),
             remoteDataSource.getRootData(offset = 0, pageSize = 10),
@@ -52,7 +52,7 @@ class RickAndMortyRemoteDataSourceTest {
     @Test
     fun getCharacters_apiItemsAreFilteredByName() = runTest {
         coEvery { mockRickAndMortyApi.getCharacters(page = 0, name = "Morty") } returns ServerGetCharacters(listOf(characters[1]))
-        
+
         assertEquals(
             ServerGetCharacters(listOf(characters[1])),
             remoteDataSource.search(query = "Morty", offset = 0, pageSize = 10),
@@ -62,11 +62,10 @@ class RickAndMortyRemoteDataSourceTest {
     @Test
     fun getCharacter_itemWithMatchingIdIsReturned() = runTest {
         coEvery { mockRickAndMortyApi.getCharacter(id = 2) } returns characters[1]
-        
+
         assertEquals(
             characters[1],
             remoteDataSource.getItem(id = "2"),
         )
     }
-
 }

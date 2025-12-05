@@ -1,7 +1,7 @@
 package com.rlad.core.infrastructure.common.usecase
 
+import com.rlad.core.domain.model.DataSource
 import com.rlad.core.domain.model.DataSourceUiModel
-import com.rlad.core.infrastructure.common.model.DataSource
 import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -15,7 +15,7 @@ class GetAvailableDataSourcesUseCaseImplTest {
     @Test
     fun repositoriesAreMappedToUiModelsAndSelectedRepositoryIsMarked() = runTest {
         val useCase = GetAvailableDataSourcesUseCaseImpl(
-            getAllDataSourcesUseCase = GetAllDataSourcesUseCaseImpl(),
+            getAllDataSourcesUseCase = GetAllDataSourcesUseCase(),
             getSelectedDataSourceUseCase = object : GetSelectedDataSourceUseCase {
                 override fun invoke(): Flow<DataSource> = flowOf(DataSource.RICKANDMORTY)
             },

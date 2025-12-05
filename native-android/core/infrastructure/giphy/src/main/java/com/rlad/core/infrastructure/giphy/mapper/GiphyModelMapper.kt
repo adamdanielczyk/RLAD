@@ -6,9 +6,13 @@ import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import com.rlad.core.infrastructure.giphy.R
 import com.rlad.core.infrastructure.giphy.local.GifEntity
 import com.rlad.core.infrastructure.giphy.remote.ServerGif
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 
-internal class GiphyModelMapper @Inject constructor(
+@Inject
+@ContributesBinding(AppScope::class)
+class GiphyModelMapper(
     private val application: Application,
 ) : ModelMapper<GifEntity, ServerGif> {
 

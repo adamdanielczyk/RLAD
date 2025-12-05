@@ -1,13 +1,15 @@
 package com.rlad.core.infrastructure.rickandmorty.remote
 
+import com.rlad.core.infrastructure.rickandmorty.di.RickAndMortyBindingContainer.RickAndMortyHttpClient
+import dev.zacsweers.metro.Inject
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import javax.inject.Inject
 
-internal class RickAndMortyApi @Inject constructor(
-    private val httpClient: HttpClient,
+@Inject
+class RickAndMortyApi(
+    @RickAndMortyHttpClient private val httpClient: HttpClient,
 ) {
 
     suspend fun getCharacters(
