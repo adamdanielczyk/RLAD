@@ -48,7 +48,7 @@ test-androidx-paging = { module = "androidx.paging:paging-testing", version.ref 
 test-androidx-runner = { module = "androidx.test:runner", version = "1.7.0" }
 test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 test-junit = { module = "junit:junit", version = "4.13.2" }
-test-mockk = { module = "io.mockk:mockk", version = "1.14.6" }
+test-mockk = { module = "io.mockk:mockk", version = "1.14.7" }
 
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
