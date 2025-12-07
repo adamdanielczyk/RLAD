@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
 }

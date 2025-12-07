@@ -14,7 +14,7 @@ internal fun Project.shared() {
         add("implementation", libs.androidx.lifecycle.runtime)
         add("implementation", libs.androidx.lifecycle.viewmodel)
         add("implementation", libs.androidx.lifecycle.viewmodel.compose)
-        add("implementation", libs.androidx.navigation.compose)
+        add("implementation", libs.androidx.navigation)
         add("implementation", libs.androidx.paging.compose)
         add("implementation", libs.androidx.paging.runtime)
         add("implementation", libs.coil.compose)
