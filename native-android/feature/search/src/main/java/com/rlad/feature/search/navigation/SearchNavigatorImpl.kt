@@ -1,31 +1,31 @@
 package com.rlad.feature.search.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import com.rlad.core.domain.navigation.DetailsNavigator
-import com.rlad.core.domain.navigation.Navigator
+import androidx.navigation3.runtime.NavKey
+import com.rlad.core.ui.navigation.DetailsNavigator
+import com.rlad.core.ui.navigation.Navigator
 import com.rlad.feature.search.ui.SearchScreen
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.ClassKey
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
+import kotlinx.serialization.Serializable
 
 @Inject
-@ContributesIntoSet(AppScope::class, binding<Navigator>())
+@ContributesIntoMap(AppScope::class, binding<Navigator<NavKey>>())
+@ClassKey(SearchRoute::class)
 class SearchNavigatorImpl(
-    private val detailsNavigator: DetailsNavigator,
-) : Navigator {
-
-    override val isStartDestination: Boolean
-        get() = true
-
-    override val route: String
-        get() = "search"
+    private val detailsNavigator: DetailsNavigator<*>,
+) : Navigator<SearchRoute> {
 
     @Composable
-    override fun Content(navController: NavHostController) {
+    override fun Content(backStack: MutableList<NavKey>, route: SearchRoute) {
         SearchScreen(
-            onItemCardClicked = { id -> detailsNavigator.navigate(navController, id) },
+            onItemCardClicked = { id -> detailsNavigator.navigate(backStack, id) },
         )
     }
 }
+
+@Serializable
+data object SearchRoute : NavKey

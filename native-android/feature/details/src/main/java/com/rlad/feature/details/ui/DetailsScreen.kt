@@ -54,7 +54,9 @@ import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 internal fun DetailsScreen(id: String) {
     val context = LocalContext.current
 
-    val viewModel = assistedMetroViewModel<DetailsViewModel, DetailsViewModel.Factory> {
+    val viewModel = assistedMetroViewModel<DetailsViewModel, DetailsViewModel.Factory>(
+        key = id,
+    ) {
         create(id)
     }
 

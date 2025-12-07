@@ -9,8 +9,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.lifecycle.viewmodel)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)

@@ -7,13 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.rlad.core.domain.navigation.Navigator
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.rlad.core.ui.RladTheme
+import com.rlad.core.ui.navigation.Navigator
+import com.rlad.feature.search.navigation.SearchRoute
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
@@ -21,13 +21,14 @@ import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.android.ActivityKey
 import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
+import kotlin.reflect.KClass
 
 @ContributesIntoMap(AppScope::class, binding<Activity>())
 @ActivityKey(MainActivity::class)
 @Inject
 class MainActivity(
     private val metroViewModelFactory: MetroViewModelFactory,
-    private val navigators: Set<Navigator>,
+    private val navigators: Map<KClass<*>, Navigator<NavKey>>,
 ) : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,22 +40,13 @@ class MainActivity(
                 val useDarkTheme = isSystemInDarkTheme()
 
                 RladTheme(useDarkTheme = useDarkTheme) {
-                    val navController = rememberNavController()
+                    val backStack = rememberNavBackStack(SearchRoute)
 
-                    val keyboardController = LocalSoftwareKeyboardController.current
-                    navController.addOnDestinationChangedListener { _, _, _ ->
-                        keyboardController?.hide()
-                    }
-
-                    NavHost(
-                        navController = navController,
-                        contentAlignment = Alignment.TopCenter,
-                        startDestination = navigators.first(Navigator::isStartDestination).route,
-                    ) {
-                        navigators.forEach { navigator ->
-                            composable(navigator.route) {
-                                navigator.Content(navController)
-                            }
+                    NavDisplay(
+                        backStack = backStack,
+                    ) { route ->
+                        NavEntry(route) {
+                            navigators.getValue(route::class).Content(backStack, route)
                         }
                     }
                 }
