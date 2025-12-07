@@ -13,6 +13,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -121,5 +122,5 @@ class SearchViewModelTest {
     }
 
     private suspend fun SearchViewModel.getCurrentItems(): List<ItemUiModel> =
-        itemsPagingData.value?.asSnapshot().orEmpty()
+        itemsPagingData.value?.take(1)?.asSnapshot().orEmpty()
 }
