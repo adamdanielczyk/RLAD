@@ -8,9 +8,7 @@ import com.rlad.core.infrastructure.artic.remote.ServerArtwork
 import com.rlad.core.infrastructure.common.mapper.ModelMapper
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
-@Inject
 @ContributesBinding(AppScope::class)
 class ArticModelMapper(
     private val application: Application,

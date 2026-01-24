@@ -5,11 +5,9 @@ import com.rlad.core.domain.repository.AppSettingsRepository
 import com.rlad.core.infrastructure.common.local.AppPreferencesLocalDataSource
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@Inject
 @ContributesBinding(AppScope::class)
 class AppSettingsRepositoryImpl(
     private val appPreferencesLocalDataSource: AppPreferencesLocalDataSource,

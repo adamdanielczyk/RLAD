@@ -4,7 +4,6 @@ import com.rlad.core.infrastructure.common.local.AppPreferencesLocalDataSource
 import com.rlad.core.infrastructure.common.usecase.GetSelectedDataSourceUseCase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -15,7 +14,6 @@ interface PagingDataRepository {
     suspend fun saveNextOffsetToLoad(offset: Int)
 }
 
-@Inject
 @ContributesBinding(AppScope::class)
 class PagingDataRepositoryImpl(
     private val appPreferencesLocalDataSource: AppPreferencesLocalDataSource,

@@ -3,9 +3,7 @@ package com.rlad.core.infrastructure.giphy.remote
 import com.rlad.core.infrastructure.common.remote.CommonRemoteDataSource
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
-@Inject
 @ContributesBinding(AppScope::class)
 class GiphyRemoteDataSource(
     private val giphyApi: GiphyApi,

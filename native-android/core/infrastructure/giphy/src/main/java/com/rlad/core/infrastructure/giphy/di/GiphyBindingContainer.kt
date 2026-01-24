@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-internal object GiphyBindingContainer {
+object GiphyBindingContainer {
 
     @Qualifier
     annotation class GiphyHttpClient

@@ -4,10 +4,8 @@ import androidx.paging.PagingSource
 import com.rlad.core.infrastructure.common.local.CommonLocalDataSource
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 
-@Inject
 @ContributesBinding(AppScope::class)
 class ArticLocalDataSource(
     private val artworkDao: ArtworkDao,

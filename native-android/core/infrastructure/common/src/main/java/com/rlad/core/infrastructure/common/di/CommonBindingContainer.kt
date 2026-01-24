@@ -11,7 +11,7 @@ import dev.zacsweers.metro.Provides
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-internal object CommonBindingContainer {
+object CommonBindingContainer {
 
     @Provides
     fun commonDatabase(application: Application): CommonDatabase = Room.databaseBuilder(
