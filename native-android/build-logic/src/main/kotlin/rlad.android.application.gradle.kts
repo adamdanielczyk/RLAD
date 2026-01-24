@@ -1,14 +1,15 @@
+import com.android.build.api.dsl.ApplicationExtension
+
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("rlad.android.metro")
     id("rlad.renameartifacts")
 }
 
-android {
-    configureKotlinAndroid()
-    configureCompose()
+extensions.configure<ApplicationExtension> {
+    configureKotlinAndroid(this)
+    configureCompose(this)
 }
 
 dependencies {
