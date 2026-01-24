@@ -8,9 +8,7 @@ import com.rlad.core.infrastructure.giphy.local.GifEntity
 import com.rlad.core.infrastructure.giphy.remote.ServerGif
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
-@Inject
 @ContributesBinding(AppScope::class)
 class GiphyModelMapper(
     private val application: Application,

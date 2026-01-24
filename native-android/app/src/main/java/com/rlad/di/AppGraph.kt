@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.DependencyGraph
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -25,7 +24,6 @@ interface AppGraph : MetroAppComponentProviders, ViewModelGraph {
     }
 }
 
-@Inject
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class MyViewModelFactory(

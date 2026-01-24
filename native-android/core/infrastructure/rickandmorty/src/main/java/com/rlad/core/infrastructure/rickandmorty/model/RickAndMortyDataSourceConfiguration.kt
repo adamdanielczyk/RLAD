@@ -7,9 +7,7 @@ import com.rlad.core.infrastructure.common.model.DataSourceConfiguration
 import com.rlad.core.infrastructure.rickandmorty.R
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 
-@Inject
 @ContributesIntoMap(AppScope::class)
 @DataSourceKey(DataSource.RICKANDMORTY)
 class RickAndMortyDataSourceConfiguration(

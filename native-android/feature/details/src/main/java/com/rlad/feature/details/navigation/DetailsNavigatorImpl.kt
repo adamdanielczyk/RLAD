@@ -9,11 +9,9 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ClassKey
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import kotlinx.serialization.Serializable
 
-@Inject
 @ContributesBinding(AppScope::class, binding<DetailsNavigator<*>>())
 @ContributesIntoMap(AppScope::class, binding<Navigator<NavKey>>())
 @ClassKey(DetailsRoute::class)

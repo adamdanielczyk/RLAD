@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-internal object ArticBindingContainer {
+object ArticBindingContainer {
 
     @Qualifier
     annotation class ArticHttpClient

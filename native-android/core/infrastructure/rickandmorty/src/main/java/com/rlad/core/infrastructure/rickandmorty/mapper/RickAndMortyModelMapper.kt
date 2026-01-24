@@ -8,9 +8,7 @@ import com.rlad.core.infrastructure.rickandmorty.local.CharacterEntity
 import com.rlad.core.infrastructure.rickandmorty.remote.ServerCharacter
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
-@Inject
 @ContributesBinding(AppScope::class)
 class RickAndMortyModelMapper(
     private val application: Application,

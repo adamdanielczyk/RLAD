@@ -11,7 +11,6 @@ import com.rlad.core.domain.usecase.GetAvailableDataSourcesUseCase
 import com.rlad.core.domain.usecase.GetItemsUseCase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-@Inject
 @ViewModelKey(SearchViewModel::class)
 @ContributesIntoMap(AppScope::class)
 class SearchViewModel(

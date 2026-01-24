@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
     entities = [ArtworkEntity::class],
     version = 1,
 )
-internal abstract class ArticDatabase : RoomDatabase() {
+abstract class ArticDatabase : RoomDatabase() {
 
     abstract fun artworkDao(): ArtworkDao
 }

@@ -16,7 +16,6 @@ import com.rlad.core.ui.navigation.Navigator
 import com.rlad.feature.search.navigation.SearchRoute
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.android.ActivityKey
 import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
@@ -25,7 +24,6 @@ import kotlin.reflect.KClass
 
 @ContributesIntoMap(AppScope::class, binding<Activity>())
 @ActivityKey(MainActivity::class)
-@Inject
 class MainActivity(
     private val metroViewModelFactory: MetroViewModelFactory,
     private val navigators: Map<KClass<*>, Navigator<NavKey>>,

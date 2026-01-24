@@ -14,9 +14,7 @@ import com.rlad.core.infrastructure.giphy.remote.ServerGif
 import com.rlad.core.infrastructure.giphy.remote.ServerGifsRoot
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 
-@Inject
 @ContributesIntoMap(AppScope::class)
 @DataSourceKey(DataSource.GIPHY)
 class GiphyRepository(

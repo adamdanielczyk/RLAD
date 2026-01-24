@@ -8,11 +8,9 @@ import com.rlad.feature.search.ui.SearchScreen
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ClassKey
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import kotlinx.serialization.Serializable
 
-@Inject
 @ContributesIntoMap(AppScope::class, binding<Navigator<NavKey>>())
 @ClassKey(SearchRoute::class)
 class SearchNavigatorImpl(
