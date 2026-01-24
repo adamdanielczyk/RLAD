@@ -1,11 +1,12 @@
+import com.android.build.api.dsl.LibraryExtension
+
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-android {
-    configureCompose()
+extensions.configure<LibraryExtension> {
+    configureCompose(this)
 }
 
 dependencies {

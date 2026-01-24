@@ -1,19 +1,19 @@
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.the
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 internal val Project.libs
     get() = the<LibrariesForLibs>()
 
-internal fun Project.configureKotlinAndroid() {
-    val javaVersion = JavaVersion.VERSION_17
-
-    kotlin {
-        jvmToolchain(javaVersion.majorVersion.toInt())
+internal fun Project.configureKotlinAndroid(
+    commonExtension: CommonExtension,
+) {
+    extensions.configure<KotlinAndroidProjectExtension> {
+        jvmToolchain(JavaVersion.VERSION_17.majorVersion.toInt())
 
         compilerOptions {
             freeCompilerArgs.addAll(
@@ -26,33 +26,28 @@ internal fun Project.configureKotlinAndroid() {
         }
     }
 
-    android {
-        compileSdkVersion(36)
+    commonExtension.apply {
+        compileSdk = 36
 
-        defaultConfig {
+        defaultConfig.apply {
             minSdk = 28
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             testInstrumentationRunnerArguments["clearPackageData"] = "true"
         }
 
-        compileOptions {
-            sourceCompatibility = javaVersion
-            targetCompatibility = javaVersion
-        }
-
-        packagingOptions {
-            resources {
-                excludes += listOf(
-                    "META-INF/LICENSE.md",
-                    "META-INF/LICENSE-notice.md",
-                )
-            }
+        packaging.resources {
+            excludes += listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+            )
         }
     }
 }
 
-internal fun Project.configureCompose() {
-    kotlin {
+internal fun Project.configureCompose(
+    commonExtension: CommonExtension,
+) {
+    extensions.configure<KotlinAndroidProjectExtension> {
         compilerOptions {
             freeCompilerArgs.addAll(
                 "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
@@ -62,15 +57,7 @@ internal fun Project.configureCompose() {
         }
     }
 
-    android {
+    commonExtension.apply {
         buildFeatures.compose = true
     }
-}
-
-private fun Project.android(action: BaseExtension.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("android", action)
-}
-
-private fun Project.kotlin(action: KotlinAndroidProjectExtension.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("kotlin", action)
 }
