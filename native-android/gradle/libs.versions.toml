@@ -2,7 +2,7 @@
 androidGradlePlugin = "9.0.0"
 androidxActivity = "1.12.4"
 androidxLifecycle = "2.10.0"
-androidxPaging = "3.4.0"
+androidxPaging = "3.4.1"
 androidxRoom = "2.8.4"
 coil = "2.7.0"
 kotlin = "2.3.10"
