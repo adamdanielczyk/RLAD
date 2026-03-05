@@ -13,7 +13,7 @@
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.2",
     "@gorhom/bottom-sheet": "^5.2.6",
-    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-async-storage/async-storage": "3.0.1",
     "@react-navigation/native": "^7.1.8",
     "@shopify/flash-list": "2.0.2",
     "@tanstack/query-async-storage-persister": "^5.90.4",
