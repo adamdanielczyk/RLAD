@@ -37,7 +37,7 @@ jobs:
 
       - uses: ./.github/actions/setup-native-android
 
-      - uses: reactivecircus/android-emulator-runner@v2.36.0
+      - uses: reactivecircus/android-emulator-runner@v2.37.0
         with:
           api-level: 29
           script: ./gradlew connectedAndroidTest
