@@ -13,7 +13,7 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension,
 ) {
     extensions.configure<KotlinAndroidProjectExtension> {
-        jvmToolchain(JavaVersion.VERSION_17.majorVersion.toInt())
+        jvmToolchain(JavaVersion.VERSION_21.majorVersion.toInt())
 
         compilerOptions {
             freeCompilerArgs.addAll(
