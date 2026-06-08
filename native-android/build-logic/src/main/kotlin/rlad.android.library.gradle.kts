@@ -2,7 +2,7 @@ import com.android.build.api.dsl.LibraryExtension
 
 plugins {
     id("com.android.library")
-    id("rlad.android.metro")
+    id("dev.zacsweers.metro")
 }
 
 extensions.configure<LibraryExtension> {

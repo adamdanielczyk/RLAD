@@ -2,9 +2,9 @@ import com.android.build.api.dsl.LibraryExtension
 
 plugins {
     id("com.android.library")
+    id("dev.zacsweers.metro")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("rlad.android.library.compose")
-    id("rlad.android.metro")
 }
 
 extensions.configure<LibraryExtension> {
