@@ -11,7 +11,7 @@ runs:
 
     - uses: gradle/actions/setup-gradle@v6
 
-    - uses: expo/expo-github-action@v8
+    - uses: expo/expo-github-action@v9
       with:
         expo-version: latest
 
