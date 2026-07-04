@@ -6,7 +6,7 @@ android {
     namespace = "com.rlad"
 
     defaultConfig {
-        targetSdk = 36
+        targetSdk = 37
         applicationId = "com.rlad"
         versionCode = 1
         versionName = "1.0.0"
