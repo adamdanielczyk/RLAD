@@ -19,6 +19,8 @@ internal fun Project.shared() {
         "implementation"(libs.androidx.paging.runtime)
         "implementation"(libs.coil.compose)
         "implementation"(libs.coil.gif)
+        "implementation"(libs.coil.network.okhttp)
+        "implementation"(libs.coil.network.cache.control)
         "implementation"(libs.kotlinx.coroutines.android)
         "implementation"(libs.kotlinx.coroutines.core)
         "implementation"(libs.lottie)
