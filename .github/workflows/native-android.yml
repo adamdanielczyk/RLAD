@@ -40,7 +40,7 @@ jobs:
       - uses: reactivecircus/android-emulator-runner@v2.38.0
         with:
           api-level: 29
-          script: ./gradlew connectedAndroidTest
+          script: ./gradlew connectedAndroidTest -Dorg.gradle.jvmargs="-Xmx4g -XX:+UseParallelGC" --max-workers=2
           working-directory: native-android
 
   assembleDebug:
