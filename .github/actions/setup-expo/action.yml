@@ -11,17 +11,29 @@ runs:
 
     - uses: gradle/actions/setup-gradle@v6
 
-    - uses: expo/expo-github-action@v9
+    - uses: expo/expo-github-action@9.0.1
       with:
         expo-version: latest
 
-    - uses: actions/setup-node@v7
+    - uses: actions/setup-node@v7.1.0
       with:
         node-version: 24
         cache: npm
         cache-dependency-path: expo/package-lock.json
 
     - run: npm ci
+      shell: bash
+      working-directory: expo
+
+    - run: npx expo install --check
+      shell: bash
+      working-directory: expo
+
+    - run: npm run typecheck
+      shell: bash
+      working-directory: expo
+
+    - run: npm run lint
       shell: bash
       working-directory: expo
 
