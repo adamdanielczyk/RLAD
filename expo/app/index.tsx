@@ -72,7 +72,9 @@ export default function HomeScreen() {
                 progressBackgroundColor={colors.card}
                 colors={[colors.text]}
                 refreshing={isRefetching}
-                onRefresh={refetch}
+                onRefresh={async () => {
+                  await refetch();
+                }}
               />
             }
             onEndReached={loadMoreItems}

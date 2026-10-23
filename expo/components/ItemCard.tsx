@@ -19,7 +19,7 @@ export function ItemCard({ item }: { item: ItemUiModel }) {
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ scale: scale.value }],
+      transform: [{ scale: scale.get() }],
     };
   });
 
@@ -29,11 +29,11 @@ export function ItemCard({ item }: { item: ItemUiModel }) {
   };
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.96, springConfig);
+    scale.set(withSpring(0.96, springConfig));
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, springConfig);
+    scale.set(withSpring(1, springConfig));
   };
 
   return (
@@ -119,7 +119,6 @@ export function ItemCard({ item }: { item: ItemUiModel }) {
               style={{
                 fontSize: 17,
                 fontWeight: "600",
-                textOverflow: "ellipsis",
                 color: colors.text,
                 letterSpacing: 0.3,
               }}
@@ -130,7 +129,6 @@ export function ItemCard({ item }: { item: ItemUiModel }) {
               numberOfLines={1}
               style={{
                 fontSize: 13,
-                textOverflow: "ellipsis",
                 color: colors.text,
                 opacity: 0.7,
                 marginTop: 4,

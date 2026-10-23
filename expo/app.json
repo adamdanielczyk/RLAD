@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "rlad",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.rlad.expo"
@@ -18,7 +17,6 @@
         "backgroundImage": "./assets/images/adaptive-icon-background.png",
         "monochromeImage": "./assets/images/adaptive-icon.png"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.rlad.expo",
       "permissions": [
         "INTERNET"

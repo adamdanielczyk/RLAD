@@ -38,7 +38,7 @@ export function VerticalFeed({
         decelerationRate="fast"
         onEndReached={onEndReached}
         onEndReachedThreshold={2}
-        ListFooterComponent={ListFooterComponent}
+        ListFooterComponent={ListFooterComponent ?? undefined}
         getItemLayout={(_, index) => ({
           length: height,
           offset: height * index,

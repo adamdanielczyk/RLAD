@@ -3,11 +3,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
-import { TextInput, TouchableOpacity, View } from "react-native";
+import { TextInput, type TextInputInstance, TouchableOpacity, View } from "react-native";
 
 export const SearchBar = ({ hasItems }: { hasItems: boolean }) => {
   const router = useRouter();
-  const textInputRef = useRef<TextInput | null>(null);
+  const textInputRef = useRef<TextInputInstance | null>(null);
   const { colors } = useTheme();
 
   const searchQuery = useAppStore((state) => state.searchQuery);
