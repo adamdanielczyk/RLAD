@@ -8,6 +8,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.Qualifier
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
@@ -24,6 +25,7 @@ object ArticBindingContainer {
     annotation class ArticHttpClient
 
     @Provides
+    @SingleIn(AppScope::class)
     fun database(application: Application): ArticDatabase = Room.databaseBuilder(
         context = application,
         klass = ArticDatabase::class.java,

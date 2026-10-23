@@ -5,9 +5,8 @@ import android.content.Intent
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
-import coil.annotation.ExperimentalCoilApi
-import coil.disk.DiskCache
-import coil.imageLoader
+import coil3.disk.DiskCache
+import coil3.imageLoader
 import com.rlad.core.domain.model.ItemUiModel
 import com.rlad.core.domain.usecase.GetItemByIdUseCase
 import dev.zacsweers.metro.AppScope
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.Flow
 import java.io.File
 
 @AssistedInject
-@OptIn(ExperimentalCoilApi::class)
 class DetailsViewModel(
     getItemByIdUseCase: GetItemByIdUseCase,
     @Assisted id: String,
@@ -58,7 +56,7 @@ class DetailsViewModel(
 
     private fun getMimeType(snapshot: DiskCache.Snapshot): String {
         val metadata = snapshot.metadata.toFile().readText()
-        return metadata.substringAfter("content-type: ").substringBefore("\n")
+        return cachedImageMimeType(metadata)
     }
 
     private fun getSharingFile(snapshot: DiskCache.Snapshot, mimeType: String): File {
@@ -71,3 +69,11 @@ class DetailsViewModel(
         return sharingFile
     }
 }
+
+internal fun cachedImageMimeType(metadata: String): String = metadata.lineSequence()
+    .firstOrNull { it.substringBefore(":").equals("content-type", ignoreCase = true) }
+    ?.substringAfter(":")
+    ?.substringBefore(";")
+    ?.trim()
+    ?.takeIf { it.isNotEmpty() }
+    ?: "image/*"

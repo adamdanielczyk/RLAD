@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.rlad.core.domain.model.ItemUiModel
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 
